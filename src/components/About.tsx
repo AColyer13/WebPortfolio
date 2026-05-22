@@ -25,7 +25,7 @@ export function About() {
 
             <div className="custom-btn-group">
               <a
-                href={withBase('files/AdamColyerResume2026v1.pdf')}
+                href={withBase('files/AdamColyerResume2026v2.pdf')}
                 className="custom-btn"
                 target="_blank"
                 rel="noopener noreferrer"
