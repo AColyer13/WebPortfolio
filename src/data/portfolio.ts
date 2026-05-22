@@ -1,6 +1,10 @@
-interface Skill {
+export interface Skill {
   name: string;
   icon: string;
+}
+
+export interface SkillBlock {
+  skills: Skill[];
 }
 
 interface TimelineItem {
@@ -19,47 +23,128 @@ interface Project {
   githubUrl: string;
 }
 
-export const skills: Skill[] = [
-  { name: 'JavaScript', icon: 'fab fa-js' },
-  { name: 'HTML5', icon: 'fab fa-html5' },
-  { name: 'CSS3', icon: 'fab fa-css3-alt' },
-  { name: 'React', icon: 'fab fa-react' },
-  { name: 'Vite', icon: 'fas fa-bolt' },
-  { name: 'React Router', icon: 'fas fa-route' },
-  { name: 'Node.js', icon: 'fab fa-node-js' },
-  { name: 'Express.js', icon: 'fas fa-server' },
-  { name: 'REST APIs', icon: 'fas fa-plug' },
-  { name: 'Firebase (Auth, Firestore)', icon: 'fas fa-fire' },
-  { name: 'NoSQL', icon: 'fas fa-database' },
-  { name: 'OAuth / JWT', icon: 'fas fa-key' },
-  { name: 'Jest', icon: 'fas fa-vial' },
-  { name: 'Playwright', icon: 'fas fa-play-circle' },
-  { name: 'Git', icon: 'fab fa-git-alt' },
-  { name: 'GitHub Actions', icon: 'fab fa-github' },
-  { name: 'Docker', icon: 'fab fa-docker' },
-  { name: 'Postman', icon: 'fas fa-paper-plane' },
-  { name: 'npm', icon: 'fab fa-npm' },
-  { name: 'TypeScript', icon: 'fas fa-i-cursor' },
-  { name: 'Python', icon: 'fab fa-python' },
-  { name: 'Java', icon: 'fab fa-java' },
-  { name: 'Flask', icon: 'fas fa-flask' },
-  { name: 'FastAPI', icon: 'fas fa-bolt' },
-  { name: 'Django', icon: 'fas fa-diagram-project' },
-  { name: 'Gemini', icon: 'fab fa-google' },
-  { name: 'xAI', icon: 'fas fa-rocket' },
-  { name: 'OpenAI', icon: 'fas fa-brain' },
-  { name: 'Claude', icon: 'fas fa-feather-pointed' },
-  { name: 'OpenClaw', icon: 'fas fa-shrimp' },
-  { name: 'DynamoDB', icon: 'fas fa-database' },
-  { name: 'PostgreSQL', icon: 'fas fa-database' },
-  { name: 'Redis', icon: 'R' },
-  { name: 'OWASP / AppSec', icon: 'fas fa-shield-alt' },
-  { name: 'Secrets & IAM', icon: 'fas fa-user-shield' },
-  { name: 'OpenAPI', icon: 'fas fa-file-code' },
-  { name: 'Zod', icon: 'fas fa-list-check' },
-  { name: 'React Query', icon: 'fas fa-arrows-rotate' },
-  { name: 'PWA', icon: 'fas fa-mobile-screen' },
+/** Skills in display order: Block 1 (top) → Block 8 (bottom). */
+export const skillBlocks: SkillBlock[] = [
+  {
+    skills: [
+      { name: 'Vite', icon: 'fas fa-bolt' },
+      { name: 'React', icon: 'fab fa-react' },
+      { name: 'React Router', icon: 'fas fa-route' },
+      { name: 'React Query', icon: 'fas fa-arrows-rotate' },
+      { name: 'JavaScript', icon: 'fab fa-js' },
+      { name: 'Python', icon: 'fab fa-python' },
+      { name: 'TypeScript', icon: 'fas fa-i-cursor' },
+      { name: 'HTML5', icon: 'fab fa-html5' },
+      { name: 'CSS3', icon: 'fab fa-css3-alt' },
+      { name: 'Tailwind CSS', icon: 'fas fa-wind' },
+      { name: 'npm', icon: 'fab fa-npm' },
+      { name: 'Node.js', icon: 'fab fa-node-js' },
+      { name: 'Express.js', icon: 'fas fa-server' },
+      { name: 'REST APIs', icon: 'fas fa-plug' },
+      { name: 'SPA', icon: 'fas fa-window-maximize' },
+      { name: 'PWA', icon: 'fas fa-mobile-screen' },
+      { name: 'React Hook Form', icon: 'fas fa-clipboard-list' },
+      { name: 'Framer Motion', icon: 'fas fa-film' },
+      { name: 'PostCSS', icon: 'fas fa-code' },
+      { name: 'Java', icon: 'fab fa-java' },
+      { name: 'Flask', icon: 'fas fa-flask' },
+      { name: 'FastAPI', icon: 'fas fa-bolt' },
+      { name: 'Django', icon: 'fas fa-diagram-project' },
+    ],
+  },
+  {
+    skills: [
+      { name: 'Radix UI', icon: 'fas fa-layer-group' },
+      { name: 'shadcn/ui', icon: 'fas fa-cubes' },
+      { name: 'Lucide', icon: 'fas fa-icons' },
+      { name: 'Three.js', icon: 'fas fa-cube' },
+      { name: 'React Three Fiber', icon: 'fas fa-cubes' },
+      { name: 'WebGL', icon: 'fas fa-gamepad' },
+      { name: 'D3.js', icon: 'fas fa-chart-line' },
+      { name: 'Recharts', icon: 'fas fa-chart-bar' },
+      { name: 'React Markdown', icon: 'fab fa-markdown' },
+    ],
+  },
+  {
+    skills: [
+      { name: 'Firebase', icon: 'fas fa-fire' },
+      { name: 'Firebase Auth', icon: 'fas fa-lock' },
+      { name: 'Firestore', icon: 'fas fa-database' },
+      { name: 'SQL', icon: 'fas fa-table' },
+      { name: 'Socket.IO', icon: 'fas fa-satellite-dish' },
+      { name: 'WebSockets', icon: 'fas fa-exchange-alt' },
+      { name: 'JWT', icon: 'fas fa-key' },
+      { name: 'OAuth', icon: 'fas fa-right-to-bracket' },
+      { name: 'Zod', icon: 'fas fa-list-check' },
+      { name: 'UUID', icon: 'fas fa-fingerprint' },
+    ],
+  },
+  {
+    skills: [
+      { name: 'OpenAPI', icon: 'fas fa-file-code' },
+      { name: 'Swagger', icon: 'fas fa-book-open' },
+      { name: 'Postman', icon: 'fas fa-paper-plane' },
+      { name: 'Axios', icon: 'fas fa-arrows-up-down' },
+      { name: 'CORS', icon: 'fas fa-shield' },
+      { name: 'SMTP / Email APIs', icon: 'fas fa-envelope' },
+    ],
+  },
+  {
+    skills: [
+      { name: 'Jest', icon: 'fas fa-vial' },
+      { name: 'Supertest', icon: 'fas fa-flask' },
+      { name: 'Vitest', icon: 'fas fa-check-double' },
+      { name: 'Playwright', icon: 'fas fa-play-circle' },
+      { name: 'E2E Testing', icon: 'fas fa-route' },
+      { name: 'Lighthouse', icon: 'fas fa-lightbulb' },
+      { name: 'Core Web Vitals', icon: 'fas fa-gauge-high' },
+      { name: 'axe', icon: 'fas fa-universal-access' },
+      { name: 'CodeQL', icon: 'fas fa-code-branch' },
+      { name: 'npm audit', icon: 'fab fa-npm' },
+      { name: 'Firebase Emulators', icon: 'fas fa-flask-vial' },
+    ],
+  },
+  {
+    skills: [
+      { name: 'Git', icon: 'fab fa-git-alt' },
+      { name: 'GitHub Actions', icon: 'fab fa-github' },
+      { name: 'Docker', icon: 'fab fa-docker' },
+      { name: 'Firebase Hosting', icon: 'fas fa-cloud' },
+      { name: 'Firebase App Hosting', icon: 'fas fa-cloud-arrow-up' },
+      { name: 'Google Cloud', icon: 'fab fa-google' },
+      { name: 'AWS', icon: 'fab fa-aws' },
+      { name: 'Cloud Run', icon: 'fas fa-person-running' },
+      { name: 'Secret Manager', icon: 'fas fa-user-secret' },
+      { name: 'Secrets & IAM', icon: 'fas fa-user-shield' },
+      { name: 'CI/CD', icon: 'fas fa-code-branch' },
+    ],
+  },
+  {
+    skills: [
+      { name: 'OWASP / AppSec', icon: 'fas fa-shield-alt' },
+      { name: 'Helmet', icon: 'fas fa-hard-hat' },
+      { name: 'CSP', icon: 'fas fa-shield-halved' },
+      { name: 'Rate Limiting', icon: 'fas fa-gauge' },
+      { name: 'Repository Pattern', icon: 'fas fa-folder-tree' },
+      { name: 'Middleware', icon: 'fas fa-filter' },
+      { name: 'Error Handling', icon: 'fas fa-triangle-exclamation' },
+    ],
+  },
+  {
+    skills: [
+      { name: 'Gemini', icon: 'fab fa-google' },
+      { name: 'OpenAI', icon: 'fas fa-brain' },
+      { name: 'Claude', icon: 'fas fa-feather-pointed' },
+      { name: 'xAI', icon: 'fas fa-rocket' },
+      { name: 'Prompt Engineering', icon: 'fas fa-wand-magic-sparkles' },
+      { name: 'AI Rate Limiting', icon: 'fas fa-robot' },
+      { name: 'Local LLMs', icon: 'fas fa-microchip' },
+      { name: 'OpenClaw', icon: 'fas fa-shrimp' },
+    ],
+  },
 ];
+
+export const skills: Skill[] = skillBlocks.flatMap((block) => block.skills);
 
 export const timeline: TimelineItem[] = [
   {

@@ -1,4 +1,15 @@
-import { skills } from '../data/portfolio'
+import { skillBlocks } from '../data/portfolio'
+
+function SkillIcon({ icon }: { icon: string }) {
+  if (icon.includes('fa')) {
+    return <i className={icon} aria-hidden />
+  }
+  return (
+    <i className="skill-card__emoji" aria-hidden>
+      {icon}
+    </i>
+  )
+}
 
 export function Skills() {
   return (
@@ -7,18 +18,22 @@ export function Skills() {
         <div className="section-heading section-heading--center">
           <h2>Skills</h2>
         </div>
-        <div className="skills-grid">
-          {skills.map((skill) => (
-            <div key={skill.name} className="services-item">
-              <div className="skill-card">
-                <h4>{skill.name}</h4>
-                {skill.icon.includes('fa') ? (
-                  <i className={skill.icon} />
-                ) : (
-                  <i className="skill-card__emoji" aria-hidden>
-                    {skill.icon}
-                  </i>
-                )}
+        <div className="skills-blocks">
+          {skillBlocks.map((block, blockIndex) => (
+            <div
+              key={blockIndex}
+              className="skills-block"
+              aria-label={`Skills group ${blockIndex + 1}`}
+            >
+              <div className="skills-grid">
+                {block.skills.map((skill) => (
+                  <div key={skill.name} className="services-item">
+                    <div className="skill-card">
+                      <h4>{skill.name}</h4>
+                      <SkillIcon icon={skill.icon} />
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
           ))}
