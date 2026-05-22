@@ -407,7 +407,8 @@
 .skills-blocks {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-6);
+  /* Match .skills-block__heading margin-block-end so space above/below category titles is even */
+  gap: var(--spacing-3);
   width: 100%;
 }
 
