@@ -144,18 +144,22 @@ export function Contact() {
                     href="https://github.com/acolyer13"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="fab fa-github"
+                    className="social-link"
                     aria-label="GitHub profile"
-                  />
+                  >
+                    <i className="fab fa-github" aria-hidden="true" />
+                  </a>
                 </li>
                 <li>
                   <a
                     href="https://www.linkedin.com/in/colyeradam/"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="fab fa-linkedin-in"
+                    className="social-link"
                     aria-label="LinkedIn profile"
-                  />
+                  >
+                    <i className="fab fa-linkedin" aria-hidden="true" />
+                  </a>
                 </li>
               </ul>
             </div>
