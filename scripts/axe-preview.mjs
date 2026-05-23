@@ -12,7 +12,8 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const root = path.join(__dirname, '..')
 /** Avoid clashing with a manual `vite preview` on the default port. */
 const port = 4187
-const base = (process.env.VITE_BASE_PATH ?? '/Portfolio-Website/').replace(/\/?$/, '/')
+// Production build uses relative base (`./`); preview serves from repo root at `/`.
+const base = '/'
 /**
  * Use `localhost` (not 127.0.0.1): Vite binds to `localhost` which may resolve to IPv6 (::1);
  * polling IPv4 only fails on many Linux/CI runners while the server is up.

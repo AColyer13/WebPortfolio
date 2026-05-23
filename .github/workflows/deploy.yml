@@ -3,7 +3,7 @@
 # GitHub Pages: Settings → Pages → Deploy from a branch → Branch: main → Folder: / (root)
 #
 # Vite entry stays under src/; CI publishes index.html, assets/, images/, etc. at repo root
-# so Pages never serves dev source. [skip ci] + paths-ignore avoid deploy loops.
+# so Pages never serves dev source. Deploy commits use [skip ci] to avoid loops.
 name: Deploy Vite site to GitHub Pages
 
 on:
@@ -40,10 +40,14 @@ jobs:
       - name: Build
         run: npm run build
 
-      - name: Verify production bundle (must not reference main.tsx)
+      - name: Verify production bundle
         run: |
           if grep -qF 'main.tsx' dist/index.html; then
             echo "dist/index.html still references main.tsx."
+            exit 1
+          fi
+          if grep -qE 'assets/(index\.css|index\.js)"' dist/index.html; then
+            echo "dist/index.html must use content-hashed asset URLs, not index.css/index.js."
             exit 1
           fi
 
@@ -53,12 +57,15 @@ jobs:
       - name: Accessibility (axe)
         run: node scripts/axe-preview.mjs
 
+      - name: Remove stale published files at repo root
+        run: |
+          rm -rf assets files images
+          rm -f index.html theme-init.js vite.svg .nojekyll
+
       - name: Publish dist/ to repository root on main
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           branch: main
           folder: dist
-          # Keep prior files during CDN propagation windows (max-age=600) to avoid
-          # transient missing-asset states between old/new cached documents.
           clean: false
           commit-message: 'deploy: Pages build at repo root [skip ci]'

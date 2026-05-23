@@ -11,7 +11,7 @@
     "preview:pages": "npm run build && vite preview",
     "test": "vitest run",
     "test:watch": "vitest",
-    "test:a11y": "VITE_BASE_PATH=/Portfolio-Website/ npm run build && VITE_BASE_PATH=/Portfolio-Website/ node scripts/axe-preview.mjs"
+    "test:a11y": "npm run build && node scripts/axe-preview.mjs"
   },
   "dependencies": {
     "@emailjs/browser": "^4.4.1",
