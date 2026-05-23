@@ -22,9 +22,13 @@ export default defineConfig(({ mode }) => {
       react(),
       tailwindcss(),
       {
-        name: 'html-csp-production',
+        // GitHub Pages: `crossorigin` on <link rel="stylesheet"> can prevent the sheet from
+        // applying in some browsers/extensions (CORS-mode load). ES modules keep crossorigin.
+        // `Cache-Control` on index.html avoids stale HTML referencing deleted hashed assets.
+        name: 'github-pages-html',
         transformIndexHtml(html, ctx) {
           if (ctx.server) return html
+
           const csp = [
             "default-src 'self'",
             "script-src 'self'",
@@ -32,27 +36,47 @@ export default defineConfig(({ mode }) => {
             "font-src 'self' data:",
             "img-src 'self' data: https: blob:",
             "connect-src 'self' https://api.emailjs.com",
-            "frame-src https://www.google.com https://www.google.com/maps https://maps.google.com https://www.gstatic.com",
+            'frame-src https://www.google.com https://www.google.com/maps https://maps.google.com https://www.gstatic.com',
             "base-uri 'self'",
             "form-action 'self'",
           ].join('; ')
+
           let result = html.replace(
-            '<head>',
-            `<head>\n    <meta http-equiv="Content-Security-Policy" content="${csp}" />`,
+            /<link([^>]*)\s+crossorigin(\s*=\s*"[^"]*")?([^>]*rel="stylesheet"[^>]*)>/g,
+            '<link$1$3>',
+          ).replace(
+            /<link([^>]*rel="stylesheet"[^>]*)\s+crossorigin(\s*=\s*"[^"]*")?([^>]*)>/g,
+            '<link$1$3>',
           )
-          // Ensure <link rel="stylesheet"> tags always appear before <script type="module">
-          // so CSS is render-blocking and available before React mounts, preventing FOUC.
-          const styleLinks = [...result.matchAll(/<link[^>]+rel="stylesheet"[^>]*>/g)].map(m => m[0])
-          const scriptTags = [...result.matchAll(/<script\s[^>]*type="module"[^>]*><\/script>/g)].map(m => m[0])
+
+          if (!result.includes('http-equiv="Content-Security-Policy"')) {
+            result = result.replace(
+              '<head>',
+              `<head>\n    <meta http-equiv="Content-Security-Policy" content="${csp}" />`,
+            )
+          }
+          if (!result.includes('http-equiv="Cache-Control"')) {
+            result = result.replace(
+              '<head>',
+              '<head>\n    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />',
+            )
+          }
+
+          // Stylesheets before module scripts so CSS is render-blocking before React mounts.
+          const styleLinks = [...result.matchAll(/<link[^>]+rel="stylesheet"[^>]*>/g)].map(
+            (m) => m[0],
+          )
+          const scriptTags = [
+            ...result.matchAll(/<script\s[^>]*type="module"[^>]*><\/script>/g),
+          ].map((m) => m[0])
           if (styleLinks.length && scriptTags.length) {
-            // Remove all stylesheet links and module scripts from their current positions
             for (const tag of [...styleLinks, ...scriptTags]) {
               result = result.replace(tag, '')
             }
-            // Re-inject: stylesheets first, then module scripts, just before </head>
             const injection = [...styleLinks, ...scriptTags].join('\n    ')
             result = result.replace('</head>', `    ${injection}\n  </head>`)
           }
+
           return result
         },
       },
