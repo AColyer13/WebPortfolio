@@ -86,20 +86,17 @@ export default defineConfig(({ mode }) => {
       // lands in src/dist and CI (folder: dist) cannot find it.
       outDir: path.join(projectRoot, 'dist'),
       emptyOutDir: true,
-      // GitHub Pages caches HTML and static assets separately (max-age=600). Using stable
-      // entry filenames avoids "new HTML vs old hashed CSS/JS" mismatch across edge POPs.
+      // Keep a single app stylesheet for predictable load order, but keep hashed filenames
+      // so browser/CDN caches refresh naturally after each deploy.
       cssCodeSplit: false,
       rollupOptions: {
         output: {
-          entryFileNames: 'assets/index.js',
-          chunkFileNames: 'assets/[name].js',
+          entryFileNames: 'assets/[name]-[hash].js',
+          chunkFileNames: 'assets/[name]-[hash].js',
           assetFileNames(assetInfo) {
             const name = assetInfo.name ?? ''
-            // Keep only the app entry stylesheet stable; let any additional CSS assets keep
-            // unique filenames so they cannot overwrite the main bundle.
-            if (name === 'style.css' || name === 'index.css') return 'assets/index.css'
             if (name.endsWith('.css')) return 'assets/[name]-[hash][extname]'
-            return 'assets/[name][extname]'
+            return 'assets/[name]-[hash][extname]'
           },
         },
       },
