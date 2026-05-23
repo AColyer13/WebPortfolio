@@ -68,6 +68,7 @@ export const skillBlocks: SkillBlock[] = [
       { name: 'Amazon RDS', icon: 'images/amazon-rds.svg' },
       { name: 'DynamoDB', icon: 'images/dynamodb.svg' },
       { name: 'Firebase', icon: 'images/firebase.svg' },
+      { name: 'AWS Amplify', icon: 'images/aws-amplify.svg' },
       { name: 'Firestore Hosting', icon: 'images/firestore-hosting.svg' },
       { name: 'Cognito', icon: 'images/cognito.svg' },
       { name: 'JWT & OAuth', icon: 'fas fa-key' },
