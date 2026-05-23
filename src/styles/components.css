@@ -422,6 +422,11 @@
   container-name: skills;
 }
 
+/* Exception: keep even space around “Skills” h2, but sit first category tight underneath */
+.skills .section-heading {
+  margin-block-end: 0;
+}
+
 .skills-blocks {
   display: flex;
   flex-direction: column;
