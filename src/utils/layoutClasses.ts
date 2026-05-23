@@ -5,6 +5,12 @@ export const containerClass =
 export const sectionBlockClass =
   'py-(--section-padding-y) [contain:layout] scroll-mt-(--header-offset)'
 
+export const contactSectionClass =
+  'py-(--contact-block-padding-y) [contain:layout] scroll-mt-(--header-offset)'
+
+export const footerSectionClass =
+  'py-(--footer-padding-y) [contain:layout] scroll-mt-(--header-offset)'
+
 export const sectionContainerClass =
   'ps-[max(var(--container-inline),env(safe-area-inset-left,0px))] pe-[max(var(--container-inline),env(safe-area-inset-right,0px))]'
 

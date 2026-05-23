@@ -20,39 +20,6 @@
   pointer-events: none;
 }
 
-/* Nav link hover text reveal */
-.nav-link-hover span {
-  position: relative;
-  display: inline-block;
-}
-
-.nav-link-hover span::before {
-  content: attr(data-hover);
-  position: absolute;
-  inset-block-start: 0;
-  inset-inline-start: 0;
-  color: var(--color-primary-600);
-  overflow: hidden;
-  width: 0;
-  transition: width 0.2s ease;
-}
-
-.nav-link-hover:hover span::before,
-.nav-link-hover:focus-visible span::before {
-  width: 100%;
-}
-
-/* Hamburger icon (three lines via box-shadow) */
-.nav-toggle-icon {
-  position: relative;
-  width: 1.25rem;
-  height: 1px;
-  background: currentColor;
-  box-shadow:
-    0 -0.375rem 0 currentColor,
-    0 0.375rem 0 currentColor;
-}
-
 /* Skill logo mask (icon path set inline per skill) */
 .skill-card__logo {
   flex-shrink: 0;
@@ -109,5 +76,29 @@
 
   .field-error {
     color: Mark;
+  }
+}
+
+/* Short viewports — tighten contact so heading, form, map, and footer fit together */
+@media (max-height: 52rem) and (min-width: 48rem) {
+  :root {
+    --contact-block-padding-y: var(--spacing-3);
+    --contact-map-height: clamp(7rem, 14svh, 11.5rem);
+    --contact-textarea-min: clamp(3.5rem, 9svh, 5.5rem);
+    --contact-layout-gap: var(--spacing-3);
+    --footer-padding-y: var(--spacing-3);
+  }
+}
+
+@media (max-height: 44rem) and (min-width: 48rem) {
+  :root {
+    --contact-map-height: clamp(6rem, 12svh, 9rem);
+    --contact-textarea-min: clamp(3rem, 8svh, 4.5rem);
+  }
+
+  .contact-form-title {
+    margin-block-end: var(--spacing-2);
+    font-size: var(--font-size-fluid-4);
+    line-height: 1.25;
   }
 }

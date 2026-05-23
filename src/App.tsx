@@ -6,7 +6,6 @@ import { Footer } from './components/Footer'
 import { Navbar } from './components/Navbar'
 import { Projects } from './components/Projects'
 import { Skills } from './components/Skills'
-
 /** DOM order — must match section `id`s and Navbar `section` keys */
 const SECTION_IDS = [
   'about',

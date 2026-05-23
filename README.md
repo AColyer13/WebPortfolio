@@ -26,6 +26,9 @@ Open http://localhost:5173
 | `npm run preview:pages` | Build then preview (like Pages) |
 | `npm run lint` | ESLint |
 | `npm run test` | Vitest |
+| `npm run test:a11y` | Build + axe color-contrast check |
+| `npm run test:lighthouse` | Build + Lighthouse (perf, a11y, SEO) |
+| `npm run test:quality` | Lint, audit, test, a11y, Lighthouse |
 
 ## Customize
 
@@ -47,9 +50,15 @@ VITE_BASE_PATH=/Portfolio-Website/ npm run build
 
 Compare output in **`dist/`** to what lands at root on deploy.
 
+## Quality & security
+
+- **CI** (`.github/workflows/ci.yml`): lint, `npm audit` (high+), tests, build, axe, Lighthouse on PRs and `main`.
+- **Dependabot** (`.github/dependabot.yml`): weekly npm updates.
+- **SEO**: Open Graph / Twitter meta tags in `src/index.html`.
+
 ## Contributing
 
-Run `npm run lint` and `npm run test` before PRs.
+Run `npm run test:quality` before PRs (or at minimum `npm run lint` and `npm run test`).
 
 ## License
 

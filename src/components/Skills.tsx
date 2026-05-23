@@ -31,7 +31,7 @@ function SkillIcon({ icon }: { icon: string }) {
     const logoUrl = withBase(icon)
     return (
       <span
-        className="skill-card__logo"
+        className="block h-10 w-10 shrink-0 bg-primary-600 [mask-mode:alpha] [mask-size:contain] [mask-repeat:no-repeat] [mask-position:center] [-webkit-mask-mode:alpha] [-webkit-mask-size:contain] [-webkit-mask-repeat:no-repeat] [-webkit-mask-position:center]"
         style={{
           maskImage: `url("${logoUrl}")`,
           WebkitMaskImage: `url("${logoUrl}")`,

@@ -11,7 +11,10 @@
     "preview:pages": "npm run build && vite preview",
     "test": "vitest run",
     "test:watch": "vitest",
-    "test:a11y": "VITE_BASE_PATH=/Portfolio-Website/ npm run build && VITE_BASE_PATH=/Portfolio-Website/ node scripts/axe-preview.mjs"
+    "test:contrast": "node scripts/check-token-contrast.mjs",
+    "test:a11y": "npm run test:contrast && VITE_BASE_PATH=/Portfolio-Website/ npm run build && VITE_BASE_PATH=/Portfolio-Website/ node scripts/axe-preview.mjs",
+    "test:lighthouse": "VITE_BASE_PATH=/Portfolio-Website/ npm run build && VITE_BASE_PATH=/Portfolio-Website/ node scripts/lighthouse-preview.mjs",
+    "test:quality": "npm run lint && npm audit --audit-level=high && npm run test && npm run test:a11y && npm run test:lighthouse"
   },
   "dependencies": {
     "@emailjs/browser": "^4.4.1",
@@ -29,16 +32,18 @@
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^5.1.1",
+    "culori": "^4.0.2",
     "eslint": "^9.39.1",
     "eslint-plugin-react-hooks": "^7.0.1",
     "eslint-plugin-react-refresh": "^0.4.24",
     "globals": "^16.5.0",
     "jsdom": "^27.0.0",
+    "lighthouse": "^13.3.0",
     "serve": "^14.2.6",
     "tailwindcss": "^4.3.0",
     "typescript": "~5.9.3",
     "typescript-eslint": "^8.46.4",
     "vite": "^7.2.4",
-    "vitest": "^3.2.4"
+    "vitest": "^4.1.7"
   }
 }

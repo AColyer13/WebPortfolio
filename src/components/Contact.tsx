@@ -8,7 +8,7 @@ import {
 import emailjs from '@emailjs/browser'
 import {
   containerClass,
-  sectionBlockClass,
+  contactSectionClass,
   sectionContainerClass,
 } from '../utils/layoutClasses'
 
@@ -19,7 +19,7 @@ type FormStatus =
   | { kind: 'success' | 'error'; message: string }
 
 const inputClass =
-  'contact-form-input w-full rounded-sm border border-border-default bg-surface-0 px-3 py-2 text-fluid-1 text-text-default transition-[border-color,box-shadow] duration-200 ease-in-out placeholder:text-text-muted focus:border-primary-600 focus:outline-none focus:shadow-[0_0_0_3px_var(--color-focus-ring)] aria-invalid:border-danger-600'
+  'w-full rounded-sm border border-border-default bg-surface-0 px-3 py-2 text-fluid-1 text-text-default transition-[border-color,box-shadow] duration-200 ease-in-out placeholder:text-text-muted placeholder:opacity-100 focus:border-primary-600 focus:outline-none focus:shadow-[0_0_0_3px_var(--color-focus-ring)] aria-invalid:border-danger-600 autofill:[-webkit-text-fill-color:var(--color-text-default)] autofill:shadow-[inset_0_0_0_1000px_var(--color-surface-0)]'
 
 function requiredField(value: string, label: string): string {
   if (!value.trim()) return `${label} is required.`
@@ -123,22 +123,21 @@ export function Contact() {
   }
 
   return (
-    <section className={`contact bg-surface-0 @container/contact ${sectionBlockClass}`} id="contact">
+    <section className={`contact bg-surface-0 @container/contact ${contactSectionClass}`} id="contact">
       <div className={`${containerClass} ${sectionContainerClass}`}>
-        <div className="grid grid-cols-1 items-stretch gap-6 @[62rem]:grid-cols-[minmax(0,5fr)_minmax(0,6fr)]">
+        <div className="grid grid-cols-1 items-stretch gap-(--contact-layout-gap) @[62rem]:grid-cols-[minmax(0,5fr)_minmax(0,6fr)]">
           <div className="flex h-full flex-col overflow-hidden rounded-lg border border-border-default bg-surface-0 contain-[layout_style]">
             <div className="w-full flex-1 p-3">
               <iframe
                 src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d90444.17968810473!2d-93.44258962458554!3d44.89525237382178!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x87f6213ace55a039%3A0xcdaf9c3796fa2779!2sEdina%2C%20MN!5e0!3m2!1sen!2sus!4v1764804107343!5m2!1sen!2sus"
                 width="100%"
-                height={400}
                 allowFullScreen
                 loading="lazy"
                 title="Map of Edina, MN"
-                className="h-[clamp(17.5rem,38vh,28.75rem)] w-full rounded-md border-0 grayscale transition-[filter] duration-200 ease-in-out hover:grayscale-0"
+                className="h-(--contact-map-height) w-full rounded-md border-0 grayscale transition-[filter] duration-200 ease-in-out hover:grayscale-0"
               />
             </div>
-            <div className="mt-0 flex flex-wrap items-center justify-between gap-3 rounded-b-lg border border-t-0 border-border-default bg-surface-50 px-3 py-4">
+            <div className="mt-0 flex flex-wrap items-center justify-between gap-3 rounded-b-lg border border-t-0 border-border-default bg-surface-50 px-3 py-3">
               <div>
                 <h3 className="mb-2 text-fluid-3 text-text-default">Say hello</h3>
                 <p className="m-0 text-fluid-2 text-text-default">612.710.7700</p>
@@ -174,8 +173,8 @@ export function Contact() {
             </div>
           </div>
 
-          <div className="contact-form w-full rounded-lg border border-border-default bg-surface-50 p-4 @max-[61.98rem]:p-4 @[62rem]:p-5">
-            <h2 className="contact-form-title mb-4 text-text-default">
+          <div className="contact-form w-full rounded-lg border border-border-default bg-surface-50 p-4 @[62rem]:p-4">
+            <h2 className="mb-3 text-fluid-4 leading-tight text-text-default short-viewport:mb-2">
               Want to know more? <br /> Let&apos;s talk
             </h2>
 
@@ -198,7 +197,7 @@ export function Contact() {
               <div className="flex flex-col gap-2">
                 <div className="grid grid-cols-1 gap-2 @[62rem]:grid-cols-2 @[62rem]:items-start">
                   <div className="flex flex-col gap-1">
-                    <label htmlFor="contact-name" className="contact-form-label text-fluid-1 font-medium text-text-default">
+                    <label htmlFor="contact-name" className="text-fluid-1 font-medium text-text-default forced-colors:text-[CanvasText]">
                       Name
                     </label>
                     <input
@@ -215,13 +214,13 @@ export function Contact() {
                       aria-describedby={touched.name && errors.name ? 'contact-name-error' : undefined}
                     />
                     {touched.name && errors.name ? (
-                      <p id="contact-name-error" className="field-error m-0 text-copyright text-danger-700" role="alert">
+                      <p id="contact-name-error" className="field-error m-0 text-copyright text-danger-700 forced-colors:text-[Mark]" role="alert">
                         {errors.name}
                       </p>
                     ) : null}
                   </div>
                   <div className="flex flex-col gap-1">
-                    <label htmlFor="contact-email" className="contact-form-label text-fluid-1 font-medium text-text-default">
+                    <label htmlFor="contact-email" className="text-fluid-1 font-medium text-text-default forced-colors:text-[CanvasText]">
                       Email
                     </label>
                     <input
@@ -240,7 +239,7 @@ export function Contact() {
                       }
                     />
                     {touched.email && errors.email ? (
-                      <p id="contact-email-error" className="field-error m-0 text-copyright text-danger-700" role="alert">
+                      <p id="contact-email-error" className="field-error m-0 text-copyright text-danger-700 forced-colors:text-[Mark]" role="alert">
                         {errors.email}
                       </p>
                     ) : null}
@@ -248,14 +247,14 @@ export function Contact() {
                 </div>
 
                 <div className="flex flex-col gap-1">
-                  <label htmlFor="contact-message" className="contact-form-label text-fluid-1 font-medium text-text-default">
+                  <label htmlFor="contact-message" className="text-fluid-1 font-medium text-text-default forced-colors:text-[CanvasText]">
                     Message
                   </label>
                   <textarea
                     id="contact-message"
                     name="message"
-                    rows={8}
-                    className={inputClass}
+                    rows={5}
+                    className={`${inputClass} min-h-(--contact-textarea-min) max-h-[18svh] resize-y`}
                     placeholder="Message"
                     value={formData.message}
                     onChange={handleChange}
@@ -266,7 +265,7 @@ export function Contact() {
                     }
                   />
                   {touched.message && errors.message ? (
-                    <p id="contact-message-error" className="field-error m-0 text-copyright text-danger-700" role="alert">
+                    <p id="contact-message-error" className="field-error m-0 text-copyright text-danger-700 forced-colors:text-[Mark]" role="alert">
                       {errors.message}
                     </p>
                   ) : null}
@@ -278,7 +277,7 @@ export function Contact() {
                 <div className="mt-2 @[62rem]:ms-auto @[62rem]:w-full @[62rem]:max-w-56">
                   <input
                     type="submit"
-                    className="submit-btn contact-form-input w-full min-h-11 cursor-pointer rounded-sm border-none bg-primary-600 px-4 py-2 font-bold text-text-on-primary transition-[background-color,transform,box-shadow] duration-200 ease-in-out hover:-translate-y-[0.1875rem] hover:bg-primary-700 hover:shadow-btn disabled:cursor-not-allowed disabled:opacity-60"
+                    className="w-full min-h-11 cursor-pointer rounded-sm border-none bg-primary-600 px-4 py-2 font-bold text-text-on-primary transition-[background-color,transform,box-shadow] duration-200 ease-in-out hover:-translate-y-[0.1875rem] hover:bg-primary-700 hover:shadow-btn disabled:cursor-not-allowed disabled:opacity-60"
                     value={isSubmitting ? 'Sending...' : 'Send'}
                     disabled={isSubmitting}
                   />

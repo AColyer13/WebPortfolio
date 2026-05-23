@@ -8,6 +8,7 @@ pnpm-debug.log*
 lerna-debug.log*
 
 node_modules
+.lighthouse
 dist
 dist-ssr
 # Local preview only if you copy dist here; not committed — deploy uses Actions artifacts.

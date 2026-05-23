@@ -19,7 +19,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build-and-publish-root:
+  quality:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -34,8 +34,17 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Lint
+        run: npm run lint
+
+      - name: Dependency audit (high+)
+        run: npm audit --audit-level=high
+
       - name: Test
         run: npm run test
+
+      - name: Token contrast (design system)
+        run: npm run test:contrast
 
       - name: Build
         run: npm run build
@@ -54,8 +63,35 @@ jobs:
         env:
           VITE_BASE_PATH: /Portfolio-Website/
 
+      - name: Lighthouse
+        run: VITE_BASE_PATH=/Portfolio-Website/ node scripts/lighthouse-preview.mjs
+        env:
+          VITE_BASE_PATH: /Portfolio-Website/
+
+      - name: Upload dist artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist/
+          retention-days: 1
+
+  deploy:
+    needs: quality
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download dist
+        uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist
+
       - name: Remove previous Pages output at repo root
-        run: rm -rf assets images files
+        run: |
+          rm -rf assets images files icons
+          rm -f manifest.webmanifest sw.js workbox-*.js registerSW.js
 
       - name: Publish dist/ to repository root on main
         uses: JamesIves/github-pages-deploy-action@v4
