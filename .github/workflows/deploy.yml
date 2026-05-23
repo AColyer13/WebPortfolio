@@ -49,6 +49,9 @@ jobs:
             exit 1
           fi
 
+      - name: Install Chrome + ChromeDriver for axe
+        run: npx --yes browser-driver-manager@latest install chrome
+
       - name: Accessibility (axe)
         run: VITE_BASE_PATH=/Portfolio-Website/ node scripts/axe-preview.mjs
         env:
