@@ -69,7 +69,7 @@ export const skillBlocks: SkillBlock[] = [
       { name: 'DynamoDB', icon: 'images/dynamodb.svg' },
       { name: 'Firebase', icon: 'images/firebase.svg' },
       { name: 'AWS Amplify', icon: 'images/aws-amplify.svg' },
-      { name: 'Firestore Hosting', icon: 'images/firestore-hosting.svg' },
+      { name: 'Firestore', icon: 'images/firestore-hosting.svg' },
       { name: 'Cognito', icon: 'images/cognito.svg' },
       { name: 'JWT & OAuth', icon: 'fas fa-key' },
       { name: 'Zod', icon: 'images/zod.svg' },
@@ -125,7 +125,7 @@ export const skillBlocks: SkillBlock[] = [
     skills: [
       { name: 'Gemini API', icon: 'images/googlegemini.svg' },
       { name: 'Cursor', icon: 'images/cursor.svg' },
-      { name: 'Claude Code', icon: 'images/anthropic.svg' },
+      { name: 'Claude Code', icon: 'images/claude-code.svg' },
       { name: 'Prompt Engineering', icon: 'fas fa-wand-magic-sparkles' },
       { name: 'AI Agent Development', icon: 'fas fa-robot' },
       { name: 'AI Rate Limiting', icon: 'fas fa-gauge-high' },
