@@ -11,7 +11,8 @@ import {
 const variantClass = {
   skills: `${sectionDeferredClass} bg-surface-50 @container/skills`,
   resume: `${sectionDeferredClass} bg-surface-0 @container/resume`,
-  project: `${sectionDeferredClass} bg-surface-50 @container/portfolio`,
+  // No content-visibility here — it can leave project links unclickable after tab/BFCache restore.
+  project: 'bg-surface-50 @container/portfolio',
 } as const
 
 export type SectionVariant = keyof typeof variantClass

@@ -57,17 +57,29 @@ export function initTouchPressFeedback(): () => void {
     clear()
   }
 
+  const onHide = () => {
+    clear()
+  }
+
+  const onVisibilityChange = () => {
+    if (document.visibilityState === 'hidden') onHide()
+  }
+
   const opts: AddEventListenerOptions = { passive: true, capture: true }
   document.addEventListener('touchstart', onTouchStart, opts)
   document.addEventListener('touchmove', onTouchMove, opts)
   document.addEventListener('touchend', onTouchEnd, opts)
   document.addEventListener('touchcancel', onTouchEnd, opts)
+  window.addEventListener('pagehide', onHide)
+  document.addEventListener('visibilitychange', onVisibilityChange)
 
   return () => {
-    clear()
+    onHide()
     document.removeEventListener('touchstart', onTouchStart, opts)
     document.removeEventListener('touchmove', onTouchMove, opts)
     document.removeEventListener('touchend', onTouchEnd, opts)
     document.removeEventListener('touchcancel', onTouchEnd, opts)
+    window.removeEventListener('pagehide', onHide)
+    document.removeEventListener('visibilitychange', onVisibilityChange)
   }
 }
