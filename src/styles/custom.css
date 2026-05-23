@@ -1,5 +1,25 @@
 /* Effects that rely on pseudo-elements or scoped form behavior — kept minimal alongside Tailwind */
 
+/* App shell + header — scroll hide/show (padding + transform stay in sync) */
+.app-shell {
+  padding-block-start: var(--header-offset);
+  transition: padding-block-start 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.app-shell.app--header-hidden {
+  padding-block-start: 0;
+}
+
+.site-header {
+  transform: translateY(0);
+  transition: transform 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.site-header.site-header--scroll-hidden {
+  transform: translateY(-100%);
+  pointer-events: none;
+}
+
 /* Nav link hover text reveal */
 .nav-link-hover span {
   position: relative;

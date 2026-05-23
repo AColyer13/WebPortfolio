@@ -232,11 +232,7 @@ function App() {
   }, [mobileMenuOpen])
 
   return (
-    <div
-      className={`transition-[padding-block-start] duration-[220ms] ease-[cubic-bezier(0.4,0,0.2,1)] pt-(--header-offset) ${
-        headerScrollHidden ? 'app--header-hidden pt-0' : ''
-      }`}
-    >
+    <div className={`app-shell${headerScrollHidden ? ' app--header-hidden' : ''}`}>
       <Navbar
         activeSection={activeSection}
         onNavigate={setActiveSection}

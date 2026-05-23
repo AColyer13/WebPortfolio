@@ -19,7 +19,10 @@ interface NavbarProps {
 const base = import.meta.env.BASE_URL
 
 const iconBtnClass =
-  'flex min-h-10 min-w-10 cursor-pointer items-center justify-center rounded-md border border-border-default bg-surface-0 p-1 text-text-default focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600'
+  'inline-flex size-9 shrink-0 cursor-pointer items-center justify-center rounded-md border border-border-default bg-surface-0 p-0 text-text-default focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600'
+
+const navLinkClass =
+  'nav-link-hover relative flex h-9 items-center rounded-sm px-2 py-1 text-menu text-text-default hover:text-text-default focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600'
 
 function cycleSessionOverride(
   override: SessionOverride,
@@ -63,7 +66,7 @@ function domTheme(override: SessionOverride): ThemePreference {
 function IconSun() {
   return (
     <svg
-      className="h-5 w-5 shrink-0"
+      className="h-[1.125rem] w-[1.125rem] shrink-0"
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
@@ -81,7 +84,7 @@ function IconSun() {
 function IconMoon() {
   return (
     <svg
-      className="h-5 w-5 shrink-0"
+      className="h-[1.125rem] w-[1.125rem] shrink-0"
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
@@ -137,8 +140,8 @@ export function Navbar({
 
   return (
     <header
-      className={`site-header @container/site-header fixed inset-x-0 top-0 z-1000 w-full translate-y-0 transition-transform duration-[220ms] ease-[cubic-bezier(0.4,0,0.2,1)] ${
-        headerScrollHidden ? 'site-header--scroll-hidden pointer-events-none -translate-y-full' : ''
+      className={`site-header @container/site-header fixed inset-x-0 top-0 z-[1000] w-full${
+        headerScrollHidden ? ' site-header--scroll-hidden' : ''
       }`}
     >
       <nav
@@ -191,7 +194,7 @@ export function Navbar({
                 <li key={item.id}>
                   <a
                     href={`${base}#${item.id}`}
-                    className={`nav-link-hover relative block min-h-10 rounded-sm px-2 py-1 text-menu text-text-default hover:text-text-default focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600 ${
+                    className={`${navLinkClass} ${
                       activeSection === item.id ? 'active font-bold text-primary-600' : ''
                     }`}
                     onClick={() => {
