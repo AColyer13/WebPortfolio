@@ -81,8 +81,8 @@
   --section-padding-y: var(--spacing-8);
   /* Hero: a bit less than section bands so the nav→headline gap stays proportional */
   --section-hero-padding-top: var(--spacing-3);
-  /* Gap under section titles (Skills / Experiences / Projects) — single rhythm */
-  --section-heading-gap: var(--spacing-6);
+  /* Gap under in-section group titles (Skills categories) */
+  --section-subheading-gap: var(--spacing-3);
   --container-max: 75rem;
   --container-inline: clamp(var(--spacing-2), 2vw + 0.5rem, var(--spacing-3));
 }
