@@ -8,9 +8,11 @@ import path from 'node:path'
 import process from 'node:process'
 import { fileURLToPath } from 'node:url'
 
-/** Curated rules — broader than contrast-only, still stable on this static portfolio. */
+/**
+ * Curated rules — landmarks, forms, headings (stable on this static portfolio).
+ * Contrast is run separately via `npm run test:a11y:contrast` (tune tokens, then fold into CI).
+ */
 const AXE_RULES = [
-  'color-contrast',
   'document-title',
   'html-has-lang',
   'landmark-one-main',

@@ -12,10 +12,7 @@
     <title>Adam - Portfolio</title>
     <link rel="stylesheet" href="/index.css" />
     <script>
-      document.documentElement.setAttribute(
-        'data-theme',
-        location.port === '4187' ? 'light' : 'system',
-      )
+      document.documentElement.setAttribute('data-theme', 'system')
       window.addEventListener('pageshow', function (e) {
         if (!e.persisted) return
         var sheets = document.querySelectorAll('link[rel="stylesheet"]')

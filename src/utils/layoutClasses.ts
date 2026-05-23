@@ -18,7 +18,7 @@ export const sectionDeferredClass =
   '[content-visibility:auto] [contain-intrinsic-size:auto_50rem]'
 
 export const primaryBtnClass =
-  'inline-flex min-h-11 items-center justify-center gap-1 rounded-pill border-none bg-primary-700 px-4 py-2 text-btn font-bold text-text-on-primary transition-[background-color,color,transform,box-shadow] duration-200 ease-in-out hover:-translate-y-[0.1875rem] hover:bg-primary-800 hover:text-text-on-primary hover:shadow-btn'
+  'inline-flex min-h-11 items-center justify-center gap-1 rounded-pill border-none bg-primary-600 px-4 py-2 text-btn font-bold text-surface-0 transition-[background-color,color,transform,box-shadow] duration-200 ease-in-out hover:-translate-y-[0.1875rem] hover:bg-primary-700 hover:text-surface-0 hover:shadow-btn'
 
 export const cardClass =
   'rounded-lg border border-border-default bg-surface-0 contain-[layout_style] transition-[transform,box-shadow,border-color] duration-200 ease-in-out'

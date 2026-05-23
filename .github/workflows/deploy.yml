@@ -53,7 +53,7 @@ jobs:
       - name: Install Chrome + ChromeDriver for axe
         run: npx --yes browser-driver-manager@latest install chrome
 
-      - name: Accessibility (axe — WCAG landmarks, forms, contrast)
+      - name: Accessibility (axe — landmarks, forms, headings)
         run: node scripts/axe-preview.mjs
 
       - name: Upload Pages artifact

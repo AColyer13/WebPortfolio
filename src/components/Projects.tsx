@@ -37,7 +37,7 @@ export function Projects() {
                 </div>
                 <div className="p-3 text-center">
                   <div>
-                    <p className="tech m-0 mb-1 text-copyright uppercase tracking-wide text-primary-800">
+                    <p className="tech m-0 mb-1 text-copyright uppercase tracking-wide text-primary-600">
                       {project.tech}
                     </p>
                     <h3 className="m-0 mb-2 text-fluid-3 font-bold text-text-default">

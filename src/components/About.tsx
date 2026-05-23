@@ -17,13 +17,13 @@ export function About() {
       <div className={`${containerClass} ${sectionContainerClass} @container/about`}>
         <div className="grid grid-cols-1 items-center gap-6 @[48rem]:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)]">
           <div className="pe-0 @[48rem]:pe-4">
-            <small className="mb-2 block text-fluid-1 font-bold text-primary-800">
+            <small className="mb-2 block text-fluid-1 font-bold text-primary-600">
               Welcome to{' '}
               <span className="inline @max-[47.98rem]:block">my portfolio!</span>
             </small>
             <h1>
               Hello everyone, I&apos;m{' '}
-              <span className="text-h1 text-primary-800">Adam Colyer</span>
+              <span className="text-h1 text-primary-600">Adam Colyer</span>
             </h1>
 
             <p>

@@ -151,9 +151,7 @@ export function Contact() {
                 <h3 className="mb-2 text-fluid-3 text-text-default">Say hello</h3>
                 <p className="m-0 text-fluid-2 text-text-default">612.710.7700</p>
                 <p>
-                  <a href="mailto:adamcolyer@gmail.com" className="text-primary-800 hover:text-primary-800">
-                    adamcolyer@gmail.com
-                  </a>
+                  <a href="mailto:adamcolyer@gmail.com">adamcolyer@gmail.com</a>
                 </p>
               </div>
 

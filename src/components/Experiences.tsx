@@ -16,8 +16,8 @@ export function Experiences() {
             key={`${item.year}-${item.title}`}
             className="grid grid-cols-[4.75rem_minmax(0,1fr)] items-center gap-3 @max-[40rem]:grid-cols-[3.5rem_minmax(0,1fr)] @max-[40rem]:gap-2"
           >
-            <div className="flex h-[4.75rem] w-[4.75rem] shrink-0 items-center justify-center self-center rounded-pill bg-primary-700 text-center @max-[40rem]:h-14 @max-[40rem]:w-14">
-              <span className="text-fluid-1 font-bold leading-tight text-text-on-primary">
+            <div className="flex h-[4.75rem] w-[4.75rem] shrink-0 items-center justify-center self-center rounded-pill bg-primary-600 text-center @max-[40rem]:h-14 @max-[40rem]:w-14">
+              <span className="text-fluid-1 font-bold leading-tight text-surface-0">
                 {item.year}
               </span>
             </div>
@@ -27,7 +27,7 @@ export function Experiences() {
               <h3 className="m-0 text-pretty text-fluid-3 font-bold leading-snug text-text-default">
                 {item.title}
               </h3>
-              <p className="m-0 text-fluid-1 font-medium leading-snug text-primary-800">
+              <p className="m-0 text-fluid-1 font-medium leading-snug text-primary-600">
                 {item.company}
               </p>
               <p className="m-0 text-body font-normal leading-relaxed text-text-muted">
