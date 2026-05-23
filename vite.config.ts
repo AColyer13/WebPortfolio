@@ -34,10 +34,24 @@ export default defineConfig(({ mode }) => {
             "base-uri 'self'",
             "form-action 'self'",
           ].join('; ')
-          return html.replace(
+          let result = html.replace(
             '<head>',
             `<head>\n    <meta http-equiv="Content-Security-Policy" content="${csp}" />`,
           )
+          // Ensure <link rel="stylesheet"> tags always appear before <script type="module">
+          // so CSS is render-blocking and available before React mounts, preventing FOUC.
+          const styleLinks = [...result.matchAll(/<link[^>]+rel="stylesheet"[^>]*>/g)].map(m => m[0])
+          const scriptTags = [...result.matchAll(/<script\s[^>]*type="module"[^>]*><\/script>/g)].map(m => m[0])
+          if (styleLinks.length && scriptTags.length) {
+            // Remove all stylesheet links and module scripts from their current positions
+            for (const tag of [...styleLinks, ...scriptTags]) {
+              result = result.replace(tag, '')
+            }
+            // Re-inject: stylesheets first, then module scripts, just before </head>
+            const injection = [...styleLinks, ...scriptTags].join('\n    ')
+            result = result.replace('</head>', `    ${injection}\n  </head>`)
+          }
+          return result
         },
       },
     ],
