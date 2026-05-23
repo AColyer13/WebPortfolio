@@ -57,8 +57,8 @@ jobs:
         env:
           VITE_BASE_PATH: /Portfolio-Website/
 
-      # Do not delete assets/ before publish — cached index.html can reference prior hashed
-      # CSS/JS for up to ~10 minutes; removing files causes unstyled pages until hard refresh.
+      - name: Remove previous Pages output at repo root
+        run: rm -rf assets images files
 
       - name: Publish dist/ to repository root on main
         uses: JamesIves/github-pages-deploy-action@v4
