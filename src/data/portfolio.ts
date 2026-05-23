@@ -30,6 +30,7 @@ export const skillBlocks: SkillBlock[] = [
     title: 'Core web / JS',
     skills: [
       { name: 'Vite', icon: 'images/vite.svg' },
+      { name: 'PWA', icon: 'images/pwa.svg' },
       { name: 'React', icon: 'images/react.svg' },
       { name: 'React Native', icon: 'images/react-native.svg' },
       { name: 'Flutter', icon: 'images/flutter.svg' },
