@@ -60,7 +60,7 @@ jobs:
       - name: Remove stale published files at repo root
         run: |
           rm -rf assets files images
-          rm -f index.html theme-init.js vite.svg .nojekyll
+          rm -f index.html vite.svg .nojekyll
 
       - name: Publish dist/ to repository root on main
         uses: JamesIves/github-pages-deploy-action@v4

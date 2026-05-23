@@ -7,8 +7,6 @@ import react from '@vitejs/plugin-react'
 
 const projectRoot = path.dirname(fileURLToPath(import.meta.url))
 
-// Relative base in production: one build works on GitHub Pages subpaths and custom domains.
-// `index.html` lives under `src/` so the repo root is not a dev entrypoint.
 export default defineConfig(({ mode }) => {
   const base = mode === 'development' || mode === 'test' ? '/' : './'
   return {
@@ -18,26 +16,34 @@ export default defineConfig(({ mode }) => {
       react(),
       tailwindcss(),
       {
-        // Vite adds crossorigin to CSS in production; on GitHub Pages that can load the
-        // sheet in CORS mode and leave link.sheet null so styles never apply after reload.
-        name: 'strip-stylesheet-crossorigin',
+        // GitHub Pages: drop crossorigin (breaks CSS on reload) and load CSS before JS.
+        name: 'production-html-assets',
         transformIndexHtml(html, ctx) {
           if (ctx.server) return html
-          return html
-            .replace(
-              /<link([^>]*)\s+crossorigin(?:\s*=\s*"[^"]*")?([^>]*rel="stylesheet"[^>]*)>/gi,
-              '<link$1$2>',
-            )
-            .replace(
-              /<link([^>]*rel="stylesheet"[^>]*)\s+crossorigin(?:\s*=\s*"[^"]*")?([^>]*)>/gi,
-              '<link$1$2>',
-            )
+
+          let result = html.replace(/\s+crossorigin(?:\s*=\s*"[^"]*")?/gi, '')
+
+          const styles = [...result.matchAll(/<link[^>]+rel="stylesheet"[^>]*>/gi)].map(
+            (m) => m[0],
+          )
+          const modules = [
+            ...result.matchAll(/<script\s+type="module"[^>]*><\/script>/gi),
+          ].map((m) => m[0])
+
+          if (!styles.length || !modules.length) return result
+
+          for (const tag of [...styles, ...modules]) {
+            result = result.replace(tag, '')
+          }
+          const block = [...styles, ...modules].join('\n    ')
+          return result.replace('</head>', `    ${block}\n  </head>`)
         },
       },
     ],
     build: {
       outDir: path.join(projectRoot, 'dist'),
       emptyOutDir: true,
+      cssCodeSplit: false,
     },
     publicDir: path.join(projectRoot, 'public'),
     test: {

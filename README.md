@@ -29,7 +29,7 @@ Open http://localhost:5173
 
 - **Projects, skills, timeline:** [`src/data/portfolio.ts`](src/data/portfolio.ts)
 - **Sections / copy:** [`src/components/`](src/components/)
-- **Theme:** [`src/styles/theme.css`](src/styles/theme.css), [`src/index.css`](src/index.css) (Tailwind + `@theme` tokens)
+- **Styles:** single [`src/index.css`](src/index.css) (tokens, Tailwind, layout utilities)
 
 ## GitHub Pages deploy
 

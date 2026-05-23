@@ -2,15 +2,25 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <script src="/theme-init.js"></script>
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="color-scheme" content="light dark" />
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1.0, viewport-fit=cover"
     />
-    <meta name="color-scheme" content="light dark" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <title>Adam - Portfolio</title>
-
+    <link rel="stylesheet" href="/index.css" />
+    <script>
+      document.documentElement.setAttribute('data-theme', 'system')
+      window.addEventListener('pageshow', function (e) {
+        if (!e.persisted) return
+        var sheets = document.querySelectorAll('link[rel="stylesheet"]')
+        for (var i = 0; i < sheets.length; i++) {
+          if (sheets[i].sheet) return
+        }
+        location.reload()
+      })
+    </script>
   </head>
   <body>
     <div id="root"></div>
