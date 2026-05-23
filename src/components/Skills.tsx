@@ -1,6 +1,7 @@
 import { skillBlocks } from '../data/portfolio'
 import { withBase } from '../utils/baseUrl'
 import { skillCardClass } from '../utils/layoutClasses'
+import { touchPressHandlers } from '../utils/touchPress'
 import { Section, SubsectionHeading } from './Section'
 
 function isFontAwesomeIcon(icon: string) {
@@ -46,7 +47,7 @@ export function Skills() {
             <div className="grid w-full grid-cols-2 items-stretch justify-items-stretch gap-x-(--container-inline) gap-y-4 @[56rem]:grid-cols-4 @[56rem]:gap-x-4">
               {block.skills.map((skill) => (
                 <div key={skill.name} className="flex w-full min-w-0 self-stretch">
-                  <div className={skillCardClass}>
+                  <div className={skillCardClass} {...touchPressHandlers}>
                     <div className="skill-card__body flex max-h-full w-full min-w-0 flex-col items-center justify-center gap-2">
                       <h4 className="m-0 w-full shrink-0 overflow-wrap-anywhere text-fluid-3 font-medium leading-snug text-text-default">
                         {skill.name}

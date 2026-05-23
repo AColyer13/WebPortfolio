@@ -381,37 +381,46 @@
 }
 
 /*
- * Touch / no-hover devices (Media Queries Level 4: hover: none).
- * Platform guidance: don’t mirror desktop hover on touch; show real controls and
- * use pressed/focus states on interactive elements only (portfolio links).
+ * Touch / coarse pointer — pressed feedback via .touch-pressed (Pointer Events)
+ * because :has(:active) is unreliable on iOS Safari.
  */
-@media (hover: none) {
-  .portfolio-item-inner {
+@media (hover: none), (pointer: coarse) {
+  .portfolio-item-inner,
+  .skill-card {
     transition-property: border-color;
     transition-duration: 0.2s;
     transition-timing-function: ease;
   }
 
-  .portfolio-item-inner:has(:active),
+  .portfolio-item-inner.touch-pressed,
+  .skill-card.touch-pressed,
   .portfolio-item-inner:has(:focus-visible) {
     border-color: var(--color-primary-600);
   }
 
-  /* Affordance: links visible without hover (web.dev / HIG / Material) */
   .portfolio-zoom-link {
     opacity: 1;
     -webkit-tap-highlight-color: transparent;
     touch-action: manipulation;
   }
 
-  .portfolio-zoom-link:active {
+  .portfolio-zoom-link:active,
+  .portfolio-zoom-link:focus-visible {
     transform: translate(-50%, -50%) scale(0.96);
+    background-color: var(--color-primary-700);
+    box-shadow: 0 0 0 0.25rem var(--color-focus-ring);
     transition: transform 0.12s ease-out;
   }
 
   .portfolio-link {
     -webkit-tap-highlight-color: transparent;
     touch-action: manipulation;
+  }
+
+  .portfolio-link:active .fab,
+  .portfolio-link:focus-visible .fab {
+    color: var(--color-primary-700);
+    filter: drop-shadow(0 0 0.25rem var(--color-focus-ring));
   }
 
   .social-link {

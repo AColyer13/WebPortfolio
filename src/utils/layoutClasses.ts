@@ -27,7 +27,7 @@ export const cardClass =
 export const cardLiftClass =
   'pointer-fine:hover:-translate-y-[0.3125rem] pointer-fine:hover:border-primary-600 pointer-fine:hover:shadow-card'
 
-export const skillCardClass = `${cardClass} ${cardLiftClass} flex h-[9.375rem] min-h-[9.375rem] max-h-[9.375rem] w-full flex-1 items-center justify-center px-3 py-4 text-center`
+export const skillCardClass = `${cardClass} skill-card ${cardLiftClass} flex h-[9.375rem] min-h-[9.375rem] max-h-[9.375rem] w-full flex-1 items-center justify-center px-3 py-4 text-center`
 
 export const portfolioCardClass = `${cardClass} portfolio-item-inner group mx-auto min-h-[23rem] max-w-full overflow-hidden pointer-fine:hover:-translate-y-[0.3125rem] pointer-fine:hover:border-primary-600 pointer-fine:hover:shadow-card-hover`
 

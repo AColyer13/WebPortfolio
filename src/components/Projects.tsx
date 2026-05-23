@@ -1,6 +1,7 @@
 import { projects } from '../data/portfolio'
 import { withBase } from '../utils/baseUrl'
 import { imgCardThumbClass, portfolioCardClass } from '../utils/layoutClasses'
+import { touchPressHandlers } from '../utils/touchPress'
 import { Section } from './Section'
 
 export function Projects() {
@@ -14,7 +15,7 @@ export function Projects() {
             : 'fab fa-github-alt'
           return (
             <div key={project.id}>
-              <div className={portfolioCardClass}>
+              <div className={portfolioCardClass} {...touchPressHandlers}>
                 <div className="relative h-[12.5rem] overflow-hidden">
                   <img
                     src={withBase(project.imageUrl)}
