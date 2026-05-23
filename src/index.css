@@ -76,7 +76,7 @@
   --menu-font-size: var(--font-size-fluid-1);
   --copyright-font-size: 0.875rem;
 
-  /* Anchor scroll offset; App.tsx sets this to .site-header height so #about matches first paint */
+  /* Fixed-header clearance; App.tsx sets this to .site-header height (padding + section scroll-margin) */
   --header-offset: calc(var(--spacing-2) * 2 + 2.5rem);
   /* Vertical padding between section bands — between tight (spacing-5) and airy (spacing-8) */
   --section-padding-y: var(--spacing-6);
@@ -164,6 +164,10 @@
   color-scheme: light;
 }
 @import 'tailwindcss';
+
+/* Hover lift/shadow only on devices with a real hover pointer; touch uses :active instead. */
+@custom-variant pointer-fine (@media (hover: hover) and (pointer: fine));
+
 @theme inline {
   --font-sans: var(--body-font-family);
 
@@ -235,11 +239,15 @@
 
   html {
     scroll-behavior: auto;
-    /* Single source for in-page anchor offset (nav #links, scrollIntoView) */
-    scroll-padding-top: var(--header-offset);
     /* Prevent rubber-band / pull past the document top on trackpad and mobile */
     overscroll-behavior-y: none;
     background-color: var(--color-surface-0);
+  }
+
+  /* Anchor offset for #hash + scrollIntoView — scroll-margin, not scroll-padding on
+     html, which adds top inset to the scrollport and allows a few px of blank overscroll. */
+  section[id] {
+    scroll-margin-top: var(--header-offset);
   }
 
   @media (prefers-reduced-motion: reduce) {

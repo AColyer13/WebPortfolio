@@ -27,7 +27,7 @@ export function Projects() {
                   />
                   <a
                     href={overlayHref}
-                    className="portfolio-zoom-link absolute top-1/2 left-1/2 z-2 flex h-[3.75rem] w-[3.75rem] min-h-11 min-w-11 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-primary-600 opacity-0 transition-opacity duration-200 ease-in-out group-hover:opacity-100 focus-visible:opacity-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-surface-0"
+                    className="portfolio-zoom-link absolute top-1/2 left-1/2 z-2 flex h-[3.75rem] w-[3.75rem] min-h-11 min-w-11 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-primary-600 opacity-100 transition-opacity duration-200 ease-in-out pointer-fine:opacity-0 pointer-fine:group-hover:opacity-100 focus-visible:opacity-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-surface-0"
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label={`Open ${project.title} (external)`}
