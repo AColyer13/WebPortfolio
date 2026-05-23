@@ -23,9 +23,8 @@ export function About() {
               <span className="inline @max-[47.98rem]:block">my portfolio!</span>
             </small>
             <h1>
-              <span className="me-2">Hey folks, I&apos;m</span>
-              <br />
-              <span className="inline text-h1 text-primary-600">Adam Colyer</span>
+              Hello everyone, I&apos;m{' '}
+              <span className="text-h1 text-primary-600">Adam Colyer</span>
             </h1>
 
             <p>

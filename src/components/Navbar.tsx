@@ -142,11 +142,14 @@ export function Navbar({
       }`}
     >
       <nav
-        className="site-nav bg-surface-0 py-2 shadow-nav @max-[47.99rem]:pt-[calc(env(safe-area-inset-top,0px)+var(--spacing-1))] @max-[47.99rem]:pb-2"
+        className="site-nav bg-surface-0 py-2 shadow-nav @max-[47.99rem]/site-header:pt-[calc(env(safe-area-inset-top,0px)+var(--spacing-1))] @max-[47.99rem]/site-header:pb-2"
         aria-label="Primary"
       >
-        <div className={`${containerClass} flex flex-wrap items-center justify-end gap-2 @[48rem]:grid @[48rem]:grid-cols-[1fr_auto_1fr] @[48rem]:items-center`}>
-          <div className="ms-auto flex items-center gap-1 @[48rem]:col-start-3 @[48rem]:row-start-1 @[48rem]:ms-0 @[48rem]:justify-self-end">
+        <div
+          className={`${containerClass} grid grid-cols-1 items-center gap-2 @[48rem]/site-header:grid-cols-[1fr_auto_1fr] @[48rem]/site-header:gap-0`}
+        >
+          {/* Mobile toolbar */}
+          <div className="flex items-center justify-end gap-1 @[48rem]/site-header:hidden">
             <button
               type="button"
               className={iconBtnClass}
@@ -160,7 +163,7 @@ export function Navbar({
             </button>
             <button
               type="button"
-              className={`${iconBtnClass} @[48rem]:hidden`}
+              className={iconBtnClass}
               onClick={() =>
                 setIsMenuOpen((open) => {
                   const next = !open
@@ -176,13 +179,14 @@ export function Navbar({
             </button>
           </div>
 
+          {/* Nav links — centered in middle column on desktop */}
           <div
-            className={`basis-full py-2 @[48rem]:col-start-2 @[48rem]:row-start-1 @[48rem]:mx-auto @[48rem]:block @[48rem]:basis-auto @[48rem]:py-0 ${
+            className={`py-2 @[48rem]/site-header:col-start-2 @[48rem]/site-header:row-start-1 @[48rem]/site-header:py-0 ${
               isMenuOpen ? 'block' : 'hidden'
-            }`}
+            } @[48rem]/site-header:block`}
             id="site-nav-menu"
           >
-            <ul className="m-0 flex list-none flex-col items-stretch gap-1 p-0 @[48rem]:flex-row @[48rem]:flex-wrap @[48rem]:items-center @[48rem]:justify-center @[48rem]:gap-0">
+            <ul className="m-0 flex list-none flex-col items-stretch gap-1 p-0 @[48rem]/site-header:flex-row @[48rem]/site-header:flex-wrap @[48rem]/site-header:items-center @[48rem]/site-header:justify-center @[48rem]/site-header:gap-0">
               {navItems.map((item) => (
                 <li key={item.id}>
                   <a
@@ -201,6 +205,21 @@ export function Navbar({
                 </li>
               ))}
             </ul>
+          </div>
+
+          {/* Desktop toolbar — right column balances mobile toolbar for true center nav */}
+          <div className="hidden items-center justify-end gap-1 @[48rem]/site-header:col-start-3 @[48rem]/site-header:row-start-1 @[48rem]/site-header:flex">
+            <button
+              type="button"
+              className={iconBtnClass}
+              onClick={() =>
+                setSessionOverride((o) => cycleSessionOverride(o, osDark))
+              }
+              aria-label={themeToggleLabel}
+              title={themeToggleTitle}
+            >
+              {effectiveTheme === 'light' ? <IconMoon /> : <IconSun />}
+            </button>
           </div>
         </div>
       </nav>
