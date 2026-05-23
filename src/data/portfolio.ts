@@ -62,7 +62,8 @@ export const skillBlocks: SkillBlock[] = [
   {
     title: 'Data, auth, realtime',
     skills: [
-      { name: 'Firebase (Auth, Firestore, Hosting)', icon: 'images/firebase.svg' },
+      { name: 'Firebase', icon: 'images/firebase.svg' },
+      { name: 'Firestore Hosting', icon: 'images/firestore-hosting.svg' },
       { name: 'SQL', icon: 'fas fa-table' },
       { name: 'Socket.IO', icon: 'images/socketdotio.svg' },
       { name: 'JWT & OAuth', icon: 'fas fa-key' },

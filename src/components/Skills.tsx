@@ -11,8 +11,8 @@ function SkillIcon({ icon }: { icon: string }) {
       <span
         className="skill-card__logo"
         style={{
-          maskImage: `url(${logoUrl})`,
-          WebkitMaskImage: `url(${logoUrl})`,
+          maskImage: `url("${logoUrl}")`,
+          WebkitMaskImage: `url("${logoUrl}")`,
         }}
         aria-hidden
       />
