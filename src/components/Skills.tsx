@@ -1,8 +1,22 @@
 import { skillBlocks } from '../data/portfolio'
+import { withBase } from '../utils/baseUrl'
 
 function SkillIcon({ icon }: { icon: string }) {
   if (icon.includes('fa')) {
     return <i className={icon} aria-hidden />
+  }
+  if (/\.(?:svg|png|jpe?g|webp)$/i.test(icon)) {
+    const logoUrl = withBase(icon)
+    return (
+      <span
+        className="skill-card__logo"
+        style={{
+          maskImage: `url(${logoUrl})`,
+          WebkitMaskImage: `url(${logoUrl})`,
+        }}
+        aria-hidden
+      />
+    )
   }
   return (
     <i className="skill-card__emoji" aria-hidden>

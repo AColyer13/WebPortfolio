@@ -115,7 +115,7 @@ export const skillBlocks: SkillBlock[] = [
     skills: [
       { name: 'Gemini API', icon: 'fab fa-google' },
       { name: 'Claude Code', icon: 'fas fa-feather-pointed' },
-      { name: 'Cursor', icon: 'fas fa-i-cursor' },
+      { name: 'Cursor', icon: 'images/cursor.svg' },
       { name: 'AI Agent Development', icon: 'fas fa-robot' },
       { name: 'Prompt Engineering', icon: 'fas fa-wand-magic-sparkles' },
       { name: 'AI Rate Limiting', icon: 'fas fa-gauge' },

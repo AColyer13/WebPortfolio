@@ -512,6 +512,20 @@
   font-style: normal;
 }
 
+.skill-card__logo {
+  flex-shrink: 0;
+  display: block;
+  width: 2.5rem;
+  height: 2.5rem;
+  background-color: var(--color-primary-600);
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  mask-position: center;
+  -webkit-mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+}
+
 /* ——— Experience / timeline ——— */
 .resume {
   background-color: var(--color-surface-0);
