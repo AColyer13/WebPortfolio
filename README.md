@@ -18,14 +18,12 @@ npm run dev
 
 Open http://localhost:5173
 
-| Script | |
-|--------|---|
-| `npm run dev` | Dev server |
-| `npm run build` | Production build |
-| `npm run preview` | Preview build |
-| `npm run preview:pages` | Build then preview (like Pages) |
-| `npm run lint` | ESLint |
-| `npm run test` | Vitest |
+- `npm run dev` — Dev server
+- `npm run build` — Production build
+- `npm run preview` — Preview build
+- `npm run preview:pages` — Build then preview (Pages-like base path)
+- `npm run lint` — ESLint
+- `npm run test` — Vitest
 
 ## Customize
 
@@ -35,9 +33,13 @@ Open http://localhost:5173
 
 ## GitHub Pages deploy
 
-On push to **`main`**, CI runs tests, builds with `VITE_BASE_PATH=/Portfolio-Website/`, then commits **`dist/`** to the **repo root** on **`main`** (see [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml)). You work in **`src/`** and **`public/`**; root **`index.html`**, **`assets/`**, **`images/`**, **`files/`**, etc. are the published site.
+On push to **`main`**, CI runs tests, builds with `VITE_BASE_PATH=/Portfolio-Website/`, then commits **`dist/`** to the **repo root** on **`main`** (see [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml)).
 
-**Pages settings:** Branch **`main`**, folder **`/` (root)** — not `/docs`. Use **Deploy from a branch**, not “GitHub Actions” as the Pages source (the workflow commits artifacts; Pages reads the branch).
+This means two `index.html` files are expected:
+- **Source entry:** `src/index.html` (used by Vite in dev/build)
+- **Published entry:** `index.html` at repo root (deployed output served by Pages)
+
+**Pages settings:** Branch **`main`**, folder **`/` (root)** — not `/docs`. Use **Deploy from a branch**, not “GitHub Actions” as the Pages source (the workflow commits artifacts; Pages serves that branch).
 
 Production-like build locally:
 
