@@ -50,6 +50,7 @@ export const skillBlocks: SkillBlock[] = [
     title: 'UI / 3D / content',
     skills: [
       { name: 'shadcn/ui (Radix)', icon: 'fas fa-cubes' },
+      { name: 'Disco UI', icon: 'fas fa-compact-disc' },
       { name: 'Lucide', icon: 'fas fa-icons' },
       { name: 'Three.js & R3F', icon: 'fas fa-cube' },
       { name: 'Recharts', icon: 'fas fa-chart-bar' },
