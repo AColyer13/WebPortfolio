@@ -72,7 +72,7 @@ export const skillBlocks: SkillBlock[] = [
       { name: 'Cognito', icon: 'images/cognito.svg' },
       { name: 'JWT & OAuth', icon: 'fas fa-key' },
       { name: 'Zod', icon: 'images/zod.svg' },
-      { name: 'API Gateway', icon: 'images/api-gateway.svg' },
+      { name: 'Amazon API Gateway', icon: 'images/api-gateway.svg' },
       { name: 'Socket.IO', icon: 'images/socketdotio.svg' },
     ],
   },
