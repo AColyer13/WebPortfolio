@@ -31,6 +31,8 @@ export const skillBlocks: SkillBlock[] = [
     skills: [
       { name: 'Vite', icon: 'fas fa-bolt' },
       { name: 'React', icon: 'fab fa-react' },
+      { name: 'React Native', icon: 'fas fa-mobile-screen' },
+      { name: 'Flutter', icon: 'fas fa-mobile-screen-button' },
       { name: 'React Router', icon: 'fas fa-route' },
       { name: 'React Query', icon: 'fas fa-arrows-rotate' },
       { name: 'JavaScript', icon: 'fab fa-js' },
