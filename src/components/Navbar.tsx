@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import {
   applyTheme,
+  syncThemeColor,
   type ResolvedTheme,
   type ThemePreference,
 } from '../theme/colorScheme'
@@ -20,6 +21,10 @@ const base = import.meta.env.BASE_URL
 
 const iconBtnClass =
   'inline-flex size-9 shrink-0 cursor-pointer items-center justify-center rounded-md border border-border-default bg-surface-0 p-0 text-text-default focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600'
+
+/** 44px touch targets on mobile toolbar (HIG / Material). */
+const iconBtnMobileClass =
+  'inline-flex size-11 shrink-0 cursor-pointer items-center justify-center rounded-md border border-border-default bg-surface-0 p-0 text-text-default focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600'
 
 const navLinkClass =
   'nav-link-hover relative flex h-9 items-center rounded-sm px-2 py-1 text-menu text-text-default hover:text-text-default focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600'
@@ -120,7 +125,8 @@ export function Navbar({
 
   useEffect(() => {
     applyTheme(appliedTheme)
-  }, [appliedTheme])
+    syncThemeColor(effectiveTheme)
+  }, [appliedTheme, effectiveTheme])
 
   const nextOverride = cycleSessionOverride(sessionOverride, osDark)
   const nextThemeLabel =
@@ -155,7 +161,7 @@ export function Navbar({
           <div className="flex items-center justify-end gap-1 @[48rem]/site-header:hidden">
             <button
               type="button"
-              className={iconBtnClass}
+              className={iconBtnMobileClass}
               onClick={() =>
                 setSessionOverride((o) => cycleSessionOverride(o, osDark))
               }
@@ -166,7 +172,7 @@ export function Navbar({
             </button>
             <button
               type="button"
-              className={iconBtnClass}
+              className={iconBtnMobileClass}
               onClick={() =>
                 setIsMenuOpen((open) => {
                   const next = !open

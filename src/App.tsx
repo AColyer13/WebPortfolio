@@ -248,6 +248,11 @@ function App() {
     }
   }, [mobileMenuOpen])
 
+  useEffect(() => {
+    document.documentElement.classList.toggle('menu-scroll-lock', mobileMenuOpen)
+    return () => document.documentElement.classList.remove('menu-scroll-lock')
+  }, [mobileMenuOpen])
+
   const navigateToSection = (section: string) => {
     const header = document.querySelector<HTMLElement>('.site-header')
     if (header) {

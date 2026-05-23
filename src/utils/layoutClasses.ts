@@ -23,12 +23,13 @@ export const primaryBtnClass =
 export const cardClass =
   'rounded-lg border border-border-default bg-surface-0 contain-[layout_style] transition-[transform,box-shadow,border-color] duration-200 ease-in-out'
 
+/** Decorative lift on fine pointers only — skill cards are not tappable (see index.css). */
 export const cardLiftClass =
-  'card-touch pointer-fine:hover:-translate-y-[0.3125rem] pointer-fine:hover:border-primary-600 pointer-fine:hover:shadow-card'
+  'pointer-fine:hover:-translate-y-[0.3125rem] pointer-fine:hover:border-primary-600 pointer-fine:hover:shadow-card'
 
 export const skillCardClass = `${cardClass} ${cardLiftClass} flex h-[9.375rem] min-h-[9.375rem] max-h-[9.375rem] w-full flex-1 items-center justify-center px-3 py-4 text-center`
 
-export const portfolioCardClass = `${cardClass} portfolio-item-inner card-touch group mx-auto min-h-[23rem] max-w-full overflow-hidden pointer-fine:hover:-translate-y-[0.3125rem] pointer-fine:hover:border-primary-600 pointer-fine:hover:shadow-card-hover`
+export const portfolioCardClass = `${cardClass} portfolio-item-inner group mx-auto min-h-[23rem] max-w-full overflow-hidden pointer-fine:hover:-translate-y-[0.3125rem] pointer-fine:hover:border-primary-600 pointer-fine:hover:shadow-card-hover`
 
 /** Contact submit — primary button with full-width / square corners */
 export const primaryBtnSubmitClass = `${primaryBtnClass} w-full cursor-pointer rounded-sm text-text-on-primary disabled:cursor-not-allowed disabled:opacity-60`

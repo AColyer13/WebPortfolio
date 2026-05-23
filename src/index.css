@@ -268,6 +268,11 @@
     font-synthesis: none;
   }
 
+  html.menu-scroll-lock,
+  html.menu-scroll-lock body {
+    overflow: hidden;
+  }
+
   h1,
   h2,
   h3,
@@ -375,25 +380,24 @@
     0 0.375rem 0 currentColor;
 }
 
-/* Touch — purple border only while pressing (no always-on highlight, no card lift) */
+/*
+ * Touch / no-hover devices (Media Queries Level 4: hover: none).
+ * Platform guidance: don’t mirror desktop hover on touch; show real controls and
+ * use pressed/focus states on interactive elements only (portfolio links).
+ */
 @media (hover: none) {
-  .card-touch,
   .portfolio-item-inner {
     transition-property: border-color;
     transition-duration: 0.2s;
     transition-timing-function: ease;
   }
 
-  /* cursor:pointer helps Safari fire :active on non-link skill cards */
-  .card-touch {
-    cursor: pointer;
-  }
-
-  .card-touch:active,
-  .portfolio-item-inner:has(:active) {
+  .portfolio-item-inner:has(:active),
+  .portfolio-item-inner:has(:focus-visible) {
     border-color: var(--color-primary-600);
   }
 
+  /* Affordance: links visible without hover (web.dev / HIG / Material) */
   .portfolio-zoom-link {
     opacity: 1;
     -webkit-tap-highlight-color: transparent;
@@ -408,6 +412,17 @@
   .portfolio-link {
     -webkit-tap-highlight-color: transparent;
     touch-action: manipulation;
+  }
+
+  .social-link {
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+
+  .social-link:active {
+    transform: translateY(-0.1875rem);
+    background-color: var(--color-primary-600);
+    color: var(--color-text-default);
   }
 }
 

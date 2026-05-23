@@ -21,7 +21,10 @@ type FormStatus =
   | { kind: 'success' | 'error'; message: string }
 
 const inputClass =
-  'contact-form-input w-full rounded-sm border border-border-default bg-surface-0 px-3 py-2 text-fluid-1 text-text-default transition-[border-color,box-shadow] duration-200 ease-in-out placeholder:text-text-muted focus:border-primary-600 focus:outline-none focus:shadow-[0_0_0_3px_var(--color-focus-ring)] aria-invalid:border-danger-600'
+  'contact-form-input w-full rounded-sm border border-border-default bg-surface-0 px-3 py-2 text-base text-text-default transition-[border-color,box-shadow] duration-200 ease-in-out placeholder:text-text-muted focus:border-primary-600 focus:outline-none focus:shadow-[0_0_0_3px_var(--color-focus-ring)] aria-invalid:border-danger-600'
+
+const socialLinkClass =
+  'social-link inline-flex h-11 w-11 items-center justify-center rounded-sm bg-border-default text-primary-600 no-underline transition-[background-color,color,transform] duration-200 ease-in-out pointer-fine:hover:-translate-y-[0.1875rem] pointer-fine:hover:bg-primary-600 pointer-fine:hover:text-text-default'
 
 function requiredField(value: string, label: string): string {
   if (!value.trim()) return `${label} is required.`
@@ -141,7 +144,7 @@ export function Contact() {
                 allowFullScreen
                 loading="lazy"
                 title="Map of Edina, MN"
-                className="h-[clamp(14rem,30vh,22rem)] w-full rounded-md border-0 grayscale transition-[filter] duration-200 ease-in-out hover:grayscale-0"
+                className="contact-map h-[clamp(14rem,30vh,22rem)] w-full rounded-md border-0 grayscale transition-[filter] duration-200 ease-in-out pointer-fine:hover:grayscale-0"
               />
             </div>
             <div className="mt-0 flex flex-wrap items-center justify-between gap-3 rounded-b-lg border border-t-0 border-border-default bg-surface-50 px-3 py-4">
@@ -159,7 +162,7 @@ export function Contact() {
                     href="https://github.com/acolyer13"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="social-link inline-flex h-11 w-11 items-center justify-center rounded-sm bg-border-default text-primary-600 no-underline transition-[background-color,color,transform] duration-200 ease-in-out hover:-translate-y-[0.1875rem] hover:bg-primary-600 hover:text-text-default"
+                    className={socialLinkClass}
                     aria-label="GitHub profile"
                   >
                     <i className="fab fa-github block text-2xl leading-none" aria-hidden="true" />
@@ -170,7 +173,7 @@ export function Contact() {
                     href="https://www.linkedin.com/in/colyeradam/"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="social-link inline-flex h-11 w-11 items-center justify-center rounded-sm bg-border-default text-primary-600 no-underline transition-[background-color,color,transform] duration-200 ease-in-out hover:-translate-y-[0.1875rem] hover:bg-primary-600 hover:text-text-default"
+                    className={socialLinkClass}
                     aria-label="LinkedIn profile"
                   >
                     <i className="fab fa-linkedin block text-2xl leading-none" aria-hidden="true" />
