@@ -1,5 +1,6 @@
 /**
- * Keep in sync with public/theme-init.js (Vite publicDir copy source).
+ * Keep in sync with src/theme/colorScheme.ts and src/utils/scrollHeader.ts.
+ * Runs synchronously before React/CSS so the first paint follows prefers-color-scheme.
  */
 ;(function () {
   var THEME_STORAGE_KEY = 'portfolio-color-scheme-v2'
