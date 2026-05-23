@@ -22,24 +22,26 @@ export default defineConfig(({ mode }) => {
       react(),
       tailwindcss(),
       {
-        name: 'html-csp-production',
+        // GitHub Pages: `crossorigin` on <link rel="stylesheet"> can prevent the sheet from
+        // applying in some browsers/extensions (CORS-mode load). ES modules keep crossorigin.
+        // Also discourage caching index.html so deploys don't pair stale HTML with deleted hashes.
+        name: 'github-pages-html',
         transformIndexHtml(html, ctx) {
           if (ctx.server) return html
-          const csp = [
-            "default-src 'self'",
-            "script-src 'self'",
-            "style-src 'self'",
-            "font-src 'self' data:",
-            "img-src 'self' data: https: blob:",
-            "connect-src 'self' https://api.emailjs.com",
-            "frame-src https://www.google.com https://www.google.com/maps https://maps.google.com https://www.gstatic.com",
-            "base-uri 'self'",
-            "form-action 'self'",
-          ].join('; ')
-          return html.replace(
-            '<head>',
-            `<head>\n    <meta http-equiv="Content-Security-Policy" content="${csp}" />`,
+          let out = html.replace(
+            /<link([^>]*)\s+crossorigin(\s*=\s*"[^"]*")?([^>]*rel="stylesheet"[^>]*)>/g,
+            '<link$1$3>',
+          ).replace(
+            /<link([^>]*rel="stylesheet"[^>]*)\s+crossorigin(\s*=\s*"[^"]*")?([^>]*)>/g,
+            '<link$1$3>',
           )
+          if (!out.includes('http-equiv="Cache-Control"')) {
+            out = out.replace(
+              '<head>',
+              '<head>\n    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />',
+            )
+          }
+          return out
         },
       },
     ],
