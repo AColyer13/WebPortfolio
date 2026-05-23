@@ -21,6 +21,11 @@ concurrency:
 jobs:
   build-and-publish-root:
     runs-on: ubuntu-latest
+    env:
+      # Default to repo subpath (project pages), but allow override via repository variable.
+      # Set `VITE_BASE_PATH` in GitHub -> Settings -> Secrets and variables -> Actions -> Variables
+      # to `/` when using a custom domain or user/organization pages root.
+      VITE_BASE_PATH: ${{ vars.VITE_BASE_PATH || format('/{0}/', github.event.repository.name) }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -39,8 +44,6 @@ jobs:
 
       - name: Build
         run: npm run build
-        env:
-          VITE_BASE_PATH: /Portfolio-Website/
 
       - name: Verify production bundle (must not reference main.tsx)
         run: |
@@ -53,9 +56,7 @@ jobs:
         run: npx --yes browser-driver-manager@latest install chrome
 
       - name: Accessibility (axe)
-        run: VITE_BASE_PATH=/Portfolio-Website/ node scripts/axe-preview.mjs
-        env:
-          VITE_BASE_PATH: /Portfolio-Website/
+        run: node scripts/axe-preview.mjs
 
       - name: Remove previous Pages output at repo root
         run: rm -rf assets images files
