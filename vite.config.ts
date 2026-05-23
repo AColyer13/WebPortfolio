@@ -86,6 +86,20 @@ export default defineConfig(({ mode }) => {
       // lands in src/dist and CI (folder: dist) cannot find it.
       outDir: path.join(projectRoot, 'dist'),
       emptyOutDir: true,
+      // GitHub Pages caches HTML and static assets separately (max-age=600). Using stable
+      // entry filenames avoids "new HTML vs old hashed CSS/JS" mismatch across edge POPs.
+      cssCodeSplit: false,
+      rollupOptions: {
+        output: {
+          entryFileNames: 'assets/index.js',
+          chunkFileNames: 'assets/[name].js',
+          assetFileNames(assetInfo) {
+            const name = assetInfo.name ?? ''
+            if (name.endsWith('.css')) return 'assets/index.css'
+            return 'assets/[name][extname]'
+          },
+        },
+      },
     },
     // Relative to Vite `root` (src/), the default `public` would be src/public — use repo-root public/.
     publicDir: path.join(projectRoot, 'public'),
