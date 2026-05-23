@@ -21,11 +21,6 @@ concurrency:
 jobs:
   build-and-publish-root:
     runs-on: ubuntu-latest
-    env:
-      # Default to repo subpath (project pages), but allow override via repository variable.
-      # Set `VITE_BASE_PATH` in GitHub -> Settings -> Secrets and variables -> Actions -> Variables
-      # to `/` when using a custom domain or user/organization pages root.
-      VITE_BASE_PATH: ${{ vars.VITE_BASE_PATH || format('/{0}/', github.event.repository.name) }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -63,7 +58,7 @@ jobs:
         with:
           branch: main
           folder: dist
-          # Keep old hashed files so cached HTML at edge POPs still finds matching assets
-          # while GitHub Pages (max-age=600) propagates new index.html.
+          # Keep prior files during CDN propagation windows (max-age=600) to avoid
+          # transient missing-asset states between old/new cached documents.
           clean: false
           commit-message: 'deploy: Pages build at repo root [skip ci]'

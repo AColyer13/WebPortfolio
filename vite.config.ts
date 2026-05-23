@@ -7,14 +7,14 @@ import react from '@vitejs/plugin-react'
 
 const projectRoot = path.dirname(fileURLToPath(import.meta.url))
 
-// `base` in production: set VITE_BASE_PATH to match your Pages URL (see README).
+// Use a relative base in production so the same build works on:
+// - GitHub Pages project sites (/repo-name/)
+// - custom domains / user pages (/)
+// without requiring VITE_BASE_PATH overrides.
 // `index.html` lives under `src/` so the repo root has no dev entrypoint — GitHub Pages
 // must not serve a root `index.html` that references `*.tsx` (wrong MIME for raw files).
 export default defineConfig(({ mode }) => {
-  const base =
-    mode === 'development' || mode === 'test'
-      ? '/'
-      : (process.env.VITE_BASE_PATH ?? '/Portfolio-Website/')
+  const base = mode === 'development' || mode === 'test' ? '/' : './'
   return {
     root: path.join(projectRoot, 'src'),
     base,
@@ -95,7 +95,10 @@ export default defineConfig(({ mode }) => {
           chunkFileNames: 'assets/[name].js',
           assetFileNames(assetInfo) {
             const name = assetInfo.name ?? ''
-            if (name.endsWith('.css')) return 'assets/index.css'
+            // Keep only the app entry stylesheet stable; let any additional CSS assets keep
+            // unique filenames so they cannot overwrite the main bundle.
+            if (name === 'style.css' || name === 'index.css') return 'assets/index.css'
+            if (name.endsWith('.css')) return 'assets/[name]-[hash][extname]'
             return 'assets/[name][extname]'
           },
         },

@@ -21,7 +21,7 @@ Open http://localhost:5173
 - `npm run dev` — Dev server
 - `npm run build` — Production build
 - `npm run preview` — Preview build
-- `npm run preview:pages` — Build then preview (Pages-like base path)
+- `npm run preview:pages` — Build then preview production output
 - `npm run lint` — ESLint
 - `npm run test` — Vitest
 
@@ -33,18 +33,18 @@ Open http://localhost:5173
 
 ## GitHub Pages deploy
 
-On push to **`main`**, CI runs tests, builds with `VITE_BASE_PATH=/Portfolio-Website/`, then commits **`dist/`** to the **repo root** on **`main`** (see [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml)).
+On push to **`main`**, CI runs tests, builds once, then commits **`dist/`** to the **repo root** on **`main`** (see [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml)).
 
-This means two `index.html` files are expected:
-- **Source entry:** `src/index.html` (used by Vite in dev/build)
-- **Published entry:** `index.html` at repo root (deployed output served by Pages)
+Single source of truth:
+- **Edit only:** `src/index.html` (Vite source entry)
+- **Do not edit:** root `index.html` (generated deploy artifact committed by CI)
 
 **Pages settings:** Branch **`main`**, folder **`/` (root)** — not `/docs`. Use **Deploy from a branch**, not “GitHub Actions” as the Pages source (the workflow commits artifacts; Pages serves that branch).
 
-Production-like build locally:
+Production build locally:
 
 ```bash
-VITE_BASE_PATH=/Portfolio-Website/ npm run build
+npm run build
 ```
 
 Compare output in **`dist/`** to what lands at root on deploy.
