@@ -112,11 +112,12 @@ export const skillBlocks: SkillBlock[] = [
   {
     title: 'AI',
     skills: [
-      { name: 'Gemini', icon: 'fab fa-google' },
-      { name: 'OpenAI', icon: 'fas fa-brain' },
-      { name: 'Claude', icon: 'fas fa-feather-pointed' },
+      { name: 'Gemini API', icon: 'fab fa-google' },
+      { name: 'Claude Code', icon: 'fas fa-feather-pointed' },
+      { name: 'Cursor', icon: 'fas fa-i-cursor' },
+      { name: 'AI Agent Development', icon: 'fas fa-robot' },
       { name: 'Prompt Engineering', icon: 'fas fa-wand-magic-sparkles' },
-      { name: 'AI Rate Limiting', icon: 'fas fa-robot' },
+      { name: 'AI Rate Limiting', icon: 'fas fa-gauge' },
       { name: 'Local LLMs', icon: 'fas fa-microchip' },
       { name: 'OpenClaw', icon: 'fas fa-shrimp' },
     ],
