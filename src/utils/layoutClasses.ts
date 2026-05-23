@@ -24,11 +24,11 @@ export const cardClass =
   'rounded-lg border border-border-default bg-surface-0 contain-[layout_style] transition-[transform,box-shadow,border-color] duration-200 ease-in-out'
 
 export const cardLiftClass =
-  'pointer-fine:hover:-translate-y-[0.3125rem] pointer-fine:hover:border-primary-600 pointer-fine:hover:shadow-card active:-translate-y-[0.3125rem] active:border-primary-600 active:shadow-card'
+  'card-touch pointer-fine:hover:-translate-y-[0.3125rem] pointer-fine:hover:border-primary-600 pointer-fine:hover:shadow-card'
 
 export const skillCardClass = `${cardClass} ${cardLiftClass} flex h-[9.375rem] min-h-[9.375rem] max-h-[9.375rem] w-full flex-1 items-center justify-center px-3 py-4 text-center`
 
-export const portfolioCardClass = `${cardClass} portfolio-item-inner group mx-auto min-h-[23rem] max-w-full overflow-hidden pointer-fine:hover:-translate-y-[0.3125rem] pointer-fine:hover:border-primary-600 pointer-fine:hover:shadow-card-hover active:-translate-y-[0.3125rem] active:border-primary-600 active:shadow-card-hover`
+export const portfolioCardClass = `${cardClass} portfolio-item-inner card-touch group mx-auto min-h-[23rem] max-w-full overflow-hidden pointer-fine:hover:-translate-y-[0.3125rem] pointer-fine:hover:border-primary-600 pointer-fine:hover:shadow-card-hover`
 
 /** Contact submit — primary button with full-width / square corners */
 export const primaryBtnSubmitClass = `${primaryBtnClass} w-full cursor-pointer rounded-sm text-text-on-primary disabled:cursor-not-allowed disabled:opacity-60`
@@ -41,4 +41,4 @@ export const imgHeroClass = `${imgResponsiveClass} rounded-lg shadow-image`
 
 /** Below-the-fold card thumbs — fixed crop box in Projects */
 export const imgCardThumbClass =
-  'mx-auto block h-full w-full max-w-full object-cover transition-transform duration-200 ease-in-out pointer-fine:group-hover:scale-105 group-active:scale-105'
+  'mx-auto block h-full w-full max-w-full object-cover transition-transform duration-200 ease-in-out pointer-fine:group-hover:scale-105'

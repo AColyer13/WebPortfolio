@@ -30,20 +30,28 @@ function syncLocationHashWithActiveSection(
   history.replaceState(window.history.state, '', path)
 }
 
+/** Measured header height (ceil avoids sub-pixel gap under the fixed bar). */
+function headerScrollInset(header: HTMLElement): number {
+  return Math.ceil(header.getBoundingClientRect().height)
+}
+
 /**
- * Jump to an in-page anchor without animating. Global `html { scroll-behavior: smooth }`
- * would otherwise make `scrollIntoView` asynchronous and let the scroll handler overwrite
- * the URL hash while the scroll is still mid-animation.
+ * Scroll to a section below the fixed header. Avoids scroll-padding / scroll-margin on
+ * `html` or sections — those can add a few px of blank scroll room at the top on reload.
  */
-function scrollElementIntoViewInstant(el: HTMLElement): void {
-  const html = document.documentElement
-  const prev = html.style.scrollBehavior
-  html.style.scrollBehavior = 'auto'
-  try {
-    el.scrollIntoView({ block: 'start' })
-  } finally {
-    html.style.scrollBehavior = prev
+function scrollToSection(
+  sectionId: string,
+  header: HTMLElement,
+): void {
+  if (sectionId === 'about') {
+    window.scrollTo(0, 0)
+    return
   }
+  const el = document.getElementById(sectionId)
+  if (!el) return
+  const top =
+    el.getBoundingClientRect().top + window.scrollY - headerScrollInset(header)
+  window.scrollTo({ top: Math.max(0, top), behavior: 'auto' })
 }
 
 /** Legacy “section top crossed below header” rule — used only as a fallback. */
@@ -138,7 +146,7 @@ function App() {
     const syncOffset = () => {
       document.documentElement.style.setProperty(
         '--header-offset',
-        `${header.offsetHeight}px`,
+        `${headerScrollInset(header)}px`,
       )
     }
 
@@ -147,10 +155,9 @@ function App() {
     const hash = window.location.hash.replace(/^#/, '')
     if (!hash) {
       window.scrollTo(0, 0)
-    }
-    if (hash) {
-      const target = document.getElementById(hash)
-      if (target) scrollElementIntoViewInstant(target)
+      requestAnimationFrame(() => window.scrollTo(0, 0))
+    } else if (SECTION_IDS.includes(hash as (typeof SECTION_IDS)[number])) {
+      scrollToSection(hash, header)
     }
 
     // Sync scroll spy after layout + optional hash jump; must run in this layout effect.
@@ -164,6 +171,13 @@ function App() {
     })
     observer.observe(header)
     window.addEventListener('resize', syncOffset)
+
+    void document.fonts?.ready?.then(() => {
+      syncOffset()
+      if (!window.location.hash) {
+        window.scrollTo(0, 0)
+      }
+    })
 
     return () => {
       observer.disconnect()
@@ -234,11 +248,22 @@ function App() {
     }
   }, [mobileMenuOpen])
 
+  const navigateToSection = (section: string) => {
+    const header = document.querySelector<HTMLElement>('.site-header')
+    if (header) {
+      scrollToSection(section, header)
+    }
+    setActiveSection(section)
+    if (SECTION_IDS.includes(section as (typeof SECTION_IDS)[number])) {
+      syncLocationHashWithActiveSection(section as (typeof SECTION_IDS)[number])
+    }
+  }
+
   return (
     <div className={`app-shell${headerScrollHidden ? ' app--header-hidden' : ''}`}>
       <Navbar
         activeSection={activeSection}
-        onNavigate={setActiveSection}
+        onNavigate={navigateToSection}
         headerScrollHidden={headerScrollHidden}
         onMenuOpenChange={setMobileMenuOpen}
       />

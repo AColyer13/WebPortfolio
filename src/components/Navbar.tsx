@@ -197,7 +197,8 @@ export function Navbar({
                     className={`${navLinkClass} ${
                       activeSection === item.id ? 'active font-bold text-primary-600' : ''
                     }`}
-                    onClick={() => {
+                    onClick={(e) => {
+                      e.preventDefault()
                       onNavigate(item.id)
                       setIsMenuOpen(false)
                       onMenuOpenChange?.(false)
