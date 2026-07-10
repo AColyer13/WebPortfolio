@@ -57,12 +57,12 @@ export function About() {
             <picture>
               <source
                 type="image/avif"
-                srcSet={pictureSrcSet('images/IMG_4874.JPEG', [960, 2048])}
+                srcSet={pictureSrcSet('images/IMG_4874.JPEG', [960])}
                 sizes="(min-width: 48rem) 45vw, 92vw"
               />
               <source
                 type="image/webp"
-                srcSet={pictureSrcSet('images/IMG_4874.JPEG', [960, 2048])}
+                srcSet={pictureSrcSet('images/IMG_4874.JPEG', [960])}
                 sizes="(min-width: 48rem) 45vw, 92vw"
               />
               <img

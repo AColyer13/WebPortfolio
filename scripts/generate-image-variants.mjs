@@ -44,11 +44,15 @@ async function exists(path) {
 }
 
 /**
- * Width map per source filename. Anything not listed gets a single 640w variant
- * (project card thumbnails are the common case).
+ * Width map per source filename. Anything not listed gets a [640, 1280] variant set
+ * (project card thumbnails are the common case). We pick 1280 as the high-end
+ * because it's the largest intrinsic width declared in `portfolio.ts` for most
+ * projects and is enough for 2x DPR at the card's ~400px CSS display size.
+ *
+ * Pair this with `pictureSrcSet(project.imageUrl, [640, 1280])` in `Projects.tsx`.
  */
 const WIDTH_OVERRIDES = {
-  'IMG_4874.JPEG': [960], // hero — already 2048w, add 960w for mobile
+  'IMG_4874.JPEG': [960], // hero — original is 2048w; 960w satisfies mobile 1x/2x.
 }
 
 async function processFile(filename) {
@@ -57,8 +61,8 @@ async function processFile(filename) {
   const { base, ext } = parsed
   const fullSource = join(PUBLIC_IMAGES, filename)
 
-  // Widths for this source: override list OR default [640]
-  const widths = WIDTH_OVERRIDES[filename] ?? [640]
+  // Widths for this source: override list OR default [640, 1280]
+  const widths = WIDTH_OVERRIDES[filename] ?? [640, 1280]
 
   for (const width of widths) {
     const baseVariant = `${base}-${width}`

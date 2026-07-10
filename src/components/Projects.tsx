@@ -21,12 +21,12 @@ export function Projects() {
                   <picture>
                     <source
                       type="image/avif"
-                      srcSet={pictureSrcSet(project.imageUrl, [640, project.imageWidth])}
+                      srcSet={pictureSrcSet(project.imageUrl, [640, 1280])}
                       sizes="(min-width: 60rem) 33vw, (min-width: 36rem) 50vw, 100vw"
                     />
                     <source
                       type="image/webp"
-                      srcSet={pictureSrcSet(project.imageUrl, [640, project.imageWidth])}
+                      srcSet={pictureSrcSet(project.imageUrl, [640, 1280])}
                       sizes="(min-width: 60rem) 33vw, (min-width: 36rem) 50vw, 100vw"
                     />
                     <img
