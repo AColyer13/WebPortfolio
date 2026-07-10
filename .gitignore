@@ -7,6 +7,9 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
+# Stray local preview output (don't accidentally commit deprecation noise)
+preview-*.err
+
 node_modules
 dist
 dist-ssr

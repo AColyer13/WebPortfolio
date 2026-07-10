@@ -11,9 +11,11 @@ describe('Skills', () => {
     const icon = body?.querySelector<HTMLElement>('.skill-card__logo')
 
     expect(icon).toBeTruthy()
-    expect(icon).toHaveStyle({
-      maskImage: 'url("/images/fastapi.svg")',
-      WebkitMaskImage: 'url("/images/fastapi.svg")',
-    })
+    // The mask URL is set inline on `mask-image` so the browser resolves it
+    // relative to the document (not the external stylesheet). Static mask
+    // geometry (size, mode, repeat, position) still lives in index.css.
+    expect(icon?.style.maskImage || icon?.style.webkitMaskImage).toBe(
+      'url("/images/fastapi.svg")',
+    )
   })
 })

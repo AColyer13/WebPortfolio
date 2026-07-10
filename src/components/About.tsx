@@ -1,9 +1,10 @@
 import { withBase } from '../utils/baseUrl'
-import { downloadFile, shouldDownloadInPlace } from '../utils/downloadFile'
+import { pictureSrcSet } from '../utils/pictureSources'
 import {
   containerClass,
   imgHeroClass,
   primaryBtnClass,
+  secondaryBtnClass,
   sectionContainerClass,
 } from '../utils/layoutClasses'
 
@@ -13,8 +14,6 @@ const RESUME_FILENAME = 'AdamColyerResume2026v2.pdf'
 const resumeUrl = withBase(RESUME_PATH)
 
 export function About() {
-  const resumeInPlace = shouldDownloadInPlace()
-
   return (
     <section
       id="about"
@@ -42,43 +41,41 @@ export function About() {
               <a
                 href={resumeUrl}
                 className={primaryBtnClass}
-                download={resumeInPlace ? RESUME_FILENAME : undefined}
-                {...(resumeInPlace
-                  ? {}
-                  : { target: '_blank', rel: 'noopener noreferrer' })}
-                onClick={
-                  resumeInPlace
-                    ? (e) => {
-                        e.preventDefault()
-                        void downloadFile(resumeUrl, RESUME_FILENAME).catch(() => {
-                          const link = document.createElement('a')
-                          link.href = resumeUrl
-                          link.download = RESUME_FILENAME
-                          link.click()
-                        })
-                      }
-                    : undefined
-                }
+                download={RESUME_FILENAME}
               >
                 <span className="fa-solid fa-file-alt" aria-hidden />
                 Download Resume
               </a>
-              <a href={`${base}#contact`} className={primaryBtnClass}>
+              <a href={`${base}#contact`} className={secondaryBtnClass}>
                 Get in Touch
               </a>
             </div>
           </div>
 
           <div>
-            <img
-              src={withBase('images/IMG_4874.JPEG')}
-              className={imgHeroClass}
-              alt="Desk setup photo"
-              width={2048}
-              height={1536}
-              fetchPriority="high"
-              decoding="async"
-            />
+            <picture>
+              <source
+                type="image/avif"
+                srcSet={pictureSrcSet('images/IMG_4874.JPEG', [960, 2048])}
+                sizes="(min-width: 48rem) 45vw, 92vw"
+              />
+              <source
+                type="image/webp"
+                srcSet={pictureSrcSet('images/IMG_4874.JPEG', [960, 2048])}
+                sizes="(min-width: 48rem) 45vw, 92vw"
+              />
+              <img
+                src={withBase('images/IMG_4874.JPEG')}
+                srcSet={`${withBase('images/IMG_4874-960.JPEG')} 960w, ${withBase('images/IMG_4874.JPEG')} 2048w`}
+                sizes="(min-width: 48rem) 45vw, 92vw"
+                className={imgHeroClass}
+                alt="Desk setup photo"
+                width={2048}
+                height={1536}
+                fetchPriority="high"
+                decoding="async"
+              />
+            </picture>
           </div>
         </div>
       </div>

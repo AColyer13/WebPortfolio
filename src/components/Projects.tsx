@@ -1,5 +1,6 @@
 import { projects } from '../data/portfolio'
 import { withBase } from '../utils/baseUrl'
+import { pictureSrcSet } from '../utils/pictureSources'
 import { imgCardThumbClass, portfolioCardClass } from '../utils/layoutClasses'
 import { Section } from './Section'
 
@@ -16,15 +17,29 @@ export function Projects() {
             <div key={project.id}>
               <div className={portfolioCardClass}>
                 <div className="relative h-[12.5rem] overflow-hidden">
-                  <img
-                    src={withBase(project.imageUrl)}
-                    alt={project.title}
-                    width={project.imageWidth}
-                    height={project.imageHeight}
-                    loading="lazy"
-                    decoding="async"
-                    className={imgCardThumbClass}
-                  />
+                  <picture>
+                    <source
+                      type="image/avif"
+                      srcSet={pictureSrcSet(project.imageUrl, [640, project.imageWidth])}
+                      sizes="(min-width: 60rem) 33vw, (min-width: 36rem) 50vw, 100vw"
+                    />
+                    <source
+                      type="image/webp"
+                      srcSet={pictureSrcSet(project.imageUrl, [640, project.imageWidth])}
+                      sizes="(min-width: 60rem) 33vw, (min-width: 36rem) 50vw, 100vw"
+                    />
+                    <img
+                      src={withBase(project.imageUrl)}
+                      srcSet={`${withBase(project.imageUrl.replace(/\.(png|jpe?g|webp)$/i, '-640.$1'))} 640w, ${withBase(project.imageUrl)} ${project.imageWidth}w`}
+                      sizes="(min-width: 60rem) 33vw, (min-width: 36rem) 50vw, 100vw"
+                      alt={project.title}
+                      width={project.imageWidth}
+                      height={project.imageHeight}
+                      loading="lazy"
+                      decoding="async"
+                      className={imgCardThumbClass}
+                    />
+                  </picture>
                   <a
                     href={overlayHref}
                     className="portfolio-zoom-link absolute top-1/2 left-1/2 z-2 flex h-[3.75rem] w-[3.75rem] min-h-11 min-w-11 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-primary-600 opacity-100 pointer-fine:pointer-events-none pointer-fine:opacity-0 pointer-fine:group-hover:pointer-events-auto pointer-fine:group-hover:opacity-100 pointer-fine:focus-visible:pointer-events-auto focus-visible:opacity-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-surface-0"

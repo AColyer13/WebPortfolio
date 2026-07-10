@@ -1,21 +1,23 @@
 import { skillBlocks } from '../data/portfolio'
 import { withBase } from '../utils/baseUrl'
 import { skillCardClass } from '../utils/layoutClasses'
-import { Section, SubsectionHeading } from './Section'
-
-function isFontAwesomeIcon(icon: string) {
-  return /^(?:fab|fas|far|fal|fat|fad|fass|fasr|fasl|fast)\s+fa-/.test(icon)
-}
+import { Icon, isRegisteredIcon } from './Icons'
+import { Section } from './Section'
 
 function SkillIcon({ icon }: { icon: string }) {
-  if (isFontAwesomeIcon(icon)) {
-    return <i className={`${icon} shrink-0 text-[2.5rem] leading-none text-primary-600`} aria-hidden />
+  if (isRegisteredIcon(icon)) {
+    return <Icon name={icon} className="shrink-0 text-[2.5rem] leading-none text-primary-600" />
   }
   if (/\.(?:svg|png|jpe?g|webp)$/i.test(icon)) {
     const logoUrl = withBase(icon)
     return (
       <span
         className="skill-card__logo"
+        // URL is data-driven per icon; the static mask geometry lives in
+        // `.skill-card__logo` in index.css. Setting `mask-image` inline (not
+        // via a CSS variable) is deliberate: a `url()` value resolved inside
+        // an external stylesheet would be relative to that stylesheet
+        // (`./assets/...`) instead of the document (`./...`).
         style={{
           maskImage: `url("${logoUrl}")`,
           WebkitMaskImage: `url("${logoUrl}")`,
@@ -41,8 +43,24 @@ export function Skills() {
     >
       <div className="flex w-full flex-col gap-(--section-subheading-gap)">
         {skillBlocks.map((block) => (
-          <div key={block.title} className="w-full">
-            <SubsectionHeading title={block.title} />
+          <details key={block.title} className="skills-details w-full" open>
+            <summary className="skills-details__summary mx-auto mb-(--section-subheading-gap) flex max-w-[50ch] cursor-pointer list-none items-center justify-center gap-2 [&::-webkit-details-marker]:hidden">
+              <svg
+                className="skills-chevron size-4 text-primary-500 transition-transform duration-200"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth={2.5}
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                aria-hidden
+              >
+                <path d="M9 6l6 6-6 6" />
+              </svg>
+              <span className="text-fluid-3 font-medium leading-snug tracking-wide text-primary-500">
+                {block.title}
+              </span>
+            </summary>
             <div className="grid w-full grid-cols-2 items-stretch justify-items-stretch gap-x-(--container-inline) gap-y-4 @[56rem]:grid-cols-4 @[56rem]:gap-x-4">
               {block.skills.map((skill) => (
                 <div key={skill.name} className="flex w-full min-w-0 self-stretch">
@@ -57,7 +75,7 @@ export function Skills() {
                 </div>
               ))}
             </div>
-          </div>
+          </details>
         ))}
       </div>
     </Section>

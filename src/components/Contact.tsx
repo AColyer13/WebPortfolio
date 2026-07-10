@@ -26,15 +26,19 @@ const inputClass =
 const socialLinkClass =
   'social-link inline-flex h-11 w-11 items-center justify-center rounded-sm bg-border-default text-primary-600 no-underline transition-[background-color,color,transform] duration-200 ease-in-out pointer-fine:hover:-translate-y-[0.1875rem] pointer-fine:hover:bg-primary-600 pointer-fine:hover:text-text-default'
 
+/* `<input type="email">` already runs the browser's RFC-5321/5322 check via
+ * the Constraint Validation API. Our `emailInputRef.current.checkValidity()`
+ * uses that instead — no custom `pattern` attribute needed. */
+
 function requiredField(value: string, label: string): string {
   if (!value.trim()) return `${label} is required.`
   return ''
 }
 
-function validateEmail(value: string): string {
-  if (!value.trim()) return 'Email is required.'
-  const ok = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim())
-  if (!ok) return 'Enter a valid email address.'
+/** Read the browser's native validity message for `email`, or '' when valid. */
+function validateEmailField(input: HTMLInputElement): string {
+  if (!input.value.trim()) return 'Email is required.'
+  if (!input.checkValidity()) return 'Enter a valid email address.'
   return ''
 }
 
@@ -52,14 +56,20 @@ export function Contact() {
   const [errors, setErrors] = useState<Partial<Record<FieldName, string>>>({})
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [status, setStatus] = useState<FormStatus>({ kind: 'idle' })
+  const [mapLoaded, setMapLoaded] = useState(false)
   const timestampRef = useRef<HTMLInputElement | null>(null)
   const formRef = useRef<HTMLFormElement | null>(null)
+  const nameInputRef = useRef<HTMLInputElement | null>(null)
+  const emailInputRef = useRef<HTMLInputElement | null>(null)
+  const messageInputRef = useRef<HTMLTextAreaElement | null>(null)
 
   const runFieldValidation = (name: FieldName, value: string) => {
     let msg = ''
     if (name === 'name') msg = requiredField(value, 'Name')
-    else if (name === 'email') msg = validateEmail(value)
-    else msg = requiredField(value, 'Message')
+    else if (name === 'email') {
+      const el = emailInputRef.current
+      msg = el ? validateEmailField(el) : requiredField(value, 'Email')
+    } else msg = requiredField(value, 'Message')
     setErrors((prev) => ({ ...prev, [name]: msg }))
     return msg
   }
@@ -89,7 +99,7 @@ export function Contact() {
 
     setTouched({ name: true, email: true, message: true })
     const eName = requiredField(formData.name, 'Name')
-    const eEmail = validateEmail(formData.email)
+    const eEmail = emailInputRef.current ? validateEmailField(emailInputRef.current) : 'Email is required.'
     const eMessage = requiredField(formData.message, 'Message')
     setErrors({
       name: eName,
@@ -138,14 +148,37 @@ export function Contact() {
         <div className="grid grid-cols-1 items-start gap-5 @[62rem]:grid-cols-[minmax(0,5fr)_minmax(0,6fr)]">
           <div className="flex flex-col overflow-hidden rounded-lg border border-border-default bg-surface-0 contain-[layout_style]">
             <div className="w-full p-3">
-              <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d90444.17968810473!2d-93.44258962458554!3d44.89525237382178!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x87f6213ace55a039%3A0xcdaf9c3796fa2779!2sEdina%2C%20MN!5e0!3m2!1sen!2sus!4v1764804107343!5m2!1sen!2sus"
-                width="100%"
-                allowFullScreen
-                loading="lazy"
-                title="Map of Edina, MN"
-                className="contact-map h-[clamp(14rem,30vh,22rem)] w-full rounded-md border-0 grayscale transition-[filter] duration-200 ease-in-out pointer-fine:hover:grayscale-0"
-              />
+              {mapLoaded ? (
+                <iframe
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d90444.17968810473!2d-93.44258962458554!3d44.89525237382178!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x87f6213ace55a039%3A0xcdaf9c3796fa2779!2sEdina%2C%20MN!5e0!3m2!1sen!2sus!4v1764804107343!5m2!1sen!2sus"
+                  width="100%"
+                  allowFullScreen
+                  loading="lazy"
+                  title="Map of Edina, MN"
+                  className="contact-map h-[clamp(14rem,30vh,22rem)] w-full rounded-md border-0 grayscale transition-[filter] duration-200 ease-in-out pointer-fine:hover:grayscale-0"
+                />
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => setMapLoaded(true)}
+                  aria-label="Load interactive map of Edina, MN"
+                  className="contact-map-placeholder group relative h-[clamp(14rem,30vh,22rem)] w-full cursor-pointer overflow-hidden rounded-md border border-border-default bg-surface-100 text-text-default transition-[background-color,border-color] duration-200 ease-in-out focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600 hover:border-primary-600"
+                >
+                  <span
+                    aria-hidden
+                    className="absolute inset-0 bg-[radial-gradient(circle_at_30%_40%,color-mix(in_oklch,var(--color-primary-600)_25%,transparent),transparent_60%),radial-gradient(circle_at_70%_60%,color-mix(in_oklch,var(--color-primary-600)_18%,transparent),transparent_55%)] opacity-60 transition-opacity duration-200 group-hover:opacity-90"
+                  />
+                  <span className="relative flex h-full w-full flex-col items-center justify-center gap-2 text-center">
+                    <span className="text-fluid-3 font-bold text-primary-600">
+                      Edina, MN
+                    </span>
+                    <span className="inline-flex items-center gap-1 rounded-pill border border-primary-600 px-3 py-1 text-fluid-1 font-medium text-primary-600 transition-colors duration-200 group-hover:bg-primary-600 group-hover:text-surface-0">
+                      <i className="fas fa-map-marker-alt" aria-hidden />
+                      Load interactive map
+                    </span>
+                  </span>
+                </button>
+              )}
             </div>
             <div className="mt-0 flex flex-wrap items-center justify-between gap-3 rounded-b-lg border border-t-0 border-border-default bg-surface-50 px-3 py-4">
               <div>
@@ -219,6 +252,8 @@ export function Contact() {
                       value={formData.name}
                       onChange={handleChange}
                       onBlur={handleBlur}
+                      ref={nameInputRef}
+                      required
                       autoComplete="name"
                       aria-invalid={touched.name && !!errors.name}
                       aria-describedby={touched.name && errors.name ? 'contact-name-error' : undefined}
@@ -242,6 +277,8 @@ export function Contact() {
                       value={formData.email}
                       onChange={handleChange}
                       onBlur={handleBlur}
+                      ref={emailInputRef}
+                      required
                       autoComplete="email"
                       aria-invalid={touched.email && !!errors.email}
                       aria-describedby={
@@ -264,11 +301,16 @@ export function Contact() {
                     id="contact-message"
                     name="message"
                     rows={4}
-                    className={`${inputClass} min-h-[5.5rem] resize-y`}
+                    className={`${inputClass} field-sizing-content min-h-[8rem] max-h-[20rem] resize-y`}
                     placeholder="Message"
                     value={formData.message}
                     onChange={handleChange}
                     onBlur={handleBlur}
+                    ref={messageInputRef}
+                    required
+                    minLength={10}
+                    maxLength={2000}
+                    autoComplete="off"
                     aria-invalid={touched.message && !!errors.message}
                     aria-describedby={
                       touched.message && errors.message ? 'contact-message-error' : undefined

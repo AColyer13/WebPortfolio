@@ -387,6 +387,7 @@
  * `cursor: pointer` is also required so iOS Safari fires `:active` on non-anchor
  * elements; `-webkit-tap-highlight-color: transparent` suppresses the default
  * grey flash so our custom border-color transition is the only feedback.
+ * Replaces the previous `initTouchPressFeedback()` JS path in App.tsx.
  */
 @media (hover: none), (pointer: coarse) {
   .portfolio-item-inner,

@@ -6,7 +6,6 @@ import { Footer } from './components/Footer'
 import { Navbar } from './components/Navbar'
 import { Projects } from './components/Projects'
 import { Skills } from './components/Skills'
-import { initTouchPressFeedback } from './utils/touchPress'
 
 /** DOM order — must match section `id`s and Navbar `section` keys */
 const SECTION_IDS = [
@@ -254,21 +253,59 @@ function App() {
     return () => document.documentElement.classList.remove('menu-scroll-lock')
   }, [mobileMenuOpen])
 
-  useEffect(() => initTouchPressFeedback(), [])
-
   const navigateToSection = (section: string) => {
     const header = document.querySelector<HTMLElement>('.site-header')
-    if (header) {
-      scrollToSection(section, header)
+    // Determine transition direction based on current vs target section index.
+    // Forward (down) slides content up; back (up) slides content down.
+    // Falls back to 'forward' when either id is unknown.
+    const targetIdx = SECTION_IDS.indexOf(
+      section as (typeof SECTION_IDS)[number],
+    )
+    const currentIdx = SECTION_IDS.indexOf(
+      activeSection as (typeof SECTION_IDS)[number],
+    )
+    const direction =
+      targetIdx > currentIdx ? 'forward' : targetIdx < currentIdx ? 'back' : 'forward'
+
+    const run = () => {
+      if (header) {
+        scrollToSection(section, header)
+      }
+      setActiveSection(section)
+      if (SECTION_IDS.includes(section as (typeof SECTION_IDS)[number])) {
+        syncLocationHashWithActiveSection(section as (typeof SECTION_IDS)[number])
+      }
     }
-    setActiveSection(section)
-    if (SECTION_IDS.includes(section as (typeof SECTION_IDS)[number])) {
-      syncLocationHashWithActiveSection(section as (typeof SECTION_IDS)[number])
+    // View Transitions API (Baseline 2024+) — opt in for a smooth cross-fade when
+    // navigating between sections. `types` (Chrome 125+/FF 147+/Safari 18.2+)
+    // lets CSS pick directional keyframes via :active-view-transition-type().
+    const doc = document as Document & {
+      startViewTransition?: (
+        cb: () => void,
+        opts?: { types?: readonly string[] },
+      ) => { types?: { add: (t: string) => void; delete: (t: string) => void } }
+    }
+    if (typeof doc.startViewTransition === 'function') {
+      try {
+        const vt = doc.startViewTransition(run, { types: [direction] })
+        // Silence unused-var lint; vt is intentionally not awaited (fire-and-forget).
+        void vt
+      } catch {
+        run()
+      }
+    } else {
+      run()
     }
   }
 
   return (
     <div className={`app-shell${headerScrollHidden ? ' app--header-hidden' : ''}`}>
+      <a
+        href="#main-content"
+        className="skip-link sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-[1100] focus:rounded-md focus:bg-primary-600 focus:px-3 focus:py-2 focus:text-text-on-primary focus:shadow-btn focus:outline-2 focus:outline-offset-2 focus:outline-primary-600"
+      >
+        Skip to main content
+      </a>
       <Navbar
         activeSection={activeSection}
         onNavigate={navigateToSection}

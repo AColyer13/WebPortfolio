@@ -18,6 +18,7 @@ interface NavbarProps {
 }
 
 const base = import.meta.env.BASE_URL
+const POPOVER_ID = 'site-nav-menu'
 
 const iconBtnClass =
   'inline-flex size-9 shrink-0 cursor-pointer items-center justify-center rounded-md border border-border-default bg-surface-0 p-0 text-text-default focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600'
@@ -28,6 +29,8 @@ const iconBtnMobileClass =
 
 const navLinkClass =
   'nav-link-hover relative flex h-9 items-center rounded-sm px-2 py-1 text-menu text-text-default hover:text-text-default focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600'
+
+const navLinkMobileClass = `${navLinkClass} min-h-11 justify-center px-4 py-2`
 
 function cycleSessionOverride(
   override: SessionOverride,
@@ -111,13 +114,47 @@ const navItems = [
   { id: 'contact', label: 'Contact' },
 ] as const
 
+/** Shared list used by both the desktop static nav and the mobile popover. */
+function NavLinks({
+  activeSection,
+  onNavigate,
+  onAfterNavigate,
+  linkClass,
+}: {
+  activeSection: string
+  onNavigate: (section: string) => void
+  onAfterNavigate?: () => void
+  linkClass: string
+}) {
+  return (
+    <ul className="m-0 flex list-none flex-col items-stretch gap-1 p-0 @[48rem]/site-header:flex-row @[48rem]/site-header:flex-wrap @[48rem]/site-header:items-center @[48rem]/site-header:justify-center @[48rem]/site-header:gap-0">
+      {navItems.map((item) => (
+        <li key={item.id}>
+          <a
+            href={`${base}#${item.id}`}
+            className={`${linkClass} ${
+              activeSection === item.id ? 'active font-bold text-primary-600' : ''
+            }`}
+            onClick={(e) => {
+              e.preventDefault()
+              onNavigate(item.id)
+              onAfterNavigate?.()
+            }}
+          >
+            <span data-hover={item.label}>{item.label}</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  )
+}
+
 export function Navbar({
   activeSection,
   onNavigate,
   headerScrollHidden = false,
   onMenuOpenChange,
 }: NavbarProps) {
-  const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [sessionOverride, setSessionOverride] = useState<SessionOverride>(null)
   const osDark = useOsDark()
   const effectiveTheme = resolveTheme(sessionOverride, osDark)
@@ -127,6 +164,20 @@ export function Navbar({
     applyTheme(appliedTheme)
     syncThemeColor(effectiveTheme)
   }, [appliedTheme, effectiveTheme])
+
+  // Sync the popover open state up to App.tsx so body scroll-lock + header
+  // auto-hide can react. The Popover API fires a `toggle` event on the popover
+  // element whenever it's shown or hidden (including outside-click and Escape).
+  useEffect(() => {
+    const popover = document.getElementById(POPOVER_ID)
+    if (!popover) return
+    const onToggle = (event: Event) => {
+      const newState = (event as ToggleEvent).newState
+      onMenuOpenChange?.(newState === 'open')
+    }
+    popover.addEventListener('toggle', onToggle)
+    return () => popover.removeEventListener('toggle', onToggle)
+  }, [onMenuOpenChange])
 
   const nextOverride = cycleSessionOverride(sessionOverride, osDark)
   const nextThemeLabel =
@@ -143,6 +194,17 @@ export function Navbar({
         : 'Dark override, this visit only'
   const themeToggleLabel = `Color theme: ${currentThemeLabel}. Activate to use ${nextThemeLabel}.`
   const themeToggleTitle = `Theme: ${currentThemeLabel}. Next: ${nextThemeLabel}.`
+  const themeToggleShortLabel = `Theme: ${currentThemeLabel}. Next: ${nextThemeLabel}.`
+
+  // Programmatic close on link click (popover=auto would only close on
+  // outside-click/Escape; clicking a link inside the popover still navigates
+  // without closing by default).
+  const closeMobileMenu = () => {
+    const popover = document.getElementById(POPOVER_ID)
+    if (popover && popover.matches(':popover-open')) {
+      popover.hidePopover()
+    }
+  }
 
   return (
     <header
@@ -165,56 +227,45 @@ export function Navbar({
               onClick={() =>
                 setSessionOverride((o) => cycleSessionOverride(o, osDark))
               }
-              aria-label={themeToggleLabel}
-              title={themeToggleTitle}
+              aria-label={themeToggleShortLabel}
+              data-tooltip={themeToggleShortLabel}
             >
               {effectiveTheme === 'light' ? <IconMoon /> : <IconSun />}
             </button>
             <button
               type="button"
               className={iconBtnMobileClass}
-              onClick={() =>
-                setIsMenuOpen((open) => {
-                  const next = !open
-                  onMenuOpenChange?.(next)
-                  return next
-                })
-              }
-              aria-controls="site-nav-menu"
-              aria-expanded={isMenuOpen}
+              // Popover API: popovertarget toggles the popover open/closed.
+              // No manual state needed — the `toggle` event fires automatically.
+              popoverTarget={POPOVER_ID}
+              aria-label="Toggle navigation"
+              data-tooltip="Toggle navigation"
             >
-              <span className="sr-only">Toggle navigation</span>
               <span className="nav-toggle-icon" aria-hidden />
             </button>
           </div>
 
-          {/* Nav links — centered in middle column on desktop */}
+          {/* Desktop nav — centered in middle column, always visible on desktop */}
+          <div className="hidden py-0 @[48rem]/site-header:col-start-2 @[48rem]/site-header:row-start-1 @[48rem]/site-header:block">
+            <NavLinks
+              activeSection={activeSection}
+              onNavigate={onNavigate}
+              linkClass={navLinkClass}
+            />
+          </div>
+
+          {/* Mobile nav — popover anchored to the hamburger; opens via popovertarget */}
           <div
-            className={`py-2 @[48rem]/site-header:col-start-2 @[48rem]/site-header:row-start-1 @[48rem]/site-header:py-0 ${
-              isMenuOpen ? 'block' : 'hidden'
-            } @[48rem]/site-header:block`}
-            id="site-nav-menu"
+            id={POPOVER_ID}
+            popover="auto"
+            className="site-nav-popover fixed inset-x-0 top-[var(--header-offset)] z-[999] m-0 border-b border-border-default bg-surface-0 p-2 shadow-nav @supports([transition-behavior:allow-discrete]):opacity-0"
           >
-            <ul className="m-0 flex list-none flex-col items-stretch gap-1 p-0 @[48rem]/site-header:flex-row @[48rem]/site-header:flex-wrap @[48rem]/site-header:items-center @[48rem]/site-header:justify-center @[48rem]/site-header:gap-0">
-              {navItems.map((item) => (
-                <li key={item.id}>
-                  <a
-                    href={`${base}#${item.id}`}
-                    className={`${navLinkClass} ${
-                      activeSection === item.id ? 'active font-bold text-primary-600' : ''
-                    }`}
-                    onClick={(e) => {
-                      e.preventDefault()
-                      onNavigate(item.id)
-                      setIsMenuOpen(false)
-                      onMenuOpenChange?.(false)
-                    }}
-                  >
-                    <span data-hover={item.label}>{item.label}</span>
-                  </a>
-                </li>
-              ))}
-            </ul>
+            <NavLinks
+              activeSection={activeSection}
+              onNavigate={onNavigate}
+              onAfterNavigate={closeMobileMenu}
+              linkClass={navLinkMobileClass}
+            />
           </div>
 
           {/* Desktop toolbar — right column balances mobile toolbar for true center nav */}
@@ -227,6 +278,7 @@ export function Navbar({
               }
               aria-label={themeToggleLabel}
               title={themeToggleTitle}
+              data-tooltip={themeToggleTitle}
             >
               {effectiveTheme === 'light' ? <IconMoon /> : <IconSun />}
             </button>
