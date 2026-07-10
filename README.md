@@ -13,7 +13,11 @@ A single-page personal portfolio. See [SPEC.md](SPEC.md) for what the site does.
 | **Icons**     | `lucide-react` + custom SVG paths in `src/components/Icons.tsx` |
 | **Contact**   | EmailJS (lazy-loaded SDK, fetched on submit) |
 | **Tests**     | Vitest + Testing Library; axe-core/cli for a11y |
+## Supported browsers
 
+Last 2 versions of Chrome, Firefox, Safari, and Edge (Safari 16+). The site is
+LTR English only. See [docs/COMPAT.md](docs/COMPAT.md) for the full browser
+support matrix, feature-detection rules, and known quirks.
 ## Quick start
 
 ```bash

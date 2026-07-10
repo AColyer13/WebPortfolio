@@ -59,7 +59,8 @@
   --font-weight-medium: 500;
   --font-weight-bold: 700;
 
-  --body-font-family: 'Plain', system-ui, sans-serif;
+  /* System font stack: Plain (custom) → -apple-system/BlinkMacSystemFont (macOS/iOS) → Segoe UI (Windows) → system-ui (modern OS) → sans-serif (final fallback). */
+  --body-font-family: 'Plain', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
 
   --font-size-fluid-1: clamp(0.875rem, 0.82rem + 0.15vw, 1rem);
   --font-size-fluid-2: clamp(1rem, 0.92rem + 0.28vw, 1.125rem);
@@ -239,6 +240,8 @@
   html {
     scroll-behavior: auto;
     background-color: var(--color-surface-0);
+    /* Reserve a stable gutter for the scrollbar so Windows "always show scrollbars" / overlay-scrollbar engines (macOS) don't cause horizontal layout shift between pages of different heights. */
+    scrollbar-gutter: stable;
   }
 
   /* Block trackpad rubber-band at the top on desktop only; `none` on all viewports breaks pull-to-refresh. */

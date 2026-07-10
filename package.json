@@ -20,6 +20,14 @@
     "react": "19.2.4",
     "react-dom": "19.2.4"
   },
+  "browserslist": [
+    "last 2 Chrome versions",
+    "last 2 Firefox versions",
+    "last 2 Safari versions",
+    "last 2 Edge versions",
+    "Safari >= 16",
+    "not dead"
+  ],
   "devDependencies": {
     "@axe-core/cli": "^4.11.3",
     "@eslint/js": "^10.0.1",

@@ -14,8 +14,7 @@ preview-*.log
 node_modules
 dist
 dist-ssr
-# Local preview only if you copy dist here; not committed — deploy uses Actions artifacts.
-docs
+# Local preview output goes in .tmp-previews/ (also ignored below) — not docs/.
 *.local
 
 # Cursor local
