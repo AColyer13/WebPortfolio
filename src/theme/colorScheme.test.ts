@@ -46,7 +46,7 @@ describe('syncThemeColor', () => {
   it('uses dark surface for dark mode', () => {
     syncThemeColor('dark')
     const meta = document.head.querySelector('meta[name="theme-color"]')
-    expect(meta?.getAttribute('content')).toBe('#18181c')
+    expect(meta?.getAttribute('content')).toBe('#0e0e13')
   })
 })
 
@@ -82,6 +82,6 @@ describe('initTheme', () => {
     initTheme()
     expect(document.documentElement.getAttribute('data-theme')).toBe('system')
     const meta = document.head.querySelector('meta[name="theme-color"]')
-    expect(meta?.getAttribute('content')).toBe('#18181c')
+    expect(meta?.getAttribute('content')).toBe('#0e0e13')
   })
 })

@@ -13,10 +13,13 @@
   --color-primary-700: oklch(20% 0.02 260);
   --color-primary-500: oklch(40% 0.02 260);
 
-  /* Surfaces */
+  /* Surfaces — 4-tier elevation: page bg < cards < section bands < deep.
+   * Each tier is one notch lighter than the previous so elevated surfaces
+   * (cards on page, cards on band) always have visible contrast. */
+  --color-bg: oklch(98% 0.005 260);
   --color-surface-0: oklch(100% 0 0);
-  --color-surface-50: oklch(98% 0.005 260);
-  --color-surface-100: oklch(96% 0.01 260);
+  --color-surface-50: oklch(96% 0.01 260);
+  --color-surface-100: oklch(94% 0.012 260);
 
   /* Text */
   --color-text-default: oklch(28% 0.03 260);
@@ -112,15 +115,18 @@
     --color-primary-700: #fafafa;
     --color-primary-500: #a1a1aa;
 
+    /* Page bg sits one tone darker than cards so cards visibly elevate. */
+    --color-bg: #0e0e13;
     --color-surface-0: #18181c;
-    --color-surface-50: #1f1f26;
-    --color-surface-100: #27272f;
+    --color-surface-50: #23232c;
+    --color-surface-100: #2c2c36;
 
     --color-text-default: #e4e4e7;
     --color-text-muted: #a1a1aa;
     --color-text-subtle: #8e8e96;
     --color-text-on-primary: #fafafa;
 
+    /* Bumped from #3f3f46 so card edges are clearly defined on the new darker page bg. */
     --color-border-default: #3f3f46;
 
     --color-focus-ring: rgb(228 228 231 / 35%);
@@ -148,9 +154,11 @@
   --color-primary-700: #fafafa;
   --color-primary-500: #a1a1aa;
 
+  /* Page bg sits one tone darker than cards so cards visibly elevate. */
+  --color-bg: #0e0e13;
   --color-surface-0: #18181c;
-  --color-surface-50: #1f1f26;
-  --color-surface-100: #27272f;
+  --color-surface-50: #23232c;
+  --color-surface-100: #2c2c36;
 
   --color-text-default: #e4e4e7;
   --color-text-muted: #a1a1aa;
@@ -190,6 +198,7 @@
   --color-btn-bg: var(--color-btn-bg);
   --color-btn-fg: var(--color-btn-fg);
   --color-btn-hover: var(--color-btn-hover);
+  --color-bg: var(--color-bg);
   --color-surface-0: var(--color-surface-0);
   --color-surface-50: var(--color-surface-50);
   --color-surface-100: var(--color-surface-100);
@@ -255,7 +264,7 @@
 
   html {
     scroll-behavior: auto;
-    background-color: var(--color-surface-0);
+    background-color: var(--color-bg);
     /* Reserve a stable gutter for the scrollbar so Windows "always show scrollbars" / overlay-scrollbar engines (macOS) don't cause horizontal layout shift between pages of different heights. */
     scrollbar-gutter: stable;
   }
@@ -281,7 +290,7 @@
   }
 
   body {
-    @apply m-0 overflow-x-hidden bg-surface-0 font-sans text-body font-normal text-text-default;
+    @apply m-0 overflow-x-hidden bg-bg font-sans text-body font-normal text-text-default;
     line-height: 1.6;
     font-synthesis: none;
   }

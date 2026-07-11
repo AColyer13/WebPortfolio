@@ -4,10 +4,10 @@ export type ThemePreference = 'light' | 'dark' | 'system'
 /** Resolved light/dark for icons / labels only */
 export type ResolvedTheme = 'light' | 'dark'
 
-/** Browser chrome — neutral surfaces */
+/** Browser chrome — matches the page background (`--color-bg` in index.css) */
 const THEME_COLOR: Record<ResolvedTheme, string> = {
   light: '#fafafa',
-  dark: '#18181c',
+  dark: '#0e0e13',
 }
 
 /** Legacy storage key — dropped on first paint so scheduled OS themes always apply. */

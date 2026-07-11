@@ -183,7 +183,7 @@ export function Navbar({
       }`}
     >
       <nav
-        className="site-nav bg-surface-0 py-2 shadow-nav @max-[47.99rem]/site-header:pt-[calc(env(safe-area-inset-top,0px)+var(--spacing-1))] @max-[47.99rem]/site-header:pb-2"
+        className="site-nav bg-bg py-2 shadow-nav @max-[47.99rem]/site-header:pt-[calc(env(safe-area-inset-top,0px)+var(--spacing-1))] @max-[47.99rem]/site-header:pb-2"
         aria-label="Primary"
       >
         <div
