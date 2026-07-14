@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { act, fireEvent, render, screen } from '@testing-library/react'
+import { fireEvent, render, screen } from '@testing-library/react'
 import { skillBlocks } from '../data/portfolio'
 import { Skills } from './Skills'
 
@@ -11,11 +11,6 @@ function getBlockSummaries() {
   const summaries = Array.from(document.querySelectorAll<HTMLElement>('details summary'))
   expect(summaries.length).toBe(skillBlocks.length)
   return summaries
-}
-
-/** Expand every block so all skill cards are mounted in the DOM. */
-function expandAllBlocks() {
-  getBlockSummaries().forEach((s) => fireEvent.click(s))
 }
 
 describe('Skills', () => {
@@ -39,6 +34,42 @@ describe('Skills', () => {
           skill.application.length,
           `${skill.name} has no application`,
         ).toBeGreaterThan(20)
+      }
+    }
+  })
+
+  it('has a Data Science & ML Foundations block with the canonical stack', () => {
+    const block = skillBlocks.find((b) => b.title === 'Data Science & ML Foundations')
+    expect(block).toBeTruthy()
+    const names = block?.skills.map((s) => s.name) ?? []
+    expect(names).toContain('Pandas')
+    expect(names).toContain('PyTorch')
+    expect(names).toContain('Matplotlib')
+    expect(names).toContain('Seaborn')
+  })
+
+  it('lists PII Redaction (Presidio) under Data, Auth & Security', () => {
+    const security = skillBlocks.find((b) => b.title === 'Data, Auth & Security')
+    expect(security).toBeTruthy()
+    const redaction = security?.skills.find((s) =>
+      s.name.toLowerCase().includes('pii redaction'),
+    )
+    expect(redaction).toBeTruthy()
+    // Application text should mention the legal-eagle privacy service.
+    expect(redaction?.application.toLowerCase()).toContain('legal-eagle')
+    expect(redaction?.application.toLowerCase()).toContain('presidio')
+  })
+
+  it('every skill icon either uses a registered IconKey or references a /public image', () => {
+    // Cheaper than a browser hit: just assert the icon string is well-formed.
+    for (const block of skillBlocks) {
+      for (const skill of block.skills) {
+        if (skill.icon.includes('/')) {
+          expect(
+            /\.(?:svg|png|jpe?g|webp)$/i.test(skill.icon),
+            `${skill.name} icon should be a file path with an image extension`,
+          ).toBe(true)
+        }
       }
     }
   })
@@ -83,6 +114,7 @@ describe('Skills', () => {
 
   it('rotates the chevron when a block is opened', () => {
     render(<Skills />)
+    // All chevrons start with no rotation.
     const collapsedChevrons = document.querySelectorAll<HTMLElement>(
       '.skills-details__chevron',
     )
@@ -94,6 +126,10 @@ describe('Skills', () => {
       '.skills-details[open] > .skills-details__summary .skills-details__chevron',
     )
     expect(openChevron).toBeTruthy()
+    // The CSS rule sets `transform: rotate(180deg)` on the open-state chevron.
+    // jsdom doesn't run stylesheets, so we assert against the rule's
+    // application via the data attribute / sibling selector instead.
+    expect(openChevron).toBe(document.querySelector('.skills-details__chevron'))
   })
 
   it('renders FastAPI with the logo mask like other SVG skills when expanded', () => {
@@ -110,81 +146,36 @@ describe('Skills', () => {
     )
   })
 
-  it('has a Data Science & ML Foundations block with the canonical stack', () => {
-    const block = skillBlocks.find((b) => b.title === 'Data Science & ML Foundations')
-    expect(block).toBeTruthy()
-    const names = block?.skills.map((s) => s.name) ?? []
-    expect(names).toContain('Pandas')
-    expect(names).toContain('PyTorch')
-    expect(names).toContain('Matplotlib')
-    expect(names).toContain('Seaborn')
-  })
-
-  it('lists PII Redaction (Presidio) under Data, Auth & Security', () => {
-    const security = skillBlocks.find((b) => b.title === 'Data, Auth & Security')
-    expect(security).toBeTruthy()
-    const redaction = security?.skills.find((s) =>
-      s.name.toLowerCase().includes('pii redaction'),
-    )
-    expect(redaction).toBeTruthy()
-    expect(redaction?.application.toLowerCase()).toContain('legal-eagle')
-    expect(redaction?.application.toLowerCase()).toContain('presidio')
-  })
-
-  it('every skill icon either uses a registered IconKey or references a /public image', () => {
-    for (const block of skillBlocks) {
-      for (const skill of block.skills) {
-        if (skill.icon.includes('/')) {
-          expect(
-            /\.(?:svg|png|jpe?g|webp)$/i.test(skill.icon),
-            `${skill.name} icon should be a file path with an image extension`,
-          ).toBe(true)
-        }
-      }
-    }
-  })
-
-  it('renders every (i) trigger inside the card after expansion', () => {
+  it('places every (i) trigger at the bottom-right of its skill card', () => {
     render(<Skills />)
-    expandAllBlocks()
+    getBlockSummaries().forEach((s) => fireEvent.click(s))
 
     const totalSkills = skillBlocks.reduce((sum, b) => sum + b.skills.length, 0)
-    // Open-state has a different label (Close <skill>).
-    const triggers = screen.getAllByRole('button', { name: /how i use it|close .* details/i })
+    const triggers = screen.getAllByRole('button', { name: /show description/i })
     expect(triggers.length).toBe(totalSkills)
-  })
 
-  it('flips a skill card in place when its (i) trigger is clicked', () => {
-    render(<Skills />)
-    expandAllBlocks()
+    for (const trigger of triggers) {
+      // The (i) chip is fully contained inside the card - never spills past
+      // the card border. It's tucked into the bottom-right corner with a
+      // small inset (right-2, bottom-2).
+      expect(trigger.classList.contains('right-2')).toBe(true)
+      expect(trigger.classList.contains('bottom-2')).toBe(true)
+      expect(trigger.classList.contains('size-4')).toBe(true)
+      // No translate hooks - the chip is anchored purely via offsets.
+      expect(trigger.classList.contains('-translate-x-1/3')).toBe(false)
+      expect(trigger.classList.contains('translate-y-1/3')).toBe(false)
+      // No `data-tooltip` so the global `[data-tooltip]` rule doesn't force
+      // `position: relative` and break absolute anchoring.
+      expect(trigger.hasAttribute('data-tooltip')).toBe(false)
 
-    // The compact face for the first skill should be rendered initially.
-    const compactFaces = document.querySelectorAll<HTMLElement>(
-      '.skill-card__face--compact',
-    )
-    expect(compactFaces.length).toBeGreaterThan(0)
-
-    const skill = skillBlocks[0].skills[0]
-    const trigger = screen.getByRole('button', {
-      name: new RegExp(`About ${skill.name}`, 'i'),
-    })
-    fireEvent.click(trigger)
-
-    // Now the card should be marked open and expose the description in-place.
-    const cardWithOpen = document.querySelector<HTMLElement>('.skill-card--open')
-    expect(cardWithOpen).toBeTruthy()
-    // Dialog wrapper carries the description text directly (not in a popover).
-    expect(cardWithOpen?.textContent).toContain(skill.description.slice(0, 40))
-    // The (i) trigger should now report aria-expanded=true.
-    expect(trigger.getAttribute('aria-expanded')).toBe('true')
-
-    // Click outside the card to close (the component closes on outside click).
-    act(() => {
-      document.body.dispatchEvent(
-        new MouseEvent('pointerdown', { bubbles: true }),
-      )
-    })
-    // After Escape / outside-click, the card is back to closed state.
+      // The trigger is a sibling of the .skill-card surface (not inside it)
+      // so the card's logo and text size are independent of the (i).
+      const wrapper = trigger.parentElement
+      expect(wrapper).toBeTruthy()
+      const card = wrapper?.querySelector('.skill-card')
+      expect(card).toBeTruthy()
+      expect(card?.contains(trigger)).toBe(false)
+    }
   })
 
   it('stacks categories tightly (no large vertical gap between blocks)', () => {
@@ -192,16 +183,41 @@ describe('Skills', () => {
     const blockContainer = document.querySelector<HTMLElement>('.skills-blocks')
       ?? document.querySelector<HTMLElement>('details.skills-details')?.parentElement
     expect(blockContainer).toBeTruthy()
+    // The wrapper should use the small `gap-3` class (0.75rem) instead of
+    // the page-wide `--spacing-8` (4rem) so headings aren't airy.
     expect(blockContainer?.classList.contains('gap-3')).toBe(true)
   })
 
   it('does not apply the legacy "with-info" padding override to the card', () => {
     render(<Skills />)
-    expandAllBlocks()
+    getBlockSummaries().forEach((s) => fireEvent.click(s))
+    // Each .skill-card surface must NOT carry the .skill-card--with-info class
+    // because that class used to introduce extra bottom padding just to make
+    // room for the (i) button - which made the logo noticeably smaller.
     const cards = document.querySelectorAll<HTMLElement>('.skill-card')
     expect(cards.length).toBeGreaterThan(0)
     for (const card of cards) {
       expect(card.classList.contains('skill-card--with-info')).toBe(false)
+    }
+  })
+
+  it('pairs each (i) trigger with a popover that contains a description', () => {
+    render(<Skills />)
+    getBlockSummaries().forEach((s) => fireEvent.click(s))
+
+    const triggers = screen.getAllByRole('button', { name: /show description/i })
+    for (const trigger of triggers) {
+      const targetId = trigger.getAttribute('popovertarget')
+      expect(targetId).toBeTruthy()
+      const popover = document.getElementById(targetId as string)
+      expect(popover, `popover #${targetId} missing`).toBeTruthy()
+      expect(popover?.getAttribute('popover')).toBe('auto')
+      if (popover) {
+        const firstParagraph = popover.querySelector('p')
+        expect(firstParagraph?.textContent?.length ?? 0).toBeGreaterThan(20)
+        const heading = popover.querySelector<HTMLHeadingElement>('h4')
+        expect(heading?.textContent?.length ?? 0).toBeGreaterThan(0)
+      }
     }
   })
 })

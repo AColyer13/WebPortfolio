@@ -486,66 +486,34 @@
   font-feature-settings: 'tnum' 1;
 }
 
-/*
- * Skill card "flip" - the (i) trigger reveals the description and
- * application in place, replacing the compact face inside the same
- * tile. Two surfaces (compact / expanded) animate across each other
- * via a fade + tiny lift so the transition reads as a card flip.
- *
- * Layout rules:
- * - Compact: fixed h-[9.375rem] tile, centered logo + name.
- * - Open:    the tile grows to fit the content with min-height: 14rem
- *            and overflow-y: auto for unusually long descriptions.
- * - Both faces share the same grid cell via a single `position: relative`
- *   on `.skill-card` and absolute-positioned faces when open.
- */
-.skill-card--open {
-  min-height: 14rem;
-  height: auto;
-  max-height: none;
-  background: var(--color-surface-50);
-  border-color: var(--color-text-muted);
-}
-
-.skill-card--closed {
-  /* The compact face inherits the static h-[9.375rem] from skillCardClass. */
-}
-
-.skill-card__face {
-  /* Common face styles; toggled between compact and expanded via .skill-card--open. */
-  position: absolute;
+.skill-popover {
+  /* Reset UA popover defaults so the card looks like a designed panel. */
+  margin: auto;
   inset: 0;
+  width: min(22rem, calc(100vw - 2rem));
+  max-height: 70vh;
+  overflow-y: auto;
+  color: inherit;
+
+  /* In/out animation (allow-discrete enables the `display` transition). */
   transition:
     opacity 0.18s ease,
-    transform 0.18s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.skill-card--closed .skill-card__face--compact {
+    transform 0.18s cubic-bezier(0.05, 0.7, 0.1, 1),
+    overlay 0.18s ease allow-discrete,
+    display 0.18s ease allow-discrete;
   opacity: 1;
   transform: translateY(0) scale(1);
 }
 
-.skill-card--closed .skill-card__face--expanded {
-  opacity: 0;
-  transform: translateY(0.4rem) scale(0.98);
-  pointer-events: none;
-}
-
-.skill-card--open .skill-card__face--expanded {
-  opacity: 1;
-  transform: translateY(0) scale(1);
-}
-
-.skill-card--open .skill-card__face--compact {
-  opacity: 0;
-  transform: translateY(-0.4rem) scale(1.02);
-  pointer-events: none;
+@starting-style {
+  .skill-popover:popover-open {
+    opacity: 0;
+    transform: translateY(0.4rem) scale(0.98);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .skill-card__face,
-  .skill-card--open .skill-card__face--compact,
-  .skill-card--closed .skill-card__face--expanded {
+  .skill-popover {
     transition: none !important;
   }
 }
@@ -556,10 +524,17 @@
     outline-offset: 2px;
   }
 
-  .skill-card--open {
-    border-color: CanvasText !important;
+  .skill-popover {
+    border: 1px solid CanvasText !important;
     background: Canvas !important;
     color: CanvasText !important;
+  }
+
+  .skill-popover__close {
+    border-color: ButtonText !important;
+    background: ButtonFace !important;
+    color: ButtonText !important;
+    forced-color-adjust: none;
   }
 }
 
