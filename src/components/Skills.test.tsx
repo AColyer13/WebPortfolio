@@ -119,16 +119,19 @@ describe('Skills', () => {
     expect(triggers.length).toBe(totalSkills)
 
     for (const trigger of triggers) {
-      // The trigger is positioned absolutely on the wrapper so it doesn't
-      // influence the card's interior layout.
-      expect(trigger.classList.contains('absolute')).toBe(true)
+      // Trigger sits at the bottom-right corner of the card via Tailwind
+      // offsets; CSS gives it `position: absolute` because the unlayered
+      // `[data-tooltip]` rule (now removed from this button) would otherwise
+      // override Tailwind's `.absolute` and break anchoring.
       expect(trigger.classList.contains('right-0')).toBe(true)
       expect(trigger.classList.contains('bottom-0')).toBe(true)
-      // It's a tiny size-4 chip (1rem square) - the most subtle variant.
       expect(trigger.classList.contains('size-4')).toBe(true)
-      // It hangs off the card corner via translate, not via inner padding.
       expect(trigger.classList.contains('-translate-x-1/3')).toBe(true)
       expect(trigger.classList.contains('translate-y-1/3')).toBe(true)
+      // No `data-tooltip` on the (i) trigger anymore so the global
+      // [data-tooltip]:after/before :hover styles don't try to position
+      // it (and force `position: relative`).
+      expect(trigger.hasAttribute('data-tooltip')).toBe(false)
 
       // The trigger is a sibling of the .skill-card surface (not inside it)
       // so the card's logo and text size are independent of the (i).

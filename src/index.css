@@ -463,6 +463,16 @@
   border-color: var(--color-text-muted);
 }
 
+/* Pin the (i) trigger absolutely. The Tailwind `.absolute` utility lives in
+ * the utility layer, which is lower precedence than unlayered CSS, so the
+ * raw `.skill-info-btn` rule below takes precedence and the button is
+ * guaranteed to anchor on the card wrapper. */
+.skill-info-btn {
+  font-feature-settings: 'tnum' 1;
+  position: absolute;
+  z-index: 1;
+}
+
 /*
  * Skill-card (i) button + popover.
  * The popover is anchored via the Popover API (popoverTarget on the i button).
