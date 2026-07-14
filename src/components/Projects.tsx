@@ -176,8 +176,8 @@ function ProjectCard({ project, imagePriority }: ProjectCardProps) {
         </picture>
       </div>
       <div className="flex grow flex-col gap-2 p-4">
-        <div className="flex items-start gap-2">
-          <p className="m-0 grow shrink basis-0 text-copyright uppercase tracking-wide text-text-subtle">
+        <div className="relative">
+          <p className="m-0 text-copyright uppercase tracking-wide text-text-subtle pr-6">
             {project.tech}
           </p>
           {/* (i) trigger - matches the Skills pattern: tiny clean circle
@@ -190,7 +190,7 @@ function ProjectCard({ project, imagePriority }: ProjectCardProps) {
             aria-controls={popoverId}
             aria-label={`About ${project.title} — show summary and tech stack`}
             onClick={onToggle}
-            className="skill-info-btn -mt-0.5 -mr-1 inline-flex size-4 shrink-0 cursor-pointer items-center justify-center rounded-full bg-surface-50 text-copyright font-medium leading-none text-text-muted transition-colors duration-150 ease-in-out hover:text-text-default focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600"
+            className="skill-info-btn absolute right-0 top-1/2 -translate-y-1/2 inline-flex size-4 shrink-0 cursor-pointer items-center justify-center rounded-full bg-surface-50 text-copyright font-medium leading-none text-text-muted transition-colors duration-150 ease-in-out hover:text-text-default focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600"
           >
             i
           </button>
