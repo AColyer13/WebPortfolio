@@ -76,35 +76,38 @@ interface SkillCardProps {
 }
 
 /**
- * One skill tile: logo, name, and an (i) trigger in the bottom-right corner
- * that opens a popover with the description and a one-line professional
- * application.
+ * One skill tile: name on top, the logo centered below, and a tiny (i) trigger
+ * in the bottom-right corner. The (i) is anchored to the card wrapper (not
+ * the surface) so it never resizes or shifts the logo/text — it visually sits
+ * on the card border line.
  */
 function SkillCard({ skill }: SkillCardProps) {
   const popoverId = useId()
   const triggerId = `${popoverId}-trigger`
 
   return (
-    <div className="flex w-full min-w-0 self-stretch">
-      <div className={`${skillCardClass} skill-card--with-info`}>
-        <div className="skill-card__body relative flex max-h-full w-full min-w-0 flex-col items-center justify-center gap-2">
+    <div className="relative flex w-full min-w-0 self-stretch">
+      <div className={`${skillCardClass} flex w-full`}>
+        <div className="skill-card__body flex max-h-full w-full min-w-0 flex-col items-center justify-center gap-2">
           <h4 className="m-0 overflow-wrap-anywhere text-center text-fluid-3 font-medium leading-snug text-text-default">
             {skill.name}
           </h4>
           <SkillIcon icon={skill.icon} />
-          <button
-            type="button"
-            id={triggerId}
-            className="skill-info-btn absolute right-1.5 bottom-1.5 inline-flex size-5 shrink-0 cursor-pointer items-center justify-center rounded-full border border-border-default bg-surface-50 text-copyright font-medium leading-none text-text-muted transition-colors duration-150 ease-in-out hover:border-text-default hover:text-text-default focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600"
-            aria-label={`About ${skill.name} — show description and how I use it`}
-            aria-describedby={popoverId}
-            popoverTarget={popoverId}
-            data-tooltip={`What ${skill.name} is and how I use it`}
-          >
-            i
-          </button>
         </div>
       </div>
+      {/* (i) sits over the bottom-right corner of the card border, anchored to
+          the wrapper so it never resizes the logo or the text. */}
+      <button
+        type="button"
+        id={triggerId}
+        className="skill-info-btn absolute right-1 bottom-1 inline-flex size-5 shrink-0 cursor-pointer items-center justify-center rounded-full border border-border-default bg-surface-0 text-copyright font-medium leading-none text-text-muted transition-colors duration-150 ease-in-out hover:border-text-default hover:text-text-default focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600"
+        aria-label={`About ${skill.name} — show description and how I use it`}
+        aria-describedby={popoverId}
+        popoverTarget={popoverId}
+        data-tooltip={`What ${skill.name} is and how I use it`}
+      >
+        i
+      </button>
       <SkillPopover
         skill={skill}
         popoverId={popoverId}

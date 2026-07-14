@@ -452,10 +452,15 @@
     -webkit-tap-highlight-color: transparent;
   }
 
-  .skill-card:active,
-  .skill-card:has(:focus-visible) {
+  .skill-card:active {
     border-color: var(--color-text-muted);
   }
+}
+
+/* Highlight the card border when its (i) trigger receives focus, even though
+ * the trigger is a sibling of the card rather than a descendant. */
+.skill-card:has(+ .skill-info-btn:focus-visible) {
+  border-color: var(--color-text-muted);
 }
 
 /*
@@ -463,13 +468,12 @@
  * The popover is anchored via the Popover API (popoverTarget on the i button).
  * We let the browser handle centering/light-dismiss; styling just keeps the
  * card readable, the width capped, and long descriptions scrollable.
+ *
+ * The (i) trigger is positioned on the wrapper (not inside the card surface)
+ * so it never affects the logo or text size — it's a peer, not a child.
  */
 .skill-info-btn {
   font-feature-settings: 'tnum' 1;
-}
-
-.skill-card--with-info {
-  padding-block: 0.5rem;
 }
 
 .skill-popover {

@@ -119,12 +119,34 @@ describe('Skills', () => {
     expect(triggers.length).toBe(totalSkills)
 
     for (const trigger of triggers) {
-      // The trigger is positioned absolutely at bottom-right.
+      // The trigger is positioned absolutely on the wrapper so it doesn't
+      // influence the card's interior layout.
       expect(trigger.classList.contains('absolute')).toBe(true)
-      expect(trigger.classList.contains('bottom-1.5')).toBe(true)
-      expect(trigger.classList.contains('right-1.5')).toBe(true)
-      // And it's small (size-5 = 1.25rem square).
+      expect(trigger.classList.contains('right-1')).toBe(true)
+      expect(trigger.classList.contains('bottom-1')).toBe(true)
+      // It's a tiny size-5 chip (1.25rem square).
       expect(trigger.classList.contains('size-5')).toBe(true)
+
+      // The trigger is a sibling of the .skill-card surface (not inside it)
+      // so the card's logo and text size are independent of the (i).
+      const wrapper = trigger.parentElement
+      expect(wrapper).toBeTruthy()
+      const card = wrapper?.querySelector('.skill-card')
+      expect(card).toBeTruthy()
+      expect(card?.contains(trigger)).toBe(false)
+    }
+  })
+
+  it('does not apply the legacy "with-info" padding override to the card', () => {
+    render(<Skills />)
+    getBlockSummaries().forEach((s) => fireEvent.click(s))
+    // Each .skill-card surface must NOT carry the .skill-card--with-info class
+    // because that class used to introduce extra bottom padding just to make
+    // room for the (i) button - which made the logo noticeably smaller.
+    const cards = document.querySelectorAll<HTMLElement>('.skill-card')
+    expect(cards.length).toBeGreaterThan(0)
+    for (const card of cards) {
+      expect(card.classList.contains('skill-card--with-info')).toBe(false)
     }
   })
 
