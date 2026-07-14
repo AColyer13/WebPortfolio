@@ -106,34 +106,53 @@ function SkillCard({ skill }: SkillCardProps) {
     const trigger = triggerRef.current
     if (!popover || !trigger) return
 
-    // Distance from the popover's bottom-right corner to the (i) so the
-    // arrow can land cleanly on the chip.
+    // Distance from the popover's bottom edge to the (i) so the arrow can
+    // land cleanly on the chip.
     const GAP = 8
 
     const positionPopover = () => {
       const triggerRect = trigger.getBoundingClientRect()
-      const popoverWidth = Math.min(
-        22 * 16, // 22rem
-        window.innerWidth - 16,
-      )
 
-      // Anchor the popover's bottom-right corner at the (i)'s top-right
-      // (so the popover opens above-and-left of the chip).
-      const rightOffset = Math.round(window.innerWidth - triggerRect.right)
-      const bottomOffset = Math.round(window.innerHeight - triggerRect.top + GAP)
-
+      // Reset every inset so the UA stylesheet's default `inset: 0` (which
+      // pins popover elements to the top-left of the viewport) doesn't
+      // fight our positioning.
       popover.style.position = 'fixed'
-      popover.style.right = `${rightOffset}px`
-      popover.style.bottom = `${bottomOffset}px`
+      popover.style.inset = 'auto'
+      popover.style.right = 'auto'
+      popover.style.bottom = 'auto'
+      popover.style.top = ''
+      popover.style.left = ''
+      popover.style.width = ''
+      popover.style.maxWidth = ''
+
+      const popoverWidth = Math.min(22 * 16, window.innerWidth - 16)
+      const popoverHeight = popover.getBoundingClientRect().height || 0
+
+      // Anchor the popover's bottom-right corner just above the (i)'s
+      // top-right corner. Clamp so the panel never spills off-screen.
+      const margin = 8
+      const desiredLeft = triggerRect.right - popoverWidth
+      const desiredTop = triggerRect.top - popoverHeight - GAP
+
+      const left = Math.max(
+        margin,
+        Math.min(desiredLeft, window.innerWidth - popoverWidth - margin),
+      )
+      const top = Math.max(margin, desiredTop)
+
       popover.style.width = `${Math.round(popoverWidth)}px`
-      popover.style.maxWidth = `calc(100vw - 1rem)`
+      popover.style.maxWidth = `calc(100vw - ${margin * 2}px)`
+      popover.style.top = `${Math.round(top)}px`
+      popover.style.left = `${Math.round(left)}px`
       // Mark the corner so the CSS arrow picks the right placement.
       popover.dataset.placement = 'bottom-end'
     }
 
     const openPopover = () => {
-      positionPopover()
       if (typeof popover.showPopover === 'function') popover.showPopover()
+      // Position *after* showPopover so the popover has been laid out and
+      // we can measure its real height for the top calculation.
+      positionPopover()
     }
 
     const closePopover = () => {

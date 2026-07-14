@@ -231,18 +231,20 @@ describe('Skills', () => {
     const triggers = screen.getAllByRole('button', { name: /show description/i })
     expect(triggers.length).toBeGreaterThan(0)
 
-    // Click the first (i) - the popover opens and JS writes right/bottom
-    // (anchored at the (i)'s top-right, so the popover sits up-and-left
-    // of the chip) plus a fixed width. data-placement tells the CSS arrow
-    // which corner of the popover to attach to.
+    // Click the first (i) - the popover opens and JS writes top/left
+    // (anchored above the (i), right edge aligned with the chip) plus a
+    // fixed width. data-placement tells the CSS arrow which corner of
+    // the popover to attach to.
     fireEvent.click(triggers[0])
 
     const popoverId = triggers[0].getAttribute('aria-controls')
     const popover = document.getElementById(popoverId as string)
     expect(popover).toBeTruthy()
     expect(popover?.style.position).toBe('fixed')
-    expect(popover?.style.right).not.toBe('')
-    expect(popover?.style.bottom).not.toBe('')
+    // Reset the UA default `inset: 0` so our top/left win.
+    expect(popover?.style.inset).toBe('auto')
+    expect(popover?.style.top).not.toBe('')
+    expect(popover?.style.left).not.toBe('')
     expect(popover?.style.width).not.toBe('')
     expect(popover?.getAttribute('data-placement')).toBe('bottom-end')
   })
