@@ -224,25 +224,26 @@ describe('Skills', () => {
     }
   })
 
-  it('opens the popover over the originating card on click', () => {
+  it('anchors the popover as a small callout from the (i) trigger', () => {
     render(<Skills />)
     getBlockSummaries().forEach((s) => fireEvent.click(s))
 
     const triggers = screen.getAllByRole('button', { name: /show description/i })
     expect(triggers.length).toBeGreaterThan(0)
 
-    // Click the first (i) - the popover is opened and JS writes the card's
-    // viewport-relative top/left/width onto the popover element so it
-    // overlays the skill.
+    // Click the first (i) - the popover opens and JS writes right/bottom
+    // (anchored at the (i)'s top-right, so the popover sits up-and-left
+    // of the chip) plus a fixed width. data-placement tells the CSS arrow
+    // which corner of the popover to attach to.
     fireEvent.click(triggers[0])
 
     const popoverId = triggers[0].getAttribute('aria-controls')
     const popover = document.getElementById(popoverId as string)
     expect(popover).toBeTruthy()
-    // Inline style fields are populated by the effect.
     expect(popover?.style.position).toBe('fixed')
-    expect(popover?.style.top).not.toBe('')
-    expect(popover?.style.left).not.toBe('')
+    expect(popover?.style.right).not.toBe('')
+    expect(popover?.style.bottom).not.toBe('')
     expect(popover?.style.width).not.toBe('')
+    expect(popover?.getAttribute('data-placement')).toBe('bottom-end')
   })
 })

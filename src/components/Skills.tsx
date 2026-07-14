@@ -89,25 +89,46 @@ function SkillCard({ skill }: SkillCardProps) {
   const popoverId = useId()
   const triggerId = `${popoverId}-trigger`
   const wrapperRef = useRef<HTMLDivElement>(null)
+  const triggerRef = useRef<HTMLButtonElement>(null)
   const [open, setOpen] = useState(false)
 
-  // Position the popover to overlay the card while it's open. Reposition on
-  // resize/scroll so it follows the card if the page moves under it.
+  // Position the popover as a small callout anchored to the (i) trigger.
+  // The popover's bottom-right corner sits flush with the (i), with a
+  // small offset so the arrow can point at it. JS writes right/bottom
+  // (not top/left) so the popover extends up-and-to-the-left of the chip,
+  // reading as "info coming out of (i)".
   useEffect(() => {
     if (!open) return
 
     const popover = document.getElementById(popoverId) as
       | (HTMLElement & { showPopover?: () => void; hidePopover?: () => void })
       | null
-    const wrapper = wrapperRef.current
-    if (!popover || !wrapper) return
+    const trigger = triggerRef.current
+    if (!popover || !trigger) return
+
+    // Distance from the popover's bottom-right corner to the (i) so the
+    // arrow can land cleanly on the chip.
+    const GAP = 8
 
     const positionPopover = () => {
-      const rect = wrapper.getBoundingClientRect()
+      const triggerRect = trigger.getBoundingClientRect()
+      const popoverWidth = Math.min(
+        22 * 16, // 22rem
+        window.innerWidth - 16,
+      )
+
+      // Anchor the popover's bottom-right corner at the (i)'s top-right
+      // (so the popover opens above-and-left of the chip).
+      const rightOffset = Math.round(window.innerWidth - triggerRect.right)
+      const bottomOffset = Math.round(window.innerHeight - triggerRect.top + GAP)
+
       popover.style.position = 'fixed'
-      popover.style.top = `${Math.round(rect.top)}px`
-      popover.style.left = `${Math.round(rect.left)}px`
-      popover.style.width = `${Math.round(rect.width)}px`
+      popover.style.right = `${rightOffset}px`
+      popover.style.bottom = `${bottomOffset}px`
+      popover.style.width = `${Math.round(popoverWidth)}px`
+      popover.style.maxWidth = `calc(100vw - 1rem)`
+      // Mark the corner so the CSS arrow picks the right placement.
+      popover.dataset.placement = 'bottom-end'
     }
 
     const openPopover = () => {
@@ -128,7 +149,8 @@ function SkillCard({ skill }: SkillCardProps) {
 
     // Light-dismiss: any pointerdown outside the wrapper hides the popover.
     const onOutside = (event: MouseEvent) => {
-      if (!wrapper.contains(event.target as Node)) {
+      const wrapper = wrapperRef.current
+      if (!wrapper?.contains(event.target as Node)) {
         setOpen(false)
         closePopover()
       }
@@ -178,6 +200,7 @@ function SkillCard({ skill }: SkillCardProps) {
           the card. Fully contained inside the card surface - no negative
           translate that would let it spill past the card border. */}
       <button
+        ref={triggerRef}
         type="button"
         id={triggerId}
         aria-expanded={open}
