@@ -1,4 +1,5 @@
 import { useEffect, useId, useRef, useState } from 'react'
+import { X } from 'lucide-react'
 import { featuredProjects, projects } from '../data/portfolio'
 import { withBase } from '../utils/baseUrl'
 import { pictureSrcSet } from '../utils/pictureSources'
@@ -46,11 +47,11 @@ function describeProject(project: (typeof projects)[number]): string {
   if (tech.includes('firebase') || tech.includes('firestore')) {
     lines.push('Realtime data layer backed by Firestore rules and Cloud Functions.')
   } else if (tech.includes('python') || tech.includes('flask') || tech.includes('fastapi')) {
-    lines.push('Python API surface; thin client talks to it over HTTPS.')
+    lines.push('Python API on the back end; the client talks to it over HTTPS.')
   } else if (tech.includes('node.js') || tech.includes('express')) {
     lines.push('Node + Express backend with a small JSON / SSR footprint.')
   } else if (tech.includes('hono')) {
-    lines.push('Hono API at the edge - fast cold starts and minimal middleware.')
+    lines.push('Hono API at the edge, with fast cold starts and minimal middleware.')
   }
 
   // Data / persistence
@@ -60,7 +61,7 @@ function describeProject(project: (typeof projects)[number]): string {
 
   // AI / ML
   if (tech.some((t) => t.includes('ai') || t.includes('gemini') || t.includes('langgraph') || t.includes('openai'))) {
-    lines.push('AI-assisted flows - generation, classification, or agentic steps.')
+    lines.push('AI-assisted flows: generation, classification, or agentic steps.')
   }
 
   // 3D / graphics
@@ -232,7 +233,21 @@ function ProjectCard({ project, imagePriority }: ProjectCardProps) {
         role="dialog"
         aria-label={`${project.title} — details`}
       >
-        <h4 className="m-0 mb-2 text-fluid-3 font-bold leading-snug">{project.title}</h4>
+        <button
+          type="button"
+          className="skill-popover__close absolute top-2 right-2 inline-flex size-7 shrink-0 cursor-pointer items-center justify-center rounded-full border-0 bg-text-default/8 text-text-muted transition-colors duration-150 ease-in-out hover:bg-text-default/15 hover:text-text-default focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600"
+          onClick={() => {
+            setOpen(false)
+            const popover = document.getElementById(popoverId)
+            if (popover && 'hidePopover' in popover) {
+              ;(popover as HTMLElement & { hidePopover: () => void }).hidePopover()
+            }
+          }}
+          aria-label="Close"
+        >
+          <X className="size-3.5" strokeWidth={2.25} aria-hidden />
+        </button>
+        <h4 className="m-0 mb-2 pr-9 text-fluid-3 font-bold leading-snug">{project.title}</h4>
         <p className="m-0 mb-3 text-fluid-1 leading-relaxed text-text-default">
           {summary}
         </p>
@@ -249,19 +264,6 @@ function ProjectCard({ project, imagePriority }: ProjectCardProps) {
             </li>
           ))}
         </ul>
-        <button
-          type="button"
-          className="skill-popover__close mt-3 inline-flex min-h-9 cursor-pointer items-center rounded-sm border border-border-default bg-surface-50 px-3 py-1 text-copyright font-medium text-text-default transition-colors duration-150 ease-in-out hover:border-text-muted"
-          onClick={() => {
-            setOpen(false)
-            const popover = document.getElementById(popoverId)
-            if (popover && 'hidePopover' in popover) {
-              ;(popover as HTMLElement & { hidePopover: () => void }).hidePopover()
-            }
-          }}
-        >
-          Close
-        </button>
       </div>
     </article>
   )

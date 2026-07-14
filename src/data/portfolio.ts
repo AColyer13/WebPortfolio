@@ -41,7 +41,7 @@ interface Project {
 export const skillBlocks: SkillBlock[] = [
   {
     title: 'Frontend & Mobile Engineering',
-    summary: 'Production user interfaces for web and native — fast, accessible, animated.',
+    summary: 'Production user interfaces for web and native: fast, accessible, animated.',
     skills: [
       {
         name: 'TypeScript',
@@ -143,7 +143,7 @@ export const skillBlocks: SkillBlock[] = [
   },
   {
     title: 'Backend & API Architecture',
-    summary: 'Server runtimes, REST/streaming surfaces, contracts, and request pipelines.',
+    summary: 'Server runtimes, REST and streaming surfaces, contracts, request pipelines.',
     skills: [
       {
         name: 'Node.js 22',
@@ -221,7 +221,7 @@ export const skillBlocks: SkillBlock[] = [
   },
   {
     title: 'AI / ML Engineering',
-    summary: 'LLM orchestration, agent design, and prompt/runtime operations for production AI features.',
+    summary: 'LLM orchestration, agent design, prompt and runtime operations for production AI features.',
     skills: [
       {
         name: 'OpenAI API',
@@ -417,7 +417,7 @@ export const skillBlocks: SkillBlock[] = [
   },
   {
     title: 'Cloud, DevOps & Infrastructure',
-    summary: 'Where code meets runtime — deploy pipelines, edge plumbing, and the platforms beneath the apps.',
+    summary: 'Where code meets runtime: deploy pipelines, edge plumbing, the platforms beneath the apps.',
     skills: [
       {
         name: 'AWS',
@@ -511,7 +511,7 @@ export const skillBlocks: SkillBlock[] = [
   },
   {
     title: 'Data Science & ML Foundations',
-    summary: 'Numerical Python stack for analysis and modeling — the tools behind dashboards, eval pipelines, and ML prototypes.',
+    summary: 'Numerical Python stack for analysis and modeling: the tools behind dashboards, eval pipelines, ML prototypes.',
     skills: [
       {
         name: 'Pandas',
@@ -549,7 +549,7 @@ export const skillBlocks: SkillBlock[] = [
   },
   {
     title: 'Quality, Testing & Observability',
-    summary: 'Confidence in production — automated testing, performance budgets, and runtime telemetry.',
+    summary: 'Confidence in production: automated testing, performance budgets, runtime telemetry.',
     skills: [
       {
         name: 'Vitest',

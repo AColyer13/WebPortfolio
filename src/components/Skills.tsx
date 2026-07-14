@@ -1,4 +1,5 @@
 import { useEffect, useId, useRef, useState } from 'react'
+import { X } from 'lucide-react'
 import { skillBlocks, type Skill, type SkillBlock } from '../data/portfolio'
 import { withBase } from '../utils/baseUrl'
 import { skillCardClass } from '../utils/layoutClasses'
@@ -53,7 +54,15 @@ function SkillPopover({ skill, popoverId, onClose }: SkillPopoverProps) {
       role="dialog"
       aria-label={`${skill.name} — details`}
     >
-      <div className="mb-2 flex items-center gap-2">
+      <button
+        type="button"
+        className="skill-popover__close absolute top-2 right-2 inline-flex size-7 shrink-0 cursor-pointer items-center justify-center rounded-full border-0 bg-text-default/8 text-text-muted transition-colors duration-150 ease-in-out hover:bg-text-default/15 hover:text-text-default focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600"
+        onClick={onClose}
+        aria-label="Close"
+      >
+        <X className="size-3.5" strokeWidth={2.25} aria-hidden />
+      </button>
+      <div className="mb-2 flex items-center gap-2 pr-9">
         <SkillIcon icon={skill.icon} />
         <h4 className="m-0 text-fluid-3 font-bold leading-snug">{skill.name}</h4>
       </div>
@@ -64,13 +73,6 @@ function SkillPopover({ skill, popoverId, onClose }: SkillPopoverProps) {
         <span className="font-medium text-text-default">In practice:</span>{' '}
         {skill.application}
       </p>
-      <button
-        type="button"
-        className="skill-popover__close mt-3 inline-flex min-h-9 cursor-pointer items-center rounded-sm border border-border-default bg-surface-50 px-3 py-1 text-copyright font-medium text-text-default transition-colors duration-150 ease-in-out hover:border-text-muted"
-        onClick={onClose}
-      >
-        Close
-      </button>
     </div>
   )
 }

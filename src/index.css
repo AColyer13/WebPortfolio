@@ -553,7 +553,6 @@
   }
 
   .skill-popover__close {
-    border-color: ButtonText !important;
     background: ButtonFace !important;
     color: ButtonText !important;
     forced-color-adjust: none;
