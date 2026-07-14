@@ -487,10 +487,9 @@
 }
 
 .skill-popover {
-  /* Reset UA popover defaults so the card looks like a designed panel. */
-  margin: auto;
-  inset: 0;
-  width: min(22rem, calc(100vw - 2rem));
+  /* JS-owned positioning - the open effect sets inline top/left/width
+     from the originating card's bounding rect so the popover overlays
+     the skill instead of centering in the viewport. */
   max-height: 70vh;
   overflow-y: auto;
   color: inherit;

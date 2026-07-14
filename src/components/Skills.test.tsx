@@ -201,17 +201,20 @@ describe('Skills', () => {
     }
   })
 
-  it('pairs each (i) trigger with a popover that contains a description', () => {
+  it('pairs each (i) trigger with a manual popover that contains a description', () => {
     render(<Skills />)
     getBlockSummaries().forEach((s) => fireEvent.click(s))
 
     const triggers = screen.getAllByRole('button', { name: /show description/i })
+    // The trigger and the popover are linked via aria-controls (no
+    // popovertarget attribute any more - the click handler opens the
+    // popover manually so we can position it ourselves).
     for (const trigger of triggers) {
-      const targetId = trigger.getAttribute('popovertarget')
-      expect(targetId).toBeTruthy()
-      const popover = document.getElementById(targetId as string)
-      expect(popover, `popover #${targetId} missing`).toBeTruthy()
-      expect(popover?.getAttribute('popover')).toBe('auto')
+      const popoverId = trigger.getAttribute('aria-controls')
+      expect(popoverId).toBeTruthy()
+      const popover = document.getElementById(popoverId as string)
+      expect(popover, `popover #${popoverId} missing`).toBeTruthy()
+      expect(popover?.getAttribute('popover')).toBe('manual')
       if (popover) {
         const firstParagraph = popover.querySelector('p')
         expect(firstParagraph?.textContent?.length ?? 0).toBeGreaterThan(20)
@@ -219,5 +222,27 @@ describe('Skills', () => {
         expect(heading?.textContent?.length ?? 0).toBeGreaterThan(0)
       }
     }
+  })
+
+  it('opens the popover over the originating card on click', () => {
+    render(<Skills />)
+    getBlockSummaries().forEach((s) => fireEvent.click(s))
+
+    const triggers = screen.getAllByRole('button', { name: /show description/i })
+    expect(triggers.length).toBeGreaterThan(0)
+
+    // Click the first (i) - the popover is opened and JS writes the card's
+    // viewport-relative top/left/width onto the popover element so it
+    // overlays the skill.
+    fireEvent.click(triggers[0])
+
+    const popoverId = triggers[0].getAttribute('aria-controls')
+    const popover = document.getElementById(popoverId as string)
+    expect(popover).toBeTruthy()
+    // Inline style fields are populated by the effect.
+    expect(popover?.style.position).toBe('fixed')
+    expect(popover?.style.top).not.toBe('')
+    expect(popover?.style.left).not.toBe('')
+    expect(popover?.style.width).not.toBe('')
   })
 })

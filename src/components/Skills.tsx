@@ -1,4 +1,4 @@
-import { useId } from 'react'
+import { useEffect, useId, useRef, useState } from 'react'
 import { skillBlocks, type Skill, type SkillBlock } from '../data/portfolio'
 import { withBase } from '../utils/baseUrl'
 import { skillCardClass } from '../utils/layoutClasses'
@@ -37,15 +37,18 @@ interface SkillPopoverProps {
 }
 
 /**
- * Detailed view of a skill, rendered inside a native `popover` element so the
- * browser handles light-dismiss, focus management, and stacking automatically.
+ * Detailed view of a skill, rendered inside a native `popover="manual"` element.
+ * We disable the UA's auto-placement so we can anchor the popover directly on
+ * top of the originating skill card. Inline `top`/`left`/`width` are written
+ * from JS at open-time (and on resize/scroll) so the popover overlays the
+ * skill rather than centering in the viewport.
  */
 function SkillPopover({ skill, popoverId, onClose }: SkillPopoverProps) {
   return (
     <div
       id={popoverId}
-      popover="auto"
-      className="skill-popover w-[min(22rem,calc(100vw-2rem))] rounded-md border border-border-default bg-surface-0 p-4 text-text-default shadow-[0_1rem_2.5rem_rgb(0_0_0_/0.18)]"
+      popover="manual"
+      className="skill-popover rounded-md border border-border-default bg-surface-0 p-4 text-text-default shadow-[0_1rem_2.5rem_rgb(0_0_0_/0.18)]"
       role="dialog"
       aria-label={`${skill.name} — details`}
     >
@@ -77,16 +80,92 @@ interface SkillCardProps {
 
 /**
  * One skill tile: name on top, the logo centered below, and a tiny (i) trigger
- * in the bottom-right corner. The (i) is anchored to the card wrapper (not
- * the surface) so it never resizes or shifts the logo/text — it visually sits
- * on the card border line.
+ * in the bottom-right corner. The (i) opens a `popover="manual"` element that
+ * is positioned in JS to overlay this specific card — so it never floats to
+ * viewport center. Light-dismiss (clicking outside) still closes it because
+ * the popover stays in the top layer.
  */
 function SkillCard({ skill }: SkillCardProps) {
   const popoverId = useId()
   const triggerId = `${popoverId}-trigger`
+  const wrapperRef = useRef<HTMLDivElement>(null)
+  const [open, setOpen] = useState(false)
+
+  // Position the popover to overlay the card while it's open. Reposition on
+  // resize/scroll so it follows the card if the page moves under it.
+  useEffect(() => {
+    if (!open) return
+
+    const popover = document.getElementById(popoverId) as
+      | (HTMLElement & { showPopover?: () => void; hidePopover?: () => void })
+      | null
+    const wrapper = wrapperRef.current
+    if (!popover || !wrapper) return
+
+    const positionPopover = () => {
+      const rect = wrapper.getBoundingClientRect()
+      popover.style.position = 'fixed'
+      popover.style.top = `${Math.round(rect.top)}px`
+      popover.style.left = `${Math.round(rect.left)}px`
+      popover.style.width = `${Math.round(rect.width)}px`
+    }
+
+    const openPopover = () => {
+      positionPopover()
+      if (typeof popover.showPopover === 'function') popover.showPopover()
+    }
+
+    const closePopover = () => {
+      if (typeof popover.hidePopover === 'function') popover.hidePopover()
+    }
+
+    // Open immediately so the user sees the overlay.
+    openPopover()
+
+    const onScrollOrResize = () => {
+      if (popover.matches?.(':popover-open')) positionPopover()
+    }
+
+    // Light-dismiss: any pointerdown outside the wrapper hides the popover.
+    const onOutside = (event: MouseEvent) => {
+      if (!wrapper.contains(event.target as Node)) {
+        setOpen(false)
+        closePopover()
+      }
+    }
+
+    // Esc closes too.
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setOpen(false)
+        closePopover()
+      }
+    }
+
+    // Defer the outside-click listener so the click that opened us
+    // doesn't immediately close us.
+    const outsideHandle = window.setTimeout(() => {
+      window.addEventListener('pointerdown', onOutside)
+    }, 0)
+
+    window.addEventListener('resize', onScrollOrResize)
+    window.addEventListener('scroll', onScrollOrResize, true)
+    window.addEventListener('keydown', onKey)
+
+    return () => {
+      window.clearTimeout(outsideHandle)
+      window.removeEventListener('pointerdown', onOutside)
+      window.removeEventListener('resize', onScrollOrResize)
+      window.removeEventListener('scroll', onScrollOrResize, true)
+      window.removeEventListener('keydown', onKey)
+      if (popover.matches?.(':popover-open')) closePopover()
+    }
+  }, [open, popoverId])
+
+  const onToggle = () => setOpen((value) => !value)
 
   return (
-    <div className="relative flex w-full min-w-0 self-stretch">
+    <div ref={wrapperRef} className="relative flex w-full min-w-0 self-stretch">
       <div className={`${skillCardClass} flex w-full`}>
         <div className="skill-card__body flex max-h-full w-full min-w-0 flex-col items-center justify-center gap-2">
           <h4 className="m-0 overflow-wrap-anywhere text-center text-fluid-3 font-medium leading-snug text-text-default">
@@ -101,22 +180,18 @@ function SkillCard({ skill }: SkillCardProps) {
       <button
         type="button"
         id={triggerId}
-        className="skill-info-btn right-2 bottom-2 inline-flex size-4 shrink-0 cursor-pointer items-center justify-center rounded-full bg-surface-50 text-copyright font-medium leading-none text-text-muted transition-colors duration-150 ease-in-out hover:text-text-default focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600"
+        aria-expanded={open}
+        aria-controls={popoverId}
         aria-label={`About ${skill.name} — show description and how I use it`}
-        aria-describedby={popoverId}
-        popoverTarget={popoverId}
+        className="skill-info-btn right-2 bottom-2 inline-flex size-4 shrink-0 cursor-pointer items-center justify-center rounded-full bg-surface-50 text-copyright font-medium leading-none text-text-muted transition-colors duration-150 ease-in-out hover:text-text-default focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600"
+        onClick={onToggle}
       >
         i
       </button>
       <SkillPopover
         skill={skill}
         popoverId={popoverId}
-        onClose={() => {
-          const popover = document.getElementById(popoverId)
-          if (popover && 'hidePopover' in popover) {
-            ;(popover as HTMLElement & { hidePopover: () => void }).hidePopover()
-          }
-        }}
+        onClose={() => setOpen(false)}
       />
     </div>
   )
