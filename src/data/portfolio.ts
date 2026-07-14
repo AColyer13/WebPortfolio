@@ -733,6 +733,7 @@ export const projects: Project[] = [
     imageUrl: 'images/writing-consultant.png',
     imageWidth: 1280,
     imageHeight: 640,
+    liveUrl: 'https://acolyer13.github.io/writing_consultant/',
     githubUrl: 'https://github.com/AColyer13/writing_consultant',
   },
   {
