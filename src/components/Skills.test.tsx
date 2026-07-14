@@ -122,10 +122,13 @@ describe('Skills', () => {
       // The trigger is positioned absolutely on the wrapper so it doesn't
       // influence the card's interior layout.
       expect(trigger.classList.contains('absolute')).toBe(true)
-      expect(trigger.classList.contains('right-1')).toBe(true)
-      expect(trigger.classList.contains('bottom-1')).toBe(true)
-      // It's a tiny size-5 chip (1.25rem square).
-      expect(trigger.classList.contains('size-5')).toBe(true)
+      expect(trigger.classList.contains('right-0')).toBe(true)
+      expect(trigger.classList.contains('bottom-0')).toBe(true)
+      // It's a tiny size-4 chip (1rem square) - the most subtle variant.
+      expect(trigger.classList.contains('size-4')).toBe(true)
+      // It hangs off the card corner via translate, not via inner padding.
+      expect(trigger.classList.contains('-translate-x-1/3')).toBe(true)
+      expect(trigger.classList.contains('translate-y-1/3')).toBe(true)
 
       // The trigger is a sibling of the .skill-card surface (not inside it)
       // so the card's logo and text size are independent of the (i).
@@ -135,6 +138,16 @@ describe('Skills', () => {
       expect(card).toBeTruthy()
       expect(card?.contains(trigger)).toBe(false)
     }
+  })
+
+  it('stacks categories tightly (no large vertical gap between blocks)', () => {
+    render(<Skills />)
+    const blockContainer = document.querySelector<HTMLElement>('.skills-blocks')
+      ?? document.querySelector<HTMLElement>('details.skills-details')?.parentElement
+    expect(blockContainer).toBeTruthy()
+    // The wrapper should use the small `gap-3` class (0.75rem) instead of
+    // the page-wide `--spacing-8` (4rem) so headings aren't airy.
+    expect(blockContainer?.classList.contains('gap-3')).toBe(true)
   })
 
   it('does not apply the legacy "with-info" padding override to the card', () => {

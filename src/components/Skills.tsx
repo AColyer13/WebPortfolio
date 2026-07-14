@@ -95,12 +95,12 @@ function SkillCard({ skill }: SkillCardProps) {
           <SkillIcon icon={skill.icon} />
         </div>
       </div>
-      {/* (i) sits over the bottom-right corner of the card border, anchored to
-          the wrapper so it never resizes the logo or the text. */}
+      {/* (i) sits as a tiny clean circle at the bottom-right of the card,
+          anchored to the wrapper so it never resizes the logo or text. */}
       <button
         type="button"
         id={triggerId}
-        className="skill-info-btn absolute right-1 bottom-1 inline-flex size-5 shrink-0 cursor-pointer items-center justify-center rounded-full border border-border-default bg-surface-0 text-copyright font-medium leading-none text-text-muted transition-colors duration-150 ease-in-out hover:border-text-default hover:text-text-default focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600"
+        className="skill-info-btn absolute right-0 bottom-0 inline-flex size-4 -translate-x-1/3 translate-y-1/3 shrink-0 cursor-pointer items-center justify-center rounded-full bg-surface-50 text-copyright font-medium leading-none text-text-muted transition-colors duration-150 ease-in-out hover:text-text-default focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600"
         aria-label={`About ${skill.name} — show description and how I use it`}
         aria-describedby={popoverId}
         popoverTarget={popoverId}
@@ -179,7 +179,7 @@ export function Skills() {
       variant="skills"
       headingClassName="flow-root mb-3 mx-auto max-w-[52ch] text-center"
     >
-      <div className="flex w-full flex-col gap-(--spacing-8)">
+      <div className="skills-blocks flex w-full flex-col gap-3">
         {skillBlocks.map((block) => (
           <SkillBlockSection key={block.title} block={block} />
         ))}
