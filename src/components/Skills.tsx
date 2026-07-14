@@ -95,15 +95,13 @@ function SkillCard({ skill }: SkillCardProps) {
           <SkillIcon icon={skill.icon} />
         </div>
       </div>
-      {/* (i) sits as a tiny clean circle at the bottom-right of the card,
-          anchored to the wrapper so it never resizes the logo or text.
-          `position: absolute` is asserted in CSS via .skill-info-btn because
-          the global [data-tooltip] rule (which the button no longer carries)
-          would otherwise win specificity over Tailwind's `.absolute`. */}
+      {/* (i) sits as a tiny clean circle tucked into the bottom-right corner of
+          the card. Fully contained inside the card surface - no negative
+          translate that would let it spill past the card border. */}
       <button
         type="button"
         id={triggerId}
-        className="skill-info-btn right-0 bottom-0 inline-flex size-4 -translate-x-1/3 translate-y-1/3 shrink-0 cursor-pointer items-center justify-center rounded-full bg-surface-50 text-copyright font-medium leading-none text-text-muted transition-colors duration-150 ease-in-out hover:text-text-default focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600"
+        className="skill-info-btn right-1.5 bottom-1.5 inline-flex size-4 shrink-0 cursor-pointer items-center justify-center rounded-full bg-surface-50 text-copyright font-medium leading-none text-text-muted transition-colors duration-150 ease-in-out hover:text-text-default focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600"
         aria-label={`About ${skill.name} — show description and how I use it`}
         aria-describedby={popoverId}
         popoverTarget={popoverId}
