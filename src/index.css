@@ -415,8 +415,8 @@
 .skill-card__logo {
   flex-shrink: 0;
   display: block;
-  width: 2.5rem;
-  height: 2.5rem;
+  width: 2.25rem;
+  height: 2.25rem;
   background-color: var(--color-text-muted);
   mask-mode: alpha;
   mask-size: contain;
@@ -433,6 +433,72 @@
   .skill-card:active,
   .skill-card:has(:focus-visible) {
     border-color: var(--color-text-muted);
+  }
+}
+
+/*
+ * Skill-card (i) button + popover.
+ * The popover is anchored via the Popover API (popoverTarget on the i button).
+ * We let the browser handle centering/light-dismiss; styling just keeps the
+ * card readable, the width capped, and long descriptions scrollable.
+ */
+.skill-info-btn {
+  font-feature-settings: 'tnum' 1;
+}
+
+.skill-card--with-info {
+  padding-block: 0.5rem;
+}
+
+.skill-popover {
+  /* Reset UA popover defaults so the card looks like a designed panel. */
+  margin: auto;
+  inset: 0;
+  width: min(22rem, calc(100vw - 2rem));
+  max-height: 70vh;
+  overflow-y: auto;
+  color: inherit;
+
+  /* In/out animation (allow-discrete enables the `display` transition). */
+  transition:
+    opacity 0.18s ease,
+    transform 0.18s cubic-bezier(0.05, 0.7, 0.1, 1),
+    overlay 0.18s ease allow-discrete,
+    display 0.18s ease allow-discrete;
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+@starting-style {
+  .skill-popover:popover-open {
+    opacity: 0;
+    transform: translateY(0.4rem) scale(0.98);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skill-popover {
+    transition: none !important;
+  }
+}
+
+@media (forced-colors: active) {
+  .skill-info-btn:focus-visible {
+    outline: 2px solid Highlight !important;
+    outline-offset: 2px;
+  }
+
+  .skill-popover {
+    border: 1px solid CanvasText !important;
+    background: Canvas !important;
+    color: CanvasText !important;
+  }
+
+  .skill-popover__close {
+    border-color: ButtonText !important;
+    background: ButtonFace !important;
+    color: ButtonText !important;
+    forced-color-adjust: none;
   }
 }
 
