@@ -436,6 +436,14 @@ export const skillBlocks: SkillBlock[] = [
           'Firebase App Hosting for GroundCTRL and Vertex AI for Gemini-powered features in the same project.',
       },
       {
+        name: 'Microsoft Azure',
+        icon: 'images/microsoftazure.svg',
+        description:
+          'Microsoft\'s cloud platform spanning compute, identity, networking, storage, and integrated Microsoft 365 + Entra ID services.',
+        application:
+          'Use for clients already standardized on Microsoft 365 / Entra ID; App Service, Functions, and Key Vault are my go-to entry points.',
+      },
+      {
         name: 'Cloud Run',
         icon: 'images/cloudrun.svg',
         description:

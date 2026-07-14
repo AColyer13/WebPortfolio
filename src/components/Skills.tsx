@@ -1,4 +1,4 @@
-import { useId } from 'react'
+import { useEffect, useId, useRef, useState } from 'react'
 import { skillBlocks, type Skill, type SkillBlock } from '../data/portfolio'
 import { withBase } from '../utils/baseUrl'
 import { skillCardClass } from '../utils/layoutClasses'
@@ -29,95 +29,115 @@ function SkillIcon({ icon }: { icon: string }) {
   )
 }
 
-interface SkillPopoverProps {
-  skill: Skill
-  /** Unique id pairing the trigger button to the popover region. */
-  popoverId: string
-  onClose: () => void
-}
-
-/**
- * Detailed view of a skill, rendered inside a native `popover` element so the
- * browser handles light-dismiss, focus management, and stacking automatically.
- */
-function SkillPopover({ skill, popoverId, onClose }: SkillPopoverProps) {
-  return (
-    <div
-      id={popoverId}
-      popover="auto"
-      className="skill-popover w-[min(22rem,calc(100vw-2rem))] rounded-md border border-border-default bg-surface-0 p-4 text-text-default shadow-[0_1rem_2.5rem_rgb(0_0_0_/0.18)]"
-      role="dialog"
-      aria-label={`${skill.name} — details`}
-    >
-      <div className="mb-2 flex items-center gap-2">
-        <SkillIcon icon={skill.icon} />
-        <h4 className="m-0 text-fluid-3 font-bold leading-snug">{skill.name}</h4>
-      </div>
-      <p className="m-0 mb-2 text-fluid-1 leading-relaxed text-text-default">
-        {skill.description}
-      </p>
-      <p className="m-0 text-fluid-1 leading-relaxed text-text-muted">
-        <span className="font-medium text-text-default">In practice:</span>{' '}
-        {skill.application}
-      </p>
-      <button
-        type="button"
-        className="skill-popover__close mt-3 inline-flex min-h-9 cursor-pointer items-center rounded-sm border border-border-default bg-surface-50 px-3 py-1 text-copyright font-medium text-text-default transition-colors duration-150 ease-in-out hover:border-text-muted"
-        onClick={onClose}
-      >
-        Close
-      </button>
-    </div>
-  )
-}
-
 interface SkillCardProps {
   skill: Skill
 }
 
 /**
- * One skill tile: name on top, the logo centered below, and a tiny (i) trigger
- * in the bottom-right corner. The (i) is anchored to the card wrapper (not
- * the surface) so it never resizes or shifts the logo/text — it visually sits
- * on the card border line.
+ * One skill tile. Renders the compact face (name + logo) by default.
+ * Clicking the (i) trigger flips the tile in place — the card surface
+ * itself transforms into a detail view that overlays the compact face,
+ * with the logo / name up top and the description + application below.
+ * Nothing leaves the tile; no floating popover, no mid-screen dialog.
  */
 function SkillCard({ skill }: SkillCardProps) {
-  const popoverId = useId()
-  const triggerId = `${popoverId}-trigger`
+  // Per-card open state. A card flip is animated, kept inside its own
+  // grid cell, and dismissed by clicking the (i) again or via Esc.
+  const [open, setOpen] = useState(false)
+  const cardRef = useRef<HTMLDivElement>(null)
+  const buttonId = useId()
+
+  // Close on Escape (matches native popover/dialog behaviour).
+  useEffect(() => {
+    if (!open) return
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setOpen(false)
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [open])
+
+  // Close when the user clicks anywhere outside the open card.
+  useEffect(() => {
+    if (!open) return
+    const onPointer = (event: MouseEvent) => {
+      if (!cardRef.current?.contains(event.target as Node)) setOpen(false)
+    }
+    // Defer so the original click that opened the card doesn't immediately close it.
+    const handle = window.setTimeout(() => {
+      window.addEventListener('pointerdown', onPointer)
+    }, 0)
+    return () => {
+      window.clearTimeout(handle)
+      window.removeEventListener('pointerdown', onPointer)
+    }
+  }, [open])
 
   return (
     <div className="relative flex w-full min-w-0 self-stretch">
-      <div className={`${skillCardClass} flex w-full`}>
-        <div className="skill-card__body flex max-h-full w-full min-w-0 flex-col items-center justify-center gap-2">
-          <h4 className="m-0 overflow-wrap-anywhere text-center text-fluid-3 font-medium leading-snug text-text-default">
-            {skill.name}
-          </h4>
-          <SkillIcon icon={skill.icon} />
-        </div>
-      </div>
-      {/* (i) sits as a tiny clean circle tucked into the bottom-right corner of
-          the card. Fully contained inside the card surface - no negative
-          translate that would let it spill past the card border. */}
-      <button
-        type="button"
-        id={triggerId}
-        className="skill-info-btn right-2 bottom-2 inline-flex size-4 shrink-0 cursor-pointer items-center justify-center rounded-full bg-surface-50 text-copyright font-medium leading-none text-text-muted transition-colors duration-150 ease-in-out hover:text-text-default focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600"
-        aria-label={`About ${skill.name} — show description and how I use it`}
-        aria-describedby={popoverId}
-        popoverTarget={popoverId}
+      <div
+        ref={cardRef}
+        className={`${skillCardClass} skill-card--${open ? 'open' : 'closed'} flex w-full overflow-hidden`}
       >
-        i
-      </button>
-      <SkillPopover
-        skill={skill}
-        popoverId={popoverId}
-        onClose={() => {
-          const popover = document.getElementById(popoverId)
-          if (popover && 'hidePopover' in popover) {
-            ;(popover as HTMLElement & { hidePopover: () => void }).hidePopover()
-          }
-        }}
-      />
+        {/* Compact face (default). */}
+        {!open ? (
+          <div className="skill-card__body skill-card__face skill-card__face--compact flex max-h-full w-full min-w-0 flex-col items-center justify-center gap-2">
+            <h4 className="m-0 overflow-wrap-anywhere text-center text-fluid-3 font-medium leading-snug text-text-default">
+              {skill.name}
+            </h4>
+            <SkillIcon icon={skill.icon} />
+          </div>
+        ) : null}
+
+        {/* Expanded face - overlays the compact face in place.
+            The skill-card surface grows just enough to fit both the title
+            row and the description/application copy. */}
+        {open ? (
+          <div
+            className="skill-card__body skill-card__face skill-card__face--expanded flex w-full min-w-0 flex-col items-start gap-2 overflow-y-auto p-3 text-left"
+            role="dialog"
+            aria-modal="false"
+            aria-label={`${skill.name} — details`}
+          >
+            <div className="flex w-full items-start gap-2">
+              <SkillIcon icon={skill.icon} />
+              <h4 className="m-0 grow shrink basis-0 overflow-wrap-anywhere text-fluid-3 font-bold leading-snug text-text-default">
+                {skill.name}
+              </h4>
+            </div>
+            <p className="m-0 text-fluid-1 leading-relaxed text-text-default">
+              {skill.description}
+            </p>
+            <p className="m-0 text-fluid-1 leading-relaxed text-text-muted">
+              <span className="font-medium text-text-default">In practice:</span>{' '}
+              {skill.application}
+            </p>
+            <p className="m-0 mt-auto text-copyright text-text-subtle">
+              Click anywhere outside or press Esc to close.
+            </p>
+          </div>
+        ) : null}
+
+        {/* (i) toggle button - top-right when closed (so it never overlaps
+            the expanded content when open). */}
+        <button
+          type="button"
+          id={buttonId}
+          aria-expanded={open}
+          aria-controls={`${buttonId}-panel`}
+          aria-label={open ? `Close ${skill.name} details` : `About ${skill.name} — show description and how I use it`}
+          onClick={() => setOpen((value) => !value)}
+          className="skill-info-btn absolute right-2 top-2 inline-flex size-6 shrink-0 cursor-pointer items-center justify-center rounded-full border border-border-default bg-surface-0 text-copyright font-bold leading-none text-text-muted transition-colors duration-150 ease-in-out hover:border-text-default hover:text-text-default focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600"
+        >
+          {open ? (
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.25} strokeLinecap="round" className="size-3.5" aria-hidden>
+              <path d="M6 6l12 12M6 18L18 6" />
+            </svg>
+          ) : (
+            'i'
+          )}
+        </button>
+      </div>
     </div>
   )
 }
