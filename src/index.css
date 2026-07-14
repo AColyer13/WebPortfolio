@@ -415,8 +415,8 @@
 .skill-card__logo {
   flex-shrink: 0;
   display: block;
-  width: 2rem;
-  height: 2rem;
+  width: 2.25rem;
+  height: 2.25rem;
   background-color: var(--color-text-muted);
   mask-mode: alpha;
   mask-size: contain;
@@ -426,68 +426,23 @@
 
 /*
  * Skills section — collapsible discipline rows.
- * - Collapsed: only the heading bar shows; the body height transitions from
- *   0 → its natural size using `interpolate-size: allow-keywords` (Baseline
- *   2024+, supported in Chromium 129+ / Firefox 132+ / Safari TP). The
- *   fallback when unsupported is a hard show/hide — still accessible, just
- *   less smooth.
- * - Chevron: rotates 90° on expansion so the user has a clear affordance.
- * - Reduced-motion: instantly toggle, no transition or rotation.
+ * - Heading is text-only (matches the original always-open look).
+ * - Only the chevron animates: rotates 180° on expand.
+ * - The body itself appears instantly (no slide). Keeping this minimal so
+ *   the section doesn't feel over-animated.
  */
-.skills-block {
-  /* Allow `height: auto` interpolation when the body opens. */
-  interpolate-size: allow-keywords;
-}
-
-.skills-block__body {
-  display: grid;
-  grid-template-rows: 0fr;
-  transition:
-    grid-template-rows 0.28s cubic-bezier(0.4, 0, 0.2, 1),
-    opacity 0.22s ease,
-    margin-block 0.28s cubic-bezier(0.4, 0, 0.2, 1);
-  opacity: 0;
-}
-
-.skills-block[open] > .skills-block__body {
-  grid-template-rows: 1fr;
-  opacity: 1;
-}
-
-.skills-block__panel {
-  /* The inner panel sits inside the single row track; `min-height: 0`
-   * prevents overflow when the row collapses. */
-  min-height: 0;
-}
-
-.skills-block__chevron {
+.skills-details__chevron {
   transform: rotate(0deg);
 }
 
-.skills-block[open] > .skills-block__summary .skills-block__chevron {
-  transform: rotate(90deg);
+.skills-details[open] > .skills-details__summary .skills-details__chevron {
+  transform: rotate(180deg);
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .skills-block__body,
-  .skills-block__chevron,
-  .skills-block__chevron svg {
+  .skills-details__chevron,
+  .skills-details__chevron svg {
     transition: none !important;
-  }
-}
-
-/* Fallback for browsers without `interpolate-size` — snap open/closed. */
-@supports not (interpolate-size: allow-keywords) {
-  .skills-block__body {
-    display: block;
-    overflow: hidden;
-    max-height: 0;
-    transition: max-height 0.28s ease, opacity 0.22s ease;
-    opacity: 0;
-  }
-  .skills-block[open] > .skills-block__body {
-    max-height: 100rem;
-    opacity: 1;
   }
 }
 
