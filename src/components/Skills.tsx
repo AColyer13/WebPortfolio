@@ -2,6 +2,7 @@ import { useEffect, useId, useRef, useState } from 'react'
 import { skillBlocks, type Skill, type SkillBlock } from '../data/portfolio'
 import { withBase } from '../utils/baseUrl'
 import { skillCardClass } from '../utils/layoutClasses'
+import { positionCalloutPopover } from './calloutPopover'
 import { Icon, isRegisteredIcon } from './Icons'
 import { Section } from './Section'
 
@@ -106,63 +107,7 @@ function SkillCard({ skill }: SkillCardProps) {
     const trigger = triggerRef.current
     if (!popover || !trigger) return
 
-    // Distance from the popover's bottom edge to the (i) so the arrow can
-    // land cleanly on the chip.
-    const GAP = 8
-
-    const positionPopover = () => {
-      const triggerRect = trigger.getBoundingClientRect()
-
-      // Reset every inset so the UA stylesheet's default `inset: 0` (which
-      // pins popover elements to the top-left of the viewport) doesn't
-      // fight our positioning.
-      popover.style.position = 'fixed'
-      popover.style.inset = 'auto'
-      popover.style.right = 'auto'
-      popover.style.bottom = 'auto'
-      popover.style.top = ''
-      popover.style.left = ''
-      popover.style.width = ''
-      popover.style.maxWidth = ''
-
-      const popoverWidth = Math.min(26 * 16, window.innerWidth - 16)
-
-      // Reset the popover's height/overflow so we can measure it cleanly.
-      // `max-height` and `overflow` are restored just below, after we've
-      // computed how tall the panel actually wants to be.
-      popover.style.maxHeight = 'none'
-      popover.style.overflow = 'visible'
-
-      const popoverHeight = popover.getBoundingClientRect().height || 0
-
-      // Anchor the popover's bottom-right corner just above the (i)'s
-      // top-right corner. Clamp so the panel never spills off-screen.
-      const margin = 8
-      const desiredLeft = triggerRect.right - popoverWidth
-      const desiredTop = triggerRect.top - popoverHeight - GAP
-
-      const left = Math.max(
-        margin,
-        Math.min(desiredLeft, window.innerWidth - popoverWidth - margin),
-      )
-      const top = Math.max(margin, desiredTop)
-
-      // Cap height to whatever fits between the popover's top and the
-      // viewport bottom. Enable the vertical scrollbar only when the
-      // natural content height exceeds that cap, so the panel never
-      // shows a scrollbar when its content actually fits.
-      const availableHeight = Math.max(0, window.innerHeight - top - margin)
-      const needsScroll = popoverHeight > availableHeight
-
-      popover.style.width = `${Math.round(popoverWidth)}px`
-      popover.style.maxWidth = `calc(100vw - ${margin * 2}px)`
-      popover.style.top = `${Math.round(top)}px`
-      popover.style.left = `${Math.round(left)}px`
-      popover.style.maxHeight = `${Math.round(availableHeight)}px`
-      popover.style.overflowY = needsScroll ? 'auto' : 'hidden'
-      // Mark the corner so the CSS arrow picks the right placement.
-      popover.dataset.placement = 'bottom-end'
-    }
+    const positionPopover = () => positionCalloutPopover(popover, trigger)
 
     const openPopover = () => {
       if (typeof popover.showPopover === 'function') popover.showPopover()
