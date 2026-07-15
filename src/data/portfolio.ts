@@ -40,8 +40,8 @@ interface Project {
  */
 export const skillBlocks: SkillBlock[] = [
   {
-    title: 'Frontend & Mobile Engineering',
-    summary: 'Production user interfaces for web and native: fast, accessible, animated.',
+    title: 'Frontend Engineering',
+    summary: 'Production user interfaces for the web: fast, accessible, animated.',
     skills: [
       {
         name: 'TypeScript',
@@ -73,7 +73,7 @@ export const skillBlocks: SkillBlock[] = [
         description:
           'Native-ESM dev server with HMR over a single persistent connection and Rollup-driven production builds.',
         application:
-          'Go-to build pipeline for SPAs and micro-frontends; sub-second HMR kept feedback loops tight during AI coding sessions.',
+          'Default build pipeline for SPAs and micro-frontends; library-mode authoring and the new Rolldown bundler keep the prod artefact tree-shaken and the dev loop under a second — non-negotiable for the teams that own these repos.',
       },
       {
         name: 'Tailwind CSS 4',
@@ -97,7 +97,7 @@ export const skillBlocks: SkillBlock[] = [
         description:
           'Declarative React animation library with physics-based springs, layout animations, and gesture support.',
         application:
-          'Used for hero transitions, card hovers, and route changes; respects prefers-reduced-motion for accessibility.',
+          'Owned the motion strategy on client work — hero choreography, route transitions, and shared-element flows; kept everything behind `useReducedMotion` so the polish degrades gracefully for users who opt out.',
       },
       {
         name: 'React Hook Form',
@@ -113,7 +113,7 @@ export const skillBlocks: SkillBlock[] = [
         description:
           'Minimal, hook-based state store with selector subscriptions, middleware, and zero boilerplate.',
         application:
-          'Replaces Redux for client-only state; used in the Dream Vacation app for map UI and itinerary planner.',
+          'Replaces Redux for client-only state where the team doesn\'t need the ceremony; the Dream Vacation trip planner stores the itinerary graph, undo stack, and map viewport behind a single typed store.',
       },
       {
         name: 'TanStack Query',
@@ -121,23 +121,85 @@ export const skillBlocks: SkillBlock[] = [
         description:
           'Asynchronous state manager for server data with caching, dedupe, optimistic updates, and background refetch.',
         application:
-          'Owns every remote fetch in production React code; cache invalidation rules are part of the deliverable.',
+          'Owns every remote fetch in production React code; cache-invalidation contracts (per-resource query keys, exact vs. prefix invalidation) are reviewed in PRs because they\'re load-bearing for correctness.',
       },
+    ],
+  },
+  {
+    title: 'Mobile Development',
+    summary: 'Cross-platform and native mobile: release engineering, performance budgets, production app stores.',
+    skills: [
       {
-        name: 'React Native',
+        name: 'React Native (New Architecture)',
         icon: 'images/react-native.svg',
         description:
-          'Native-rendering primitives for iOS/Android from a single React codebase with shared business logic.',
+          'Cross-platform native-rendering framework with Fabric, TurboModules, Hermes, and synchronous JSI bindings replacing the legacy bridge.',
         application:
-          'Used for cross-platform field tools where web is impractical — utilities, scanners, and on-site forms.',
+          'Default for cross-platform clients that need to share a TypeScript codebase with the web app — including structured-concurrency native modules authored in Swift and Kotlin.',
+      },
+      {
+        name: 'Expo & EAS',
+        icon: 'images/expo.svg',
+        description:
+          'Managed React Native platform with EAS Build/Submit/Update, config plugins, dev clients, and OTA JS bundles.',
+        application:
+          'Used in pre-production and over-the-air update tracks; EAS Build produces signed iOS/Android binaries for CI-driven TestFlight and Play internal releases without owning a Mac fleet.',
       },
       {
         name: 'Flutter',
         icon: 'images/flutter.svg',
         description:
-          'Dart-based UI toolkit that compiles to native ARM with a custom render engine and expressive widget tree.',
+          'Dart-based UI toolkit compiling to native ARM with Impeller/Skia rendering, isolates for concurrency, and an expressive widget tree.',
         application:
-          'Reached for design-heavy mobile apps where custom animation and brand fidelity matter most.',
+          'Reached for design-heavy, brand-sensitive mobile surfaces where pixel-perfect motion and 120fps rendering are non-negotiable — paired with Riverpod for state and go_router for typed navigation.',
+      },
+      {
+        name: 'Native iOS (Swift / SwiftUI)',
+        icon: 'images/ios-swift.svg',
+        description:
+          'Apple platform stack: Swift 5.10, SwiftUI, UIKit interop, Combine, structured concurrency, and Swift Concurrency actors.',
+        application:
+          'Used for the platform-specific surface of a cross-platform app, App Clip / Widget extensions, and any feature where the RN bridge cost is unacceptable — auth flows, ARKit, and Apple Pay.',
+      },
+      {
+        name: 'Native Android (Kotlin / Jetpack Compose)',
+        icon: 'images/android-kotlin.svg',
+        description:
+          'Modern Android stack: Kotlin 2.0, Jetpack Compose, Coroutines/Flow, Room, Hilt DI, and KMP for shared business logic.',
+        application:
+          'Chosen for Android-only surfaces and KMP-shared modules; Compose state hoisting and snapshot-based animations give the same dev cadence as SwiftUI.',
+      },
+      {
+        name: 'React Native Reanimated & Skia',
+        icon: 'images/reanimated.svg',
+        description:
+          'High-performance UI thread animations via worklets; Skia GPU rendering for complex vectors, gradients, and 60fps gestures.',
+        application:
+          'Powers gesture-driven surfaces (map pinch/pan, scrubbers, sheets) where the JS thread can\'t keep up; layout transitions and shared element transitions for navigation polish.',
+      },
+      {
+        name: 'Mobile Architecture',
+        icon: 'images/arch-hexagon.svg',
+        description:
+          'Cross-cutting concerns: monorepo module boundaries, feature flagging, dependency injection, navigation graphs, and typed contracts between native and JS.',
+        application:
+          'Establishes the module taxonomy (features/*, ui/*, data/*) and the dependency rules so the app stays navigable at 200+ screens; navigation graphs are first-class, not a side-effect of auth state.',
+      },
+      {
+        name: 'Mobile Release Engineering',
+        icon: 'images/fastlane.svg',
+        description:
+          'Fastlane lanes, signing management, store metadata, phased releases, crash gating, and reproducible builds.',
+        application:
+          'CI-driven Fastlane lanes produce signed IPAs/AABs with code-signing identities synced via match; release-train policy gates every rollout on crash-free session % from the previous build.',
+      },
+      {
+        name: 'Offline-First & Sync',
+        icon: 'images/offline-sync.svg',
+        description:
+          'Local persistence (SQLite/WatermelonDB/Realm), conflict resolution (CRDTs / last-writer-wins + vector clocks), background sync, and queue replay.',
+        application:
+          'Default architecture for field-tool apps; the offline write log replays on reconnect with idempotency keys so retries never produce duplicates or lost updates.',
       },
     ],
   },
@@ -157,9 +219,9 @@ export const skillBlocks: SkillBlock[] = [
         name: 'Express 5',
         icon: 'images/express.svg',
         description:
-          'Minimal, unopinionated HTTP framework with middleware composition and the v5 async/await error pipeline.',
+          'Minimal, unopinionated HTTP framework with mature middleware composition and the v5 promise-aware error pipeline that finally routes async rejections to `next(err)`.',
         application:
-          'Powers the MissionCtrl and Mechanic Shop REST APIs behind Helmet, CORS, and rate-limit middleware.',
+          'Powers the MissionCtrl and Mechanic Shop REST APIs behind a layered middleware chain: Helmet for headers, CORS with an allowlist, rate limiting per route, request validation, then the handler — never the other way around.',
       },
       {
         name: 'Hono',
@@ -189,9 +251,9 @@ export const skillBlocks: SkillBlock[] = [
         name: 'REST API Design',
         icon: 'images/rest.svg',
         description:
-          'Resource-oriented HTTP design with correct status codes, idempotency keys, pagination, and error envelopes.',
+          'Resource-oriented HTTP design with correct status codes, idempotency keys, cursor pagination, structured error envelopes, and `Problem+JSON` for machine-readable failures.',
         application:
-          'REST contracts are reviewed before implementation; HATEOAS-lite for hypermedia, JSON:API where appropriate.',
+          'REST contracts are reviewed before implementation: nouns over verbs, idempotency keys on every mutation, and cursor pagination so deep lists stay stable as data grows.',
       },
       {
         name: 'OpenAPI / Swagger',
@@ -229,7 +291,7 @@ export const skillBlocks: SkillBlock[] = [
         description:
           'Hosted GPT-4o / o-series models with chat, tools, structured outputs, vision, and assistants endpoints.',
         application:
-          'Used in the legal-eagle triage flow and as one of three LLM providers behind the LangChain router.',
+          'Front-line provider in the legal-eagle triage flow and one of three LLM providers behind the LangChain router; structured outputs (`response_format` + JSON Schema) are how I make model calls deterministic enough to trust in production.',
       },
       {
         name: 'Anthropic Claude',
@@ -275,9 +337,9 @@ export const skillBlocks: SkillBlock[] = [
         name: 'AI Agent Development',
         icon: 'robot',
         description:
-          'Building tool-using agents that plan, observe, and loop with guardrails, retries, and structured outputs.',
+          'Tool-using agents that plan, observe, and loop — with explicit budgets, retries, structured outputs, and audit-grade telemetry.',
         application:
-          'Shipped agents for trip planning, satellite tutoring, and PII redaction — all with explicit tool budgets and audit logs.',
+          'Shipped production agents for trip planning, satellite tutoring, and PII redaction; every agent has a per-turn tool budget, deterministic structured-output schemas, and an audit log keyed to a stable request id.',
       },
       {
         name: 'Ollama / Local LLMs',
@@ -296,6 +358,14 @@ export const skillBlocks: SkillBlock[] = [
           'Built custom MCP servers to expose internal bundles and project context to AI editors and assistants.',
       },
       {
+        name: 'Cursor',
+        icon: 'images/cursor.svg',
+        description:
+          'AI-native IDE built on VS Code with cursor-tab completions, multi-file Composer agents, and editable inline-diff review.',
+        application:
+          'Daily driver for greenfield work — Composer agents scaffold features from spec sheets, my MCP servers expose repo context, and I review every diff before accepting so the code stays mine.',
+      },
+      {
         name: 'RAG Pipelines',
         icon: 'images/rag.svg',
         description:
@@ -307,9 +377,9 @@ export const skillBlocks: SkillBlock[] = [
         name: 'AI Rate Limiting',
         icon: 'gauge-high',
         description:
-          'Concurrency caps, token-bucket shaping, circuit breakers, and queueing for cost-controlled inference.',
+          'Concurrency caps, token-bucket shaping, circuit breakers, queue depth limits, and per-tenant budget enforcement for cost-controlled inference.',
         application:
-          'Every AI endpoint runs through a token-bucket + queue (p-queue) with per-user budget — verified via load tests.',
+          'Every AI endpoint runs through a token-bucket + queue (p-queue) with a per-user spend budget and a 429 backoff envelope that the client SDK respects; budget alerts ping before a runaway agent can wipe out the day\'s spend.',
       },
     ],
   },
@@ -345,17 +415,17 @@ export const skillBlocks: SkillBlock[] = [
         name: 'DynamoDB',
         icon: 'images/dynamodb.svg',
         description:
-          'Serverless key-value / document store with single-digit-ms latency at any scale and tunable consistency.',
+          'Serverless key-value / document store with single-digit-ms p99 reads at any scale, on-demand or provisioned throughput, and tunable consistency.',
         application:
-          'Reached for high-volume event data and hot-path key lookups where single-digit-ms reads are required.',
+          'Reached for high-write telemetry and hot-path key lookups (session/state, leaderboards, telemetry events) where p99 reads must stay under 10ms; partition keys and GSIs are designed up front to avoid the hot-partition trap.',
       },
       {
         name: 'Amazon RDS',
         icon: 'images/amazon-rds.svg',
         description:
-          'Managed relational database service with automated backups, patching, and Multi-AZ failover.',
+          'Managed relational database service with automated backups, point-in-time recovery, Multi-AZ failover, and read replicas.',
         application:
-          'Default managed-SQL service in AWS deploys; pair with Secrets Manager and parameter groups for compliance.',
+          'Default managed-SQL service in AWS deploys; engine versions and parameter groups are pinned via Terraform, secrets live in Secrets Manager with auto-rotation, and connection pooling sits in front (RDS Proxy) so Lambda bursts don\'t exhaust the pool.',
       },
       {
         name: 'Firebase / Firestore',
@@ -369,9 +439,9 @@ export const skillBlocks: SkillBlock[] = [
         name: 'Upstash Redis',
         icon: 'images/upstash.svg',
         description:
-          'Serverless Redis compatible with the standard SDK; pay-per-request with HTTP and edge runtimes.',
+          'Serverless Redis compatible with the standard SDK; pay-per-request with HTTP and edge runtimes so it cold-starts without provisioned nodes.',
         application:
-          'Used for rate limiting, session lookups, and the agent conversation cache in the trip planner.',
+          'Powers rate limiting, session lookups, and the agent conversation cache in the trip planner; HTTP-only mode keeps it usable from edge runtimes where a TCP socket isn\'t available.',
       },
       {
         name: 'JWT & OAuth 2.0',
@@ -401,9 +471,9 @@ export const skillBlocks: SkillBlock[] = [
         name: 'OWASP / AppSec',
         icon: 'images/owasp.svg',
         description:
-          'Practical web-security discipline: threat modelling, dependency hygiene, secret scanning, and PII encryption.',
+          'Practical web-security discipline: STRIDE-style threat modelling, dependency hygiene, secret scanning, CSP authoring, and PII encryption at rest.',
         application:
-          'Threat model before every launch; Semgrep and `npm audit`/pip-audit run on every CI green.',
+          "Threat model produced before every launch; Semgrep rules run in CI alongside `npm audit`/pip-audit and gitleaks, and findings are triaged into the sprint — not punted to 'later'.",
       },
       {
         name: 'PII Redaction (Presidio)',
@@ -447,9 +517,9 @@ export const skillBlocks: SkillBlock[] = [
         name: 'Cloud Run',
         icon: 'images/cloudrun.svg',
         description:
-          'Managed serverless containers that scale to zero on HTTP traffic and support any language or binary.',
+          'Managed serverless containers that scale to zero on HTTP traffic, support any language/binary, and bill per request after the first 2.5M free invocations.',
         application:
-          'Default deploy target for the GroundCTRL backend; Dockerfile-based images built in Cloud Build.',
+          'Default HTTP deploy target for stateless services (GroundCTRL backend, FastAPI edge endpoints); min-instances tuned for warm-cache reuse, max-instances capped per service so a single bad deploy can\'t exhaust the region.',
       },
       {
         name: 'Docker',
@@ -471,17 +541,17 @@ export const skillBlocks: SkillBlock[] = [
         name: 'GitHub Actions',
         icon: 'github',
         description:
-          'GitHub-native CI/CD with declarative workflows, reusable actions, OIDC, and matrix builds.',
+          'GitHub-native CI/CD with declarative workflows, reusable composite actions, OIDC trust to cloud, and matrix builds across OS/language versions.',
         application:
-          'Pipelines run lint, typecheck, tests, build, and preview deploys on every PR before merge to main.',
+          'Pipelines authored as a product: shared composite actions for setup, required-status checks on `main`, OIDC trust to AWS/GCP so long-lived deploy keys aren\'t a thing, and per-PR preview environments so reviewers click a link instead of trusting a screenshot.',
       },
       {
         name: 'CI/CD Pipelines',
         icon: 'code-branch',
         description:
-          'Automated test → build → promote pipelines with staging gates, signed artifacts, and rollback plans.',
+          'Automated test → build → promote pipelines with staging gates, signed artifacts, manual approvals on prod, and metric-gated rollouts.',
         application:
-          'Per-service pipelines with environment promotion; blue/green or rolling deploys on the larger apps.',
+          'Per-service pipelines with environment promotion; prod rollout is gated on SLO burn-rate from the previous release and auto-rolls back via traffic-shifting when error budgets degrade within the first 30 minutes.',
       },
       {
         name: 'Secrets & IAM',
@@ -510,24 +580,40 @@ export const skillBlocks: SkillBlock[] = [
     ],
   },
   {
-    title: 'Data Science & ML Foundations',
-    summary: 'Numerical Python stack for analysis and modeling: the tools behind dashboards, eval pipelines, ML prototypes.',
+    title: 'Data Science & Analytics',
+    summary: 'Eval pipelines, telemetry analysis, and the statistical rigour that turns AI features from demo to product.',
     skills: [
       {
         name: 'Pandas',
         icon: 'images/pandas.svg',
         description:
-          'DataFrame-centric Python library for tabular data manipulation, joins, group-by aggregation, and time-series resampling.',
+          'DataFrame-centric Python library for tabular data manipulation, joins, group-by aggregation, time-series resampling, and vectorised operations.',
         application:
-          'Used to analyse evaluation runs, score LLM trajectories, and shape the telemetry feeds that feed into dashboards and reports.',
+          'Backbone of the eval pipelines: scoring LLM trajectories against rubric datasets, joining conversation logs with telemetry, and shaping the feeds that back model-regression dashboards shipped to stakeholders.',
+      },
+      {
+        name: 'Statistical Rigor',
+        icon: 'images/statistics.svg',
+        description:
+          'Hypothesis testing, confidence intervals, power analysis, and bootstrap resampling — the discipline that prevents shipping noise as a regression.',
+        application:
+          'A/B evaluations on AI Search Quality use two-proportion z-tests with Bonferroni correction across rubric categories; sample sizes are powered up front so a "no difference" result is actually informative.',
       },
       {
         name: 'PyTorch',
         icon: 'images/pytorch.svg',
         description:
-          'Python-first deep-learning framework with dynamic computation graphs, GPU acceleration, and a mature ecosystem of training utilities.',
+          'Python-first deep-learning framework with eager dynamic graphs, TorchScript for production serialisation, torch.compile for graph-level optimisation, and a mature ecosystem for distributed training and evaluation.',
         application:
-          'Studying the fundamentals — building small models for evaluation, fine-tuning experiments, and reproducible training runs.',
+          'Reach for PyTorch when the eval question is genuinely modelling — prototypes for offline ranking, rubric-scoring model comparisons, or feature-store experiments that need gradient signal before they ship; production scoring runs through compiled TorchScript or ONNX, never eager loops.',
+      },
+      {
+        name: 'LoRA / Parameter-Efficient Fine-Tuning',
+        icon: 'images/lora.svg',
+        description:
+          'Parameter-efficient adaptation: low-rank adapters (LoRA / QLoRA / DoRA), prefix/prompt tuning, and adapter-merging workflows that avoid full-finetune cost without giving up task fit.',
+        application:
+          'Default tuning posture for adapting open-weight models to a domain — frozen base + small rank-r adapters (r ≤ 16) means a single 24GB GPU fine-tunes a 7B model in hours, not days; every adapter ships with an eval gate against the rubric dataset and a merge/diff artefact for reproducibility.',
       },
       {
         name: 'Matplotlib',
@@ -535,7 +621,7 @@ export const skillBlocks: SkillBlock[] = [
         description:
           'Foundational static plotting library for Python — the underlying engine that every other Python viz library renders through.',
         application:
-          'Default for low-level chart control: ROC curves, attention overlays, and one-off diagnostic plots when Seaborn defaults do not fit the artefact.',
+          'Reached for low-level chart control: ROC curves, calibration plots, and bespoke diagnostic figures for stakeholder reports when Seaborn defaults don\'t fit the artefact.',
       },
       {
         name: 'Seaborn',
@@ -543,7 +629,7 @@ export const skillBlocks: SkillBlock[] = [
         description:
           'High-level statistical visualisation library built on Matplotlib with sensible defaults for distributions, regressions, and categorical comparisons.',
         application:
-          'Reached for any statistical or model-evaluation chart: confusion matrices, calibration plots, distribution comparisons — reads natively from Pandas DataFrames.',
+          'Default for any statistical or model-evaluation chart — confusion matrices, calibration, distribution comparisons, eval deltas across model versions — reads natively from Pandas DataFrames.',
       },
     ],
   },
@@ -566,6 +652,14 @@ export const skillBlocks: SkillBlock[] = [
           'Established JS test runner with rich mocking, snapshotting, and a vast plugin ecosystem.',
         application:
           'Used in the GroundCTRL backend and Mechanic Shop API where the legacy tooling predates Vitest adoption.',
+      },
+      {
+        name: 'pytest',
+        icon: 'images/pytest.svg',
+        description:
+          'Mature Python testing framework with fixtures, parametrization, markers, and a rich plugin ecosystem.',
+        application:
+          'Default test runner for the Stardust FastAPI service and writing-consultant Flask app — fixtures parametrize DB and HTTP client setup so each scenario gets a clean state.',
       },
       {
         name: 'Playwright',

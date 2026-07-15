@@ -38,14 +38,89 @@ describe('Skills', () => {
     }
   })
 
-  it('has a Data Science & ML Foundations block with the canonical stack', () => {
-    const block = skillBlocks.find((b) => b.title === 'Data Science & ML Foundations')
+  it('has a Data Science & Analytics block centred on eval analysis', () => {
+    const block = skillBlocks.find((b) => b.title === 'Data Science & Analytics')
     expect(block).toBeTruthy()
     const names = block?.skills.map((s) => s.name) ?? []
     expect(names).toContain('Pandas')
+    expect(names).toContain('Statistical Rigor')
     expect(names).toContain('PyTorch')
     expect(names).toContain('Matplotlib')
     expect(names).toContain('Seaborn')
+  })
+
+  it('frames PyTorch at senior level — production serialisation, not "studying the fundamentals"', () => {
+    const block = skillBlocks.find((b) => b.title === 'Data Science & Analytics')
+    const pytorch = block?.skills.find((s) => s.name === 'PyTorch')
+    expect(pytorch).toBeTruthy()
+    const description = pytorch?.description.toLowerCase() ?? ''
+    const application = pytorch?.application.toLowerCase() ?? ''
+    // Description must mention at least one production-grade concept.
+    expect(description).toMatch(/torchscript|onnx|torch\.compile|distributed/)
+    // Application must anchor to a concrete use case (eval, ranking, scoring)
+    // — not the old "studying the fundamentals" framing.
+    expect(application).toMatch(/eval|ranking|scoring|model/)
+    // And explicitly must NOT regress to the junior framing.
+    expect(application).not.toMatch(/studying the fundamentals/)
+  })
+
+  it('frames LoRA / PEFT at senior level — cost/eval tradeoffs, not buzzword soup', () => {
+    const block = skillBlocks.find((b) => b.title === 'Data Science & Analytics')
+    const lora = block?.skills.find((s) =>
+      s.name.toLowerCase().includes('lora'),
+    )
+    expect(lora).toBeTruthy()
+    const description = lora?.description.toLowerCase() ?? ''
+    const application = lora?.application.toLowerCase() ?? ''
+    // Senior anchors: PEFT vocabulary + concrete technique names.
+    expect(description).toMatch(/low-rank|qlora|dora|prefix|adapter/)
+    // Application must show operational discipline: eval gate, reproducibility,
+    // cost / rank discipline — not "fine-tunes models in my spare time".
+    expect(application).toMatch(/eval|reproducib|rubric|merge|rank|cost/)
+    // Lock out the buzzword-only version.
+    expect(application).not.toMatch(/just (fine[- ]?tune|tune) (models|llms)/)
+    expect(application).not.toMatch(/state[- ]of[- ]the[- ]art/)
+  })
+
+  it('has a Mobile Development block with the senior-grade surface area', () => {
+    const block = skillBlocks.find((b) => b.title === 'Mobile Development')
+    expect(block).toBeTruthy()
+    const names = block?.skills.map((s) => s.name) ?? []
+    expect(names).toContain('React Native (New Architecture)')
+    expect(names).toContain('Expo & EAS')
+    expect(names).toContain('Flutter')
+    expect(names).toContain('Native iOS (Swift / SwiftUI)')
+    expect(names).toContain('Native Android (Kotlin / Jetpack Compose)')
+    expect(names).toContain('Mobile Release Engineering')
+    expect(names).toContain('Offline-First & Sync')
+    // React Native should not leak into the web-frontend block any more.
+    const frontend = skillBlocks.find((b) => b.title === 'Frontend Engineering')
+    expect(frontend).toBeTruthy()
+    expect(frontend?.skills.some((s) => /react native/i.test(s.name))).toBe(false)
+  })
+
+  it('lists Cursor under AI / ML Engineering with a real AI-editor use', () => {
+    const ai = skillBlocks.find((b) => b.title === 'AI / ML Engineering')
+    expect(ai).toBeTruthy()
+    const cursor = ai?.skills.find((s) => s.name === 'Cursor')
+    expect(cursor).toBeTruthy()
+    expect(cursor?.icon).toBe('images/cursor.svg')
+    // Application must reference the actual workflow that sets it apart from
+    // "I just use it sometimes" — Composer + MCP integration.
+    expect(cursor?.application.toLowerCase()).toContain('composer')
+    expect(cursor?.application.toLowerCase()).toContain('mcp')
+  })
+
+  it('lists pytest under Quality, Testing & Observability alongside the other runners', () => {
+    const quality = skillBlocks.find((b) => b.title === 'Quality, Testing & Observability')
+    expect(quality).toBeTruthy()
+    const names = quality?.skills.map((s) => s.name) ?? []
+    expect(names).toContain('pytest')
+    // Application text should reference a Python project (Stardust / writing-consultant).
+    const pytest = quality?.skills.find((s) => s.name === 'pytest')
+    expect(pytest?.application.toLowerCase()).toMatch(/stardust|writing-consultant/)
+    // Icon points at the new SVG asset.
+    expect(pytest?.icon).toBe('images/pytest.svg')
   })
 
   it('lists PII Redaction (Presidio) under Data, Auth & Security', () => {

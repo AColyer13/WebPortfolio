@@ -188,7 +188,7 @@ function SkillCard({ skill }: SkillCardProps) {
         aria-expanded={open}
         aria-controls={popoverId}
         aria-label={`About ${skill.name} — show description and how I use it`}
-        className="skill-info-btn right-2 bottom-2 inline-flex size-4 shrink-0 cursor-pointer items-center justify-center rounded-full bg-surface-50 text-copyright font-medium leading-none text-text-muted transition-colors duration-150 ease-in-out hover:text-text-default focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600"
+        className="skill-info-btn right-2 bottom-2 inline-flex size-4 shrink-0 cursor-pointer items-center justify-center rounded-full bg-text-default text-copyright font-bold leading-none text-bg transition-colors duration-150 ease-in-out hover:opacity-85 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600"
         onClick={onToggle}
       >
         i
