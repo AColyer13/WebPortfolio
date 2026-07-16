@@ -28,9 +28,9 @@ function techChips(tech: string): string[] {
 }
 
 /**
- * Generate a one-line role description from the project's tech stack so the
- * (i) popover has meaningful body content without hand-authored blurbs. We
- * lean on recognizable technology names and the live-URL presence.
+ * Build a short role description from the project's tech stack so the (i)
+ * popover has real body content without hand-authored blurbs. We lean on
+ * recognizable technology names plus whether there's a live URL.
  */
 function describeProject(project: (typeof projects)[number]): string {
   const tech = techChips(project.tech).map((t) => t.toLowerCase())
@@ -38,25 +38,25 @@ function describeProject(project: (typeof projects)[number]): string {
 
   // Front-end / web
   if (tech.some((t) => t === 'react' || t.startsWith('next.js'))) {
-    lines.push('Component-driven UI with server-rendered routes where applicable.')
+    lines.push('Component-driven UI, with server-rendered routes where they earn it.')
   } else if (tech.includes('html') && tech.includes('css')) {
-    lines.push('Hand-built static site with custom CSS and vanilla JS.')
+    lines.push('Static site built by hand with custom CSS and vanilla JS.')
   }
 
   // Backend / API
   if (tech.includes('firebase') || tech.includes('firestore')) {
     lines.push('Realtime data layer backed by Firestore rules and Cloud Functions.')
   } else if (tech.includes('python') || tech.includes('flask') || tech.includes('fastapi')) {
-    lines.push('Python API on the back end; the client talks to it over HTTPS.')
+    lines.push('Python API on the back end. The client talks to it over HTTPS.')
   } else if (tech.includes('node.js') || tech.includes('express')) {
-    lines.push('Node + Express backend with a small JSON / SSR footprint.')
+    lines.push('Node + Express backend, small JSON / SSR footprint.')
   } else if (tech.includes('hono')) {
-    lines.push('Hono API at the edge, with fast cold starts and minimal middleware.')
+    lines.push('Hono API at the edge with fast cold starts and minimal middleware.')
   }
 
   // Data / persistence
   if (tech.includes('postgres') || tech.includes('prisma') || tech.includes('sqlmodel')) {
-    lines.push('Persistent Postgres data store via Prisma / SQLModel.')
+    lines.push('Persistent Postgres data store accessed through Prisma or SQLModel.')
   }
 
   // AI / ML
@@ -71,14 +71,14 @@ function describeProject(project: (typeof projects)[number]): string {
 
   // PWA / mobile
   if (tech.includes('pwa')) {
-    lines.push('Installable PWA with offline-capable service worker.')
+    lines.push('Installable PWA with an offline-capable service worker.')
   }
 
   // Live demo / source
   if (project.liveUrl) {
-    lines.push('Live demo deployed; full source on GitHub.')
+    lines.push('Live demo is deployed. Full source on GitHub.')
   } else {
-    lines.push('Source-only release on GitHub.')
+    lines.push('Source-only release. Repo on GitHub.')
   }
 
   return lines.join(' ')
@@ -189,7 +189,7 @@ function ProjectCard({ project, imagePriority }: ProjectCardProps) {
             id={triggerId}
             aria-expanded={open}
             aria-controls={popoverId}
-            aria-label={`About ${project.title} — show summary and tech stack`}
+            aria-label={`About ${project.title}. Show summary and tech stack`}
             onClick={onToggle}
             className="skill-info-btn absolute right-0 top-1/2 -translate-y-1/2 inline-flex size-4 shrink-0 cursor-pointer items-center justify-center rounded-full bg-surface-50 text-copyright font-medium leading-none text-text-muted transition-colors duration-150 ease-in-out hover:text-text-default focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600"
           >
@@ -231,7 +231,7 @@ function ProjectCard({ project, imagePriority }: ProjectCardProps) {
         popover="manual"
         className="skill-popover rounded-md border border-border-default bg-surface-0 p-4 text-text-default shadow-[0_1rem_2.5rem_rgb(0_0_0_/0.18)]"
         role="dialog"
-        aria-label={`${project.title} — details`}
+        aria-label={`${project.title} details`}
       >
         <button
           type="button"

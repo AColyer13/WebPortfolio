@@ -52,7 +52,7 @@ function SkillPopover({ skill, popoverId, onClose }: SkillPopoverProps) {
       popover="manual"
       className="skill-popover rounded-md border border-border-default bg-surface-0 p-4 text-text-default shadow-[0_1rem_2.5rem_rgb(0_0_0_/0.18)]"
       role="dialog"
-      aria-label={`${skill.name} — details`}
+      aria-label={`${skill.name} details`}
     >
       <button
         type="button"
@@ -187,7 +187,7 @@ function SkillCard({ skill }: SkillCardProps) {
         id={triggerId}
         aria-expanded={open}
         aria-controls={popoverId}
-        aria-label={`About ${skill.name} — show description and how I use it`}
+        aria-label={`About ${skill.name}. Show description and how I use it`}
         className="skill-info-btn right-2 bottom-2 inline-flex size-4 shrink-0 cursor-pointer items-center justify-center rounded-full bg-text-default text-copyright font-bold leading-none text-bg transition-colors duration-150 ease-in-out hover:opacity-85 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600"
         onClick={onToggle}
       >
