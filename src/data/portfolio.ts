@@ -286,30 +286,6 @@ export const skillBlocks: SkillBlock[] = [
     summary: 'LLM orchestration, agent design, prompt and runtime operations for production AI features.',
     skills: [
       {
-        name: 'OpenAI API',
-        icon: 'images/openai.svg',
-        description:
-          'Hosted GPT-4o and o-series models with chat, tools, structured outputs, vision, and assistants endpoints.',
-        application:
-          'Front-line provider in the legal-eagle triage flow and one of three LLM providers behind the LangChain router. Structured outputs (`response_format` plus JSON Schema) are how I make model calls deterministic enough to trust in production.',
-      },
-      {
-        name: 'Anthropic Claude',
-        icon: 'images/anthropic.svg',
-        description:
-          'Claude family (Sonnet, Haiku, Opus) with extended context, tool use, and computer-use capabilities.',
-        application:
-          'Where I send anything that needs careful reading. Long-context redlines, the agent planning steps in the trip planner, anything where sloppy instruction following would cost me a regression.',
-      },
-      {
-        name: 'Google Gemini',
-        icon: 'images/googlegemini.svg',
-        description:
-          'Google\'s multimodal model family with image and video input, JSON mode, and a generous free tier.',
-        application:
-          'Drives the MissionCtrl explainable-satellite tutor. Also what I evaluate day-job on the AI Search Quality team.',
-      },
-      {
         name: 'LangChain',
         icon: 'images/langchain.svg',
         description:
@@ -350,10 +326,10 @@ export const skillBlocks: SkillBlock[] = [
           'Fallback provider for offline and dev workflows and a cost shield when bursty workloads would otherwise hit the hosted tier.',
       },
       {
-        name: 'MCP — Model Context Protocol',
+        name: 'MCP',
         icon: 'images/mcp.svg',
         description:
-          'Open standard that lets models call tools exposed by any compliant host (Cursor, Claude Desktop, others).',
+          'Model Context Protocol. Open standard that lets models call tools exposed by any compliant host (Cursor, Claude Desktop, others).',
         application:
           'Built custom MCP servers to expose internal bundles and project context to AI editors and assistants.',
       },
@@ -436,12 +412,20 @@ export const skillBlocks: SkillBlock[] = [
           'MissionCtrl and Mechanic Shop run on Firestore, with the rules getting reviewed on every PR against the emulator suite. That\'s the only reason I sleep through those deploys.',
       },
       {
-        name: 'Upstash Redis',
+        name: 'DragonflyDB',
         icon: 'images/upstash.svg',
         description:
-          'Serverless Redis compatible with the standard SDK. Pay-per-request with HTTP and edge runtimes, so it cold-starts without provisioned nodes.',
+          'Drop-in Redis replacement built for multi-threaded throughput. Same RESP protocol and SDK surface, much higher ops/sec per node.',
         application:
-          'Rate limiting, session lookups, and the agent conversation cache in the trip planner all hit Upstash. HTTP-only mode matters here because the edge runtime can\'t open a TCP socket, and I\'m not standing up a long-lived node for a session lookup.',
+          'Reached for when Redis is on the hot path and I need headroom without rewriting the client code. Drop-in compatibility means existing redis-py / ioredis clients keep working unchanged.',
+      },
+      {
+        name: 'Valkey',
+        icon: 'images/upstash.svg',
+        description:
+          'Linux-foundation fork of Redis. Keeps the BSD-licensed, single-threaded core under neutral governance after the licence change.',
+        application:
+          'Default for new Redis-shaped workloads where open governance and licence posture matter more than peak throughput. Same wire protocol, same client SDKs as Redis.',
       },
       {
         name: 'JWT & OAuth 2.0',
@@ -460,6 +444,22 @@ export const skillBlocks: SkillBlock[] = [
           'Default auth layer in every Next.js project. Sessions stored in Postgres via the Prisma adapter.',
       },
       {
+        name: 'Passwordless Auth',
+        icon: 'envelope',
+        description:
+          'Sign-in and sign-up with no password. One-time codes delivered by email (magic link or 6-digit OTP) and SMS, short-lived, single-use, rate-limited.',
+        application:
+          'The only sign-in flow on client work for users who don\'t already have a federated identity. Removes the password reset path, the credential-stuffing surface, and the "what\'s my password again" support ticket.',
+      },
+      {
+        name: 'Google Auth',
+        icon: 'images/google-signin.svg',
+        description:
+          'Google Identity Services: a federated OAuth 2.0 / OIDC sign-in that issues a verified identity and email. One Tap plus the popup button, integrated via Auth.js or a direct GIS client.',
+        application:
+          'The default create-account flow on my portfolio sites. One click creates the account and signs the visitor in, so the path from landing to "I\'m in" is one tap and never needs a form.',
+      },
+      {
         name: 'Helmet & CSP',
         icon: 'hard-hat',
         description:
@@ -471,9 +471,9 @@ export const skillBlocks: SkillBlock[] = [
         name: 'OWASP / AppSec',
         icon: 'images/owasp.svg',
         description:
-          'Practical web-security discipline. STRIDE-style threat modelling, dependency hygiene, secret scanning, CSP authoring, PII encryption at rest.',
+          'Practical web-security discipline. OWASP Top 10 categories, STRIDE-style threat modelling, dependency hygiene, secret scanning, CSP authoring, PII encryption at rest.',
         application:
-          'Threat model produced before every launch. Semgrep rules run in CI alongside `npm audit`/pip-audit and gitleaks, and findings get triaged into the sprint instead of the next-next-next backlog.',
+          'Threat model produced before every launch. Semgrep rules run in CI alongside `npm audit` / pip-audit and gitleaks, and findings get triaged into the sprint instead of the next-next-next backlog.',
       },
       {
         name: 'PII Redaction',
@@ -608,12 +608,20 @@ export const skillBlocks: SkillBlock[] = [
           'Reached for when the eval question is genuinely modelling: prototypes for offline ranking, rubric-scoring model comparisons, feature-store experiments that need gradient signal before they ship. Production scoring runs through compiled TorchScript or ONNX, never eager loops.',
       },
       {
-        name: 'LoRA / Parameter-Efficient Fine-Tuning',
+        name: 'LoRA',
         icon: 'images/lora.svg',
         description:
-          'Parameter-efficient adaptation: low-rank adapters (LoRA, QLoRA, DoRA), prefix and prompt tuning, adapter-merging workflows that skip the full-finetune cost.',
+          'Low-rank adapters (LoRA, QLoRA, DoRA). Train a small rank-r matrix alongside a frozen base model instead of retraining the full weights.',
         application:
-          'Default tuning posture for adapting open-weight models to a domain. Frozen base + small rank-r adapters (r ≤ 16) means a single 24GB GPU fine-tunes a 7B model in hours, not days. Every adapter ships with an eval gate against the rubric dataset and a merge/diff artefact for reproducibility.',
+          'My default for adapting open-weight models to a domain. A frozen base plus a small rank-r adapter (r ≤ 16) means a single 24GB GPU fine-tunes a 7B model in hours, not days.',
+      },
+      {
+        name: 'PEFT',
+        icon: 'images/lora.svg',
+        description:
+          'Parameter-Efficient Fine-Tuning. The broader category: low-rank adapters, prefix and prompt tuning, adapter-merging workflows that skip the full-finetune cost.',
+        application:
+          'Default tuning posture whenever the project fits a domain-adapt adapter better than a full fine-tune. Every adapter ships with an eval gate against the rubric dataset and a merge/diff artefact for reproducibility.',
       },
       {
         name: 'Matplotlib',
