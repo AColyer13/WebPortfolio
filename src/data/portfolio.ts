@@ -163,7 +163,7 @@ export const skillBlocks: SkillBlock[] = [
       },
       {
         name: 'Native Android',
-        icon: 'images/android-kotlin.svg',
+        icon: 'images/android.svg',
         description:
           'Modern Android stack: Kotlin 2.0, Jetpack Compose, Coroutines/Flow, Room, Hilt DI, and KMP for shared business logic.',
         application:
@@ -343,7 +343,7 @@ export const skillBlocks: SkillBlock[] = [
       },
       {
         name: 'Cursor',
-        icon: 'mouse-pointer-2',
+        icon: 'images/cursor.svg',
         description:
           'AI-native IDE built on VS Code with cursor-tab completions, multi-file Composer agents, and editable inline-diff review.',
         application:
