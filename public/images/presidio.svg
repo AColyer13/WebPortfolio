@@ -1,5 +1,5 @@
 <svg aria-hidden="true" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-  <!-- Presidio (PII Redaction): stylised shield with a redaction bar - the
+  <!-- Presidio (AI Redaction): stylised shield with a redaction bar - the
        classic "protect sensitive data" mark. Single-fill silhouette at
        viewBox 24x24. -->
   <path d="M12 2.5 4 5v6.5C4 16.2 7.4 20.1 12 21.5c4.6-1.4 8-5.3 8-10V5l-8-2.5zm-3.5 10L7 11l1.5-1.5L10 11l3.5-3.5L15 9l-5 5-1.5-1.5z"/>

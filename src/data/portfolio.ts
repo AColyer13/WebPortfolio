@@ -315,15 +315,23 @@ export const skillBlocks: SkillBlock[] = [
         description:
           'Tool-using agents that plan, observe, and loop. Explicit budgets, retries, structured outputs, audit-grade telemetry.',
         application:
-          'Shipped production agents for trip planning, satellite tutoring, and PII redaction. Every agent has a per-turn tool budget, deterministic structured-output schemas, and an audit log keyed to a stable request id.',
+          'Shipped production agents for trip planning, satellite tutoring, and AI content redaction. Every agent has a per-turn tool budget, deterministic structured-output schemas, and an audit log keyed to a stable request id.',
       },
       {
-        name: 'Ollama / Local LLMs',
+        name: 'Ollama',
         icon: 'images/ollama.svg',
         description:
-          'Local model runner exposing an OpenAI-compatible API for quantised open models like Llama, Mistral, and Qwen.',
+          'Local model runtime and API for pulling, packaging, and serving open-weight models, with Modelfiles, streaming, embeddings, and tool calling.',
         application:
-          'Fallback provider for offline and dev workflows and a cost shield when bursty workloads would otherwise hit the hosted tier.',
+          'I use Ollama to pin reproducible development models, validate RAG and agent flows offline, and swap a localhost endpoint into OpenAI-compatible integrations before hosted deployment.',
+      },
+      {
+        name: 'Local LLMs',
+        icon: 'microchip',
+        description:
+          'Private inference with open-weight models on owned hardware: quantization, context and KV-cache tuning, GPU/CPU offload, batching, and memory-aware model selection.',
+        application:
+          'I choose model families and GGUF quantization levels against latency, quality, VRAM, and privacy targets, then benchmark representative prompts before an offline or self-hosted rollout.',
       },
       {
         name: 'MCP',
@@ -347,7 +355,7 @@ export const skillBlocks: SkillBlock[] = [
         description:
           'Retrieval-augmented generation: embeddings, vector stores, hybrid retrieval, re-ranking, citation tracking.',
         application:
-          'Stardust uses Chroma + Postgres pgvector for life-story retrieval, with strict PII redaction upstream of the embedder.',
+          'Stardust uses Chroma + Postgres pgvector for life-story retrieval, with strict AI redaction upstream of the embedder.',
       },
       {
         name: 'AI Rate Limiting',
@@ -476,12 +484,12 @@ export const skillBlocks: SkillBlock[] = [
           'Threat model produced before every launch. Semgrep rules run in CI alongside `npm audit` / pip-audit and gitleaks, and findings get triaged into the sprint instead of the next-next-next backlog.',
       },
       {
-        name: 'PII Redaction',
+        name: 'AI Redaction',
         icon: 'images/presidio.svg',
         description:
-          'Pattern- and NLP-based detection of personally identifiable information (names, emails, phones, SSNs, IDs) with deterministic token replacement before any text reaches an external service.',
+          'Pattern-, NLP-, and LLM-driven detection and masking of sensitive content — PII, PHI, credentials, secrets, financial and legal identifiers, and domain-specific entities — with deterministic token replacement before any text reaches an external service.',
         application:
-          'Production privacy service in the legal-eagle project. Microsoft Presidio runs as a FastAPI micro-service, redacts OCR and ASR transcripts, and guarantees no PII leaves the host on the way to Anthropic, OpenAI, or MiniMax.',
+          'Production privacy service in the legal-eagle project. Microsoft Presidio runs as a FastAPI micro-service, redacts OCR and ASR transcripts, and guarantees no sensitive content leaves the host on the way to Anthropic, OpenAI, or MiniMax.',
       },
     ],
   },
@@ -617,7 +625,7 @@ export const skillBlocks: SkillBlock[] = [
       },
       {
         name: 'PEFT',
-        icon: 'images/lora.svg',
+        icon: 'images/peft.svg',
         description:
           'Parameter-Efficient Fine-Tuning. The broader category: low-rank adapters, prefix and prompt tuning, adapter-merging workflows that skip the full-finetune cost.',
         application:
@@ -715,7 +723,7 @@ export const skillBlocks: SkillBlock[] = [
         description:
           'Generates random inputs from a spec to discover edge-case bugs that example tests miss.',
         application:
-          'Hypothesis powers the PII redaction and rate-limit fuzz tests in the Stardust CI gate.',
+          'Hypothesis powers the AI redaction and rate-limit fuzz tests in the Stardust CI gate.',
       },
       {
         name: 'Sentry',

@@ -99,6 +99,27 @@ describe('Skills', () => {
     expect(frontend?.skills.some((s) => /react native/i.test(s.name))).toBe(false)
   })
 
+  it('lists Ollama and Local LLMs as distinct skills with focused icons and copy', () => {
+    const ai = skillBlocks.find((b) => b.title === 'AI / ML Engineering')
+    expect(ai).toBeTruthy()
+
+    const ollama = ai?.skills.find((s) => s.name === 'Ollama')
+    const localLlms = ai?.skills.find((s) => s.name === 'Local LLMs')
+
+    expect(ollama).toBeTruthy()
+    expect(ollama?.icon).toBe('images/ollama.svg')
+    expect(ollama?.description.toLowerCase()).toMatch(/runtime|api/)
+    expect(ollama?.application.toLowerCase()).toContain('ollama')
+
+    expect(localLlms).toBeTruthy()
+    expect(localLlms?.icon).toBe('microchip')
+    expect(localLlms?.description.toLowerCase()).toMatch(/open-weight|quantization/)
+    expect(localLlms?.application.toLowerCase()).toMatch(/latency|vram|privacy/)
+
+    expect(ai?.skills.some((s) => s.name === 'Ollama / Local LLMs')).toBe(false)
+    expect(ollama?.icon).not.toBe(localLlms?.icon)
+  })
+
   it('lists Cursor under AI / ML Engineering with a real AI-editor use', () => {
     const ai = skillBlocks.find((b) => b.title === 'AI / ML Engineering')
     expect(ai).toBeTruthy()
@@ -123,11 +144,11 @@ describe('Skills', () => {
     expect(pytest?.icon).toBe('images/pytest.svg')
   })
 
-  it('lists PII Redaction under Data, Auth & Security', () => {
+  it('lists AI Redaction under Data, Auth & Security', () => {
     const security = skillBlocks.find((b) => b.title === 'Data, Auth & Security')
     expect(security).toBeTruthy()
     const redaction = security?.skills.find((s) =>
-      s.name.toLowerCase().includes('pii redaction'),
+      s.name.toLowerCase().includes('ai redaction'),
     )
     expect(redaction).toBeTruthy()
     // Application text should mention the legal-eagle privacy service.

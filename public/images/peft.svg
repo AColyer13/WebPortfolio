@@ -1,0 +1,8 @@
+<svg aria-hidden="true" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="currentColor">
+  <!-- PEFT: a parent module outline with a smaller filled adapter patch
+       attached to its right edge. Conveys the broader Parameter-Efficient
+       Fine-Tuning concept of "efficient targeted add-on to a larger whole":
+       LoRA, prefix tuning, prompt tuning, and adapter-merge all share that
+       small-plug-into-large structure. -->
+  <path d="M3 4h13v16H3zm13 4h2v8h-2z"/>
+</svg>
