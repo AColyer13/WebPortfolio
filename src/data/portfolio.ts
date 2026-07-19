@@ -171,7 +171,7 @@ export const skillBlocks: SkillBlock[] = [
       },
       {
         name: 'React Native Reanimated & Skia',
-        icon: 'images/reanimated.svg',
+        icon: 'orbit',
         description:
           'UI-thread animations via worklets. Skia GPU rendering for complex vectors, gradients, and 60fps gestures.',
         application:
@@ -343,7 +343,7 @@ export const skillBlocks: SkillBlock[] = [
       },
       {
         name: 'Cursor',
-        icon: 'images/cursor.svg',
+        icon: 'mouse-pointer-2',
         description:
           'AI-native IDE built on VS Code with cursor-tab completions, multi-file Composer agents, and editable inline-diff review.',
         application:
@@ -421,7 +421,7 @@ export const skillBlocks: SkillBlock[] = [
       },
       {
         name: 'DragonflyDB',
-        icon: 'images/upstash.svg',
+        icon: 'database-zap',
         description:
           'Drop-in Redis replacement built for multi-threaded throughput. Same RESP protocol and SDK surface, much higher ops/sec per node.',
         application:
@@ -429,7 +429,7 @@ export const skillBlocks: SkillBlock[] = [
       },
       {
         name: 'Valkey',
-        icon: 'images/upstash.svg',
+        icon: 'key-round',
         description:
           'Linux-foundation fork of Redis. Keeps the BSD-licensed, single-threaded core under neutral governance after the licence change.',
         application:
@@ -469,7 +469,7 @@ export const skillBlocks: SkillBlock[] = [
       },
       {
         name: 'Helmet & CSP',
-        icon: 'hard-hat',
+        icon: 'shield-check',
         description:
           'HTTP header hardening (HSTS, X-Frame-Options) and Content-Security-Policy authoring with nonce-based scripts.',
         application:
@@ -531,7 +531,7 @@ export const skillBlocks: SkillBlock[] = [
       },
       {
         name: 'Docker',
-        icon: 'docker',
+        icon: 'images/docker.svg',
         description:
           'Container image and runtime standard. Declarative Dockerfiles, multi-stage builds, Compose.',
         application:
@@ -547,7 +547,7 @@ export const skillBlocks: SkillBlock[] = [
       },
       {
         name: 'GitHub Actions',
-        icon: 'github',
+        icon: 'images/github-actions.svg',
         description:
           'GitHub-native CI/CD. Declarative workflows, reusable composite actions, OIDC trust to cloud, matrix builds across OS and language versions.',
         application:
@@ -687,7 +687,7 @@ export const skillBlocks: SkillBlock[] = [
       },
       {
         name: 'Lighthouse CI',
-        icon: 'lightbulb',
+        icon: 'images/lighthouse.svg',
         description:
           'Automated performance, a11y, and best-practices audits with assertion-based budgets and trend tracking.',
         application:

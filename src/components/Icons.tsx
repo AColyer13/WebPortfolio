@@ -2,8 +2,8 @@ import type { ComponentType, SVGProps } from 'react'
 import {
   Accessibility,
   Bot,
-  Container,
   Cpu,
+  DatabaseZap,
   Disc3,
   ExternalLink,
   FileText,
@@ -13,12 +13,16 @@ import {
   GitMerge,
   HardHat,
   Key,
+  KeyRound,
   Lightbulb,
   type LucideProps,
   Mail,
   MapPin,
   Moon,
+  MousePointer2,
+  Orbit,
   Shield,
+  ShieldCheck,
   ShieldUser,
   SlidersHorizontal,
   Sun,
@@ -30,6 +34,7 @@ import {
 export type IconKey =
   // UI / decorative — lucide covers these cleanly.
   | 'compact-disc'
+  | 'database-zap'
   | 'envelope'
   | 'external-link-alt'
   | 'file-alt'
@@ -37,10 +42,14 @@ export type IconKey =
   | 'gauge-high'
   | 'hard-hat'
   | 'key'
+  | 'key-round'
   | 'lightbulb'
   | 'map-marker-alt'
   | 'microchip'
+  | 'mouse-pointer-2'
+  | 'orbit'
   | 'robot'
+  | 'shield-check'
   | 'shield-halved'
   | 'sliders'
   | 'table'
@@ -49,7 +58,6 @@ export type IconKey =
   | 'wand-magic-sparkles'
   // Branch / fork glyphs.
   | 'code-branch'
-  | 'docker'
   | 'git-alt'
   // Theme toggle (mobile + desktop).
   | 'moon'
@@ -70,6 +78,7 @@ type Lucide = ComponentType<LucideProps>
 /** Lucide covers these directly; `Container` stands in for the Docker whale. */
 const LUCIDE: Partial<Record<IconKey, Lucide>> = {
   'compact-disc': Disc3,
+  'database-zap': DatabaseZap,
   'envelope': Mail,
   'external-link-alt': ExternalLink,
   'file-alt': FileText,
@@ -77,10 +86,14 @@ const LUCIDE: Partial<Record<IconKey, Lucide>> = {
   'gauge-high': Gauge,
   'hard-hat': HardHat,
   'key': Key,
+  'key-round': KeyRound,
   'lightbulb': Lightbulb,
   'map-marker-alt': MapPin,
   'microchip': Cpu,
+  'mouse-pointer-2': MousePointer2,
+  'orbit': Orbit,
   'robot': Bot,
+  'shield-check': ShieldCheck,
   'shield-halved': Shield,
   'sliders': SlidersHorizontal,
   'table': Table,
@@ -88,7 +101,6 @@ const LUCIDE: Partial<Record<IconKey, Lucide>> = {
   'user-shield': ShieldUser,
   'wand-magic-sparkles': WandSparkles,
   'code-branch': GitBranch,
-  'docker': Container,
   'git-alt': GitMerge,
   'moon': Moon,
   'sun': Sun,

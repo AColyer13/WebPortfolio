@@ -1,6 +1,9 @@
+import { existsSync, readFileSync } from 'node:fs'
+import path from 'node:path'
 import { describe, it, expect } from 'vitest'
 import { fireEvent, render, screen } from '@testing-library/react'
 import { skillBlocks } from '../data/portfolio'
+import { Icon, isRegisteredIcon } from './Icons'
 import { Skills } from './Skills'
 
 /**
@@ -120,12 +123,33 @@ describe('Skills', () => {
     expect(ollama?.icon).not.toBe(localLlms?.icon)
   })
 
+  it('uses distinct, semantically accurate icons for the audited skills', () => {
+    const expectedIcons = new Map([
+      ['Ollama', 'images/ollama.svg'],
+      ['Cursor', 'mouse-pointer-2'],
+      ['React Native Reanimated & Skia', 'orbit'],
+      ['DragonflyDB', 'database-zap'],
+      ['Valkey', 'key-round'],
+      ['Helmet & CSP', 'shield-check'],
+      ['Docker', 'images/docker.svg'],
+      ['GitHub Actions', 'images/github-actions.svg'],
+      ['Lighthouse CI', 'images/lighthouse.svg'],
+    ])
+    const skills = skillBlocks.flatMap((block) => block.skills)
+
+    for (const [name, icon] of expectedIcons) {
+      expect(skills.find((skill) => skill.name === name)?.icon).toBe(icon)
+    }
+
+    expect(new Set(expectedIcons.values()).size).toBe(expectedIcons.size)
+  })
+
   it('lists Cursor under AI / ML Engineering with a real AI-editor use', () => {
     const ai = skillBlocks.find((b) => b.title === 'AI / ML Engineering')
     expect(ai).toBeTruthy()
     const cursor = ai?.skills.find((s) => s.name === 'Cursor')
     expect(cursor).toBeTruthy()
-    expect(cursor?.icon).toBe('images/cursor.svg')
+    expect(cursor?.icon).toBe('mouse-pointer-2')
     // Application must reference the actual workflow that sets it apart from
     // "I just use it sometimes" — Composer + MCP integration.
     expect(cursor?.application.toLowerCase()).toContain('composer')
@@ -156,16 +180,36 @@ describe('Skills', () => {
     expect(redaction?.application.toLowerCase()).toContain('presidio')
   })
 
-  it('every skill icon either uses a registered IconKey or references a /public image', () => {
-    // Cheaper than a browser hit: just assert the icon string is well-formed.
+  it('every skill icon resolves to a registered icon or a safe public SVG', () => {
+    const publicDir = path.join(process.cwd(), 'public')
     for (const block of skillBlocks) {
       for (const skill of block.skills) {
-        if (skill.icon.includes('/')) {
+        if (!skill.icon.includes('/')) {
           expect(
-            /\.(?:svg|png|jpe?g|webp)$/i.test(skill.icon),
-            `${skill.name} icon should be a file path with an image extension`,
+            isRegisteredIcon(skill.icon),
+            `${skill.name} uses an unregistered icon key: ${skill.icon}`,
           ).toBe(true)
+          continue
         }
+
+        expect(skill.icon).toMatch(/^images\/[a-z0-9][a-z0-9.-]*\.svg$/i)
+        const iconPath = path.join(publicDir, skill.icon)
+        expect(
+          existsSync(iconPath),
+          `${skill.name} icon is missing: ${iconPath}`,
+        ).toBe(true)
+
+        const svg = readFileSync(iconPath, 'utf8')
+        expect(svg, `${skill.name} icon must contain an SVG root`).toMatch(/<svg\b/i)
+        expect(svg, `${skill.name} icon must define a viewBox`).toMatch(
+          /viewBox=["'][^"']+["']/i,
+        )
+        expect(svg, `${skill.name} icon must contain visible vector geometry`).toMatch(
+          /<(?:path|circle|ellipse|rect|polygon|polyline|line)\b/i,
+        )
+        expect(svg, `${skill.name} icon must not contain executable markup`).not.toMatch(
+          /<script\b|javascript:|\son\w+\s*=/i,
+        )
       }
     }
   })
@@ -240,6 +284,17 @@ describe('Skills', () => {
     expect(icon?.style.maskImage || icon?.style.webkitMaskImage).toBe(
       'url("/images/fastapi.svg")',
     )
+  })
+
+  it('renders registered semantic icons as scalable SVGs', () => {
+    const { container } = render(
+      <Icon name="mouse-pointer-2" className="text-2xl" />,
+    )
+    const icon = container.querySelector('svg')
+
+    expect(icon).toBeTruthy()
+    expect(icon?.getAttribute('width')).toBe('1em')
+    expect(icon?.getAttribute('height')).toBe('1em')
   })
 
   it('places every (i) trigger at the bottom-right of its skill card', () => {

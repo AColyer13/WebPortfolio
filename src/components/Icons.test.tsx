@@ -7,8 +7,11 @@ describe('isRegisteredIcon', () => {
     expect(isRegisteredIcon('compact-disc')).toBe(true)
     expect(isRegisteredIcon('envelope')).toBe(true)
     expect(isRegisteredIcon('key')).toBe(true)
+    expect(isRegisteredIcon('key-round')).toBe(true)
+    expect(isRegisteredIcon('mouse-pointer-2')).toBe(true)
     expect(isRegisteredIcon('lightbulb')).toBe(true)
     expect(isRegisteredIcon('shield-halved')).toBe(true)
+    expect(isRegisteredIcon('shield-check')).toBe(true)
   })
 
   it('accepts brand-path keys', () => {
