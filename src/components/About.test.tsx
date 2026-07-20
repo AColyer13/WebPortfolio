@@ -19,8 +19,8 @@ describe('About', () => {
     const links = container.querySelectorAll<HTMLAnchorElement>('a[download]')
     expect(links.length).toBeGreaterThan(0)
     const link = links[0]
-    expect(link.getAttribute('download')).toMatch(/AdamColyerResume.*\.pdf$/)
-    expect(link.getAttribute('href')).toContain('AdamColyerResume')
+    expect(link.getAttribute('download')).toMatch(/Adam_Colyer_Resume_2026\.pdf$/)
+    expect(link.getAttribute('href')).toContain('Adam_Colyer_Resume_2026.pdf')
   })
 
   it('marks the hero image as high-priority + async for LCP', () => {
