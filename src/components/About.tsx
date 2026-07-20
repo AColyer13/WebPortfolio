@@ -11,7 +11,7 @@ import { Icon } from './Icons'
 
 const base = import.meta.env.BASE_URL
 const RESUME_PATH = 'files/Adam_Colyer_Resume_2026.pdf'
-const RESUME_FILENAME = 'Adam_Colyer_Resume_20266.pdf'
+const RESUME_FILENAME = 'Adam_Colyer_Resume_2026.pdf'
 const resumeUrl = withBase(RESUME_PATH)
 
 export function About() {
