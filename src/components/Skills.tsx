@@ -1,131 +1,77 @@
-import { useId, useRef, useEffect, useState } from 'react'
-import { ChevronDown } from 'lucide-react'
+import { useEffect, useId, useRef, useState } from 'react'
+import { X } from 'lucide-react'
 import { skillBlocks, type Skill, type SkillBlock } from '../data/portfolio'
-import {
-  containerClass,
-  sectionBlockClass,
-} from '../utils/layoutClasses'
+import { withBase } from '../utils/baseUrl'
+import { skillCardClass } from '../utils/layoutClasses'
 import { positionCalloutPopover } from './calloutPopover'
 import { Icon, isRegisteredIcon } from './Icons'
+import { Section } from './Section'
 
-/** Per-skill visual: SVG (mask), registered icon, or text-only fallback. */
 function SkillIcon({ icon }: { icon: string }) {
   if (isRegisteredIcon(icon)) {
-    return (
-      <Icon
-        name={icon}
-        className="skill-card__logo shrink-0 text-[1.125rem] leading-none text-text-muted"
-      />
-    )
+    return <Icon name={icon} className="shrink-0 text-[2.25rem] leading-none text-text-muted" />
   }
   if (/\.(?:svg|png|jpe?g|webp)$/i.test(icon)) {
-    const maskUrl = icon.startsWith('/') ? icon : `/${icon}`
+    const logoUrl = withBase(icon)
     return (
       <span
         className="skill-card__logo"
         style={{
-          maskImage: `url("${maskUrl}")`,
-          WebkitMaskImage: `url("${maskUrl}")`,
+          maskImage: `url("${logoUrl}")`,
+          WebkitMaskImage: `url("${logoUrl}")`,
         }}
         aria-hidden
       />
     )
   }
   return (
-    <i className="shrink-0 text-[1rem] not-italic text-text-muted" aria-hidden>
+    <i className="skill-card__emoji shrink-0 text-[1.875rem] not-italic" aria-hidden>
       {icon}
     </i>
   )
 }
 
-/**
- * Skills section: a tech-spec sheet, each discipline a collapsible
- * `<details>` row. The terminal aesthetic is layered onto the original
- * details/summary shell so the existing `:focus-visible` chain keeps
- * working and the existing markup remains a fair host for the new
- * `.hm-` class chrome.
- *
- * 8-state discipline:
- *   - default:    collapsed (`<details>` open attr absent)
- *   - hover:      summary underline / chevron weight
- *   - focus:      summary outline visible (handled by UA focus styles)
- *   - active:     chevron tilts (CSS rule on `[open] > summary`)
- *   - expanded:   chevron rotates 180°, grid reveals
- *   - revealed-empty: still uses `skill-card__body` for spacing
- */
-export function Skills() {
-  return (
-    <section id="skills" className={sectionBlockClass}>
-      <div className={containerClass}>
-        <header className="hm-section-head">
-          <span className="hm-section-head__prompt">
-            skills --list --detail
-          </span>
-          <h2 className="hm-section-head__title"># stack</h2>
-        </header>
-        <div className="skills-blocks gap-3">
-          {skillBlocks.map((block) => (
-            <SkillBlockSection key={block.title} block={block} />
-          ))}
-        </div>
-      </div>
-    </section>
-  )
-}
-
-interface SkillBlockSectionProps {
-  block: SkillBlock
-}
-
-function SkillBlockSection({ block }: SkillBlockSectionProps) {
-  return (
-    <details className="skills-details hm-discipline" id={`skill-${slug(block.title)}`}>
-      <summary className="skills-details__summary hm-discipline__head">
-        <h3 className="hm-discipline__title">{block.title}</h3>
-        <span className="hm-discipline__summary">{block.summary}</span>
-        <ChevronDown
-          className="skills-details__chevron"
-          aria-hidden
-          strokeWidth={2}
-        />
-      </summary>
-      <div className="hm-skill-grid">
-        {block.skills.map((skill) => (
-          <SkillCard key={skill.name} skill={skill} />
-        ))}
-      </div>
-    </details>
-  )
-}
-
-/** Simple kebab-case helper for fragmenting the block title into an id. */
-function slug(value: string): string {
-  return value
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-|-$/g, '')
-}
-
 interface SkillPopoverProps {
   skill: Skill
+  /** Unique id pairing the trigger button to the popover region. */
   popoverId: string
+  onClose: () => void
 }
 
-function SkillPopover({ skill, popoverId }: SkillPopoverProps) {
+/**
+ * Detailed view of a skill, rendered inside a native `popover="manual"` element.
+ * We disable the UA's auto-placement so we can anchor the popover directly on
+ * top of the originating skill card. Inline `top`/`left`/`width` are written
+ * from JS at open-time (and on resize/scroll) so the popover overlays the
+ * skill rather than centering in the viewport.
+ */
+function SkillPopover({ skill, popoverId, onClose }: SkillPopoverProps) {
   return (
     <div
       id={popoverId}
       popover="manual"
-      className="hm-skill-popover"
+      className="skill-popover rounded-md border border-border-default bg-surface-0 p-4 text-text-default shadow-[0_1rem_2.5rem_rgb(0_0_0_/0.18)]"
       role="dialog"
       aria-label={`${skill.name} details`}
     >
-      <h4 className="hm-skill-popover__name">
-        $ man {skill.name.toLowerCase().replace(/\s+/g, '-')}
-      </h4>
-      <p className="hm-skill-popover__desc">{skill.description}</p>
-      <p className="hm-skill-popover__app">
-        <strong>// in practice:</strong> {skill.application}
+      <button
+        type="button"
+        className="skill-popover__close absolute top-2 right-2 inline-flex size-7 shrink-0 cursor-pointer items-center justify-center rounded-full border-0 bg-text-default/8 text-text-muted transition-colors duration-150 ease-in-out hover:bg-text-default/15 hover:text-text-default focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600"
+        onClick={onClose}
+        aria-label="Close"
+      >
+        <X className="size-3.5" strokeWidth={2.25} aria-hidden />
+      </button>
+      <div className="mb-2 flex items-center gap-2 pr-9">
+        <SkillIcon icon={skill.icon} />
+        <h4 className="m-0 text-fluid-3 font-bold leading-snug">{skill.name}</h4>
+      </div>
+      <p className="m-0 mb-2 text-fluid-1 leading-relaxed text-text-default">
+        {skill.description}
+      </p>
+      <p className="m-0 text-fluid-1 leading-relaxed text-text-muted">
+        <span className="font-medium text-text-default">In practice:</span>{' '}
+        {skill.application}
       </p>
     </div>
   )
@@ -135,6 +81,13 @@ interface SkillCardProps {
   skill: Skill
 }
 
+/**
+ * One skill tile: name on top, the logo centered below, and a tiny (i) trigger
+ * in the bottom-right corner. The (i) opens a `popover="manual"` element that
+ * is positioned in JS to overlay this specific card — so it never floats to
+ * viewport center. Light-dismiss (clicking outside) still closes it because
+ * the popover stays in the top layer.
+ */
 function SkillCard({ skill }: SkillCardProps) {
   const popoverId = useId()
   const triggerId = `${popoverId}-trigger`
@@ -142,6 +95,11 @@ function SkillCard({ skill }: SkillCardProps) {
   const triggerRef = useRef<HTMLButtonElement>(null)
   const [open, setOpen] = useState(false)
 
+  // Position the popover as a small callout anchored to the (i) trigger.
+  // The popover's bottom-right corner sits flush with the (i), with a
+  // small offset so the arrow can point at it. JS writes right/bottom
+  // (not top/left) so the popover extends up-and-to-the-left of the chip,
+  // reading as "info coming out of (i)".
   useEffect(() => {
     if (!open) return
 
@@ -155,6 +113,8 @@ function SkillCard({ skill }: SkillCardProps) {
 
     const openPopover = () => {
       if (typeof popover.showPopover === 'function') popover.showPopover()
+      // Position *after* showPopover so the popover has been laid out and
+      // we can measure its real height for the top calculation.
       positionPopover()
     }
 
@@ -162,12 +122,14 @@ function SkillCard({ skill }: SkillCardProps) {
       if (typeof popover.hidePopover === 'function') popover.hidePopover()
     }
 
+    // Open immediately so the user sees the overlay.
     openPopover()
 
     const onScrollOrResize = () => {
       if (popover.matches?.(':popover-open')) positionPopover()
     }
 
+    // Light-dismiss: any pointerdown outside the wrapper hides the popover.
     const onOutside = (event: MouseEvent) => {
       const wrapper = wrapperRef.current
       if (!wrapper?.contains(event.target as Node)) {
@@ -176,6 +138,7 @@ function SkillCard({ skill }: SkillCardProps) {
       }
     }
 
+    // Esc closes too.
     const onKey = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
         setOpen(false)
@@ -183,6 +146,8 @@ function SkillCard({ skill }: SkillCardProps) {
       }
     }
 
+    // Defer the outside-click listener so the click that opened us
+    // doesn't immediately close us.
     const outsideHandle = window.setTimeout(() => {
       window.addEventListener('pointerdown', onOutside)
     }, 0)
@@ -204,30 +169,101 @@ function SkillCard({ skill }: SkillCardProps) {
   const onToggle = () => setOpen((value) => !value)
 
   return (
-    <div ref={wrapperRef} className="hm-skill relative">
-      <div className="skill-card hm-skill__card">
-        <div className="skill-card__body hm-skill__body">
+    <div ref={wrapperRef} className="relative flex w-full min-w-0 self-stretch">
+      <div className={`${skillCardClass} flex w-full`}>
+        <div className="skill-card__body flex max-h-full w-full min-w-0 flex-col items-center justify-center gap-2">
+          <h4 className="m-0 overflow-wrap-anywhere text-center text-fluid-3 font-medium leading-snug text-text-default">
+            {skill.name}
+          </h4>
           <SkillIcon icon={skill.icon} />
-          <h4 className="hm-skill__name">{skill.name}</h4>
-          <p className="hm-skill__desc">{skill.description}</p>
         </div>
       </div>
+      {/* (i) sits as a tiny clean circle tucked into the bottom-right corner of
+          the card. Fully contained inside the card surface - no negative
+          translate that would let it spill past the card border. */}
       <button
         ref={triggerRef}
-        id={triggerId}
         type="button"
+        id={triggerId}
         aria-expanded={open}
         aria-controls={popoverId}
         aria-label={`About ${skill.name}. Show description and how I use it`}
-        className="skill-info-btn right-2 bottom-2 size-4 hm-skill__trigger"
+        className="skill-info-btn right-2 bottom-2 inline-flex size-4 shrink-0 cursor-pointer items-center justify-center rounded-full bg-surface-50 text-copyright font-medium leading-none text-text-muted transition-colors duration-150 ease-in-out hover:text-text-default focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600"
         onClick={onToggle}
       >
-        <span aria-hidden>[i]</span>
+        i
       </button>
       <SkillPopover
         skill={skill}
         popoverId={popoverId}
+        onClose={() => setOpen(false)}
       />
     </div>
+  )
+}
+
+interface SkillBlockSectionProps {
+  block: SkillBlock
+}
+
+/**
+ * One top-level discipline block. Starts collapsed; clicking the heading
+ * expands the row. The heading itself stays minimal — just like the original
+ * always-open style. Only the chevron animates (rotates 90 deg on expand).
+ */
+function SkillBlockSection({ block }: SkillBlockSectionProps) {
+  const summaryId = useId()
+  return (
+    <details className="skills-details w-full">
+      <summary className="skills-details__summary mx-auto mb-(--section-subheading-gap) flex w-full max-w-[52ch] cursor-pointer list-none items-center justify-between gap-2 text-left [&::-webkit-details-marker]:hidden">
+        <h3 className="m-0 text-fluid-4 font-bold leading-tight tracking-tight text-text-default">
+          {block.title}
+        </h3>
+        <span className="skills-details__chevron inline-flex shrink-0 text-text-muted transition-transform duration-200 ease-out" aria-hidden>
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth={2.25}
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            className="size-4"
+          >
+            <path d="M6 9l6 6 6-6" />
+          </svg>
+        </span>
+      </summary>
+      <p
+        id={summaryId}
+        className="mx-auto mb-(--section-subheading-gap) max-w-[52ch] text-center text-fluid-1 leading-relaxed text-text-muted"
+      >
+        {block.summary}
+      </p>
+      <div
+        className="grid w-full grid-cols-2 items-stretch justify-items-stretch gap-x-(--container-inline) gap-y-4 pb-3 @[56rem]:grid-cols-4 @[56rem]:gap-x-4"
+        aria-describedby={summaryId}
+      >
+        {block.skills.map((skill) => (
+          <SkillCard key={skill.name} skill={skill} />
+        ))}
+      </div>
+    </details>
+  )
+}
+
+export function Skills() {
+  return (
+    <Section
+      id="skills"
+      title="Skills"
+      variant="skills"
+      headingClassName="flow-root mb-3 mx-auto max-w-[52ch] text-center"
+    >
+      <div className="skills-blocks flex w-full flex-col gap-3">
+        {skillBlocks.map((block) => (
+          <SkillBlockSection key={block.title} block={block} />
+        ))}
+      </div>
+    </Section>
   )
 }

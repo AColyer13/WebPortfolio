@@ -1,13 +1,25 @@
-import { useId, useRef, useEffect, useState } from 'react'
+import { useEffect, useId, useRef, useState } from 'react'
+import { X } from 'lucide-react'
 import { featuredProjects, projects } from '../data/portfolio'
-import {
-  containerClass,
-  sectionBlockClass,
-} from '../utils/layoutClasses'
+import { withBase } from '../utils/baseUrl'
+import { pictureSrcSet } from '../utils/pictureSources'
+import { imgCardThumbClass, portfolioCardClass } from '../utils/layoutClasses'
 import { positionCalloutPopover } from './calloutPopover'
+import { Section } from './Section'
 import { Icon } from './Icons'
 
-/** Convert a tech stack string into a list of mono chips. */
+const CARD_WIDTHS = [640, 1280] as const
+const CARD_SIZES = '(min-width: 60rem) 33vw, (min-width: 36rem) 50vw, 100vw'
+
+type ImagePriority = 'high' | 'eager' | 'lazy'
+
+function imagePriorityForIndex(index: number): ImagePriority {
+  if (index === 0) return 'high'
+  if (index < featuredProjects.length) return 'eager'
+  return 'lazy'
+}
+
+/** Split the comma-separated `tech` field into a clean chip list. */
 function techChips(tech: string): string[] {
   return tech
     .split(',')
@@ -16,20 +28,22 @@ function techChips(tech: string): string[] {
 }
 
 /**
- * Short role description derived from the project's tech stack. We lean on
- * recognizable technology names plus whether there's a live URL. Mirrors
- * the original generator so the copy survives the layout migration.
+ * Build a short role description from the project's tech stack so the (i)
+ * popover has real body content without hand-authored blurbs. We lean on
+ * recognizable technology names plus whether there's a live URL.
  */
 function describeProject(project: (typeof projects)[number]): string {
   const tech = techChips(project.tech).map((t) => t.toLowerCase())
   const lines: string[] = []
 
+  // Front-end / web
   if (tech.some((t) => t === 'react' || t.startsWith('next.js'))) {
     lines.push('Component-driven UI, with server-rendered routes where they earn it.')
   } else if (tech.includes('html') && tech.includes('css')) {
     lines.push('Static site built by hand with custom CSS and vanilla JS.')
   }
 
+  // Backend / API
   if (tech.includes('firebase') || tech.includes('firestore')) {
     lines.push('Realtime data layer backed by Firestore rules and Cloud Functions.')
   } else if (tech.includes('python') || tech.includes('flask') || tech.includes('fastapi')) {
@@ -40,22 +54,27 @@ function describeProject(project: (typeof projects)[number]): string {
     lines.push('Hono API at the edge with fast cold starts and minimal middleware.')
   }
 
+  // Data / persistence
   if (tech.includes('postgres') || tech.includes('prisma') || tech.includes('sqlmodel')) {
     lines.push('Persistent Postgres data store accessed through Prisma or SQLModel.')
   }
 
+  // AI / ML
   if (tech.some((t) => t.includes('ai') || t.includes('gemini') || t.includes('langgraph') || t.includes('openai'))) {
     lines.push('AI-assisted flows: generation, classification, or agentic steps.')
   }
 
+  // 3D / graphics
   if (tech.includes('three.js') || tech.includes('webgl') || tech.includes('canvas')) {
     lines.push('Real-time 3D or canvas rendering in the browser.')
   }
 
+  // PWA / mobile
   if (tech.includes('pwa')) {
     lines.push('Installable PWA with an offline-capable service worker.')
   }
 
+  // Live demo / source
   if (project.liveUrl) {
     lines.push('Live demo is deployed. Full source on GitHub.')
   } else {
@@ -65,104 +84,52 @@ function describeProject(project: (typeof projects)[number]): string {
   return lines.join(' ')
 }
 
-/**
- * Convert a raster source path (e.g. `images/foo.png`) into the variants
- * produced by `scripts/generate-image-variants.mjs`. The script always
- * writes `<base>-<width>.{png|jpg,avif,webp}` for the same widths, so the
- * `<picture>` markup can be derived from the source + width list.
- */
-function pictureSrcSet(
-  source: string,
-  widths: number[],
-  format: 'avif' | 'webp' | 'png',
-): string {
-  const lastDot = source.lastIndexOf('.')
-  const base = lastDot >= 0 ? source.slice(0, lastDot) : source
-  return widths
-    .map((width) => `${base}-${width}.${format} ${width}w`)
-    .join(', ')
-}
-
-/** Map a project id to a `~/projects/<slug>` style path. */
-function projectPath(project: (typeof projects)[number]): string {
-  const slug = project.title
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-|-$/g, '')
-  return `~/projects/${slug}/`
-}
-
-interface ProjectRowProps {
+interface ProjectCardProps {
   project: (typeof projects)[number]
-  index: number
-  /** True if this card sits in the visible featured slice. */
-  isFeatured: boolean
+  imagePriority: ImagePriority
 }
 
-/**
- * Single project card.
- *
- * Reuses the original `<article>` + `<picture>` + `<source>` shell so the
- * existing variant pipeline keeps working and the markup stays readable to
- * screen readers. The terminal aesthetic is applied via the `.hm-proj`
- * class — that layer sits over the original chrome without replacing it.
- */
-function ProjectRow({ project, index, isFeatured }: ProjectRowProps) {
-  const chips = techChips(project.tech)
-  const summary = describeProject(project)
-  const widths = [640, 1280]
-
-  const popoverId = useId()
-  const triggerId = `${popoverId}-trigger`
+function ProjectCard({ project, imagePriority }: ProjectCardProps) {
   const wrapperRef = useRef<HTMLElement>(null)
   const triggerRef = useRef<HTMLButtonElement>(null)
+  const popoverId = useId()
+  const triggerId = `${popoverId}-trigger`
   const [open, setOpen] = useState(false)
+  const chips = techChips(project.tech)
+  const summary = describeProject(project)
 
   useEffect(() => {
     if (!open) return
-
     const popover = document.getElementById(popoverId) as
       | (HTMLElement & { showPopover?: () => void; hidePopover?: () => void })
       | null
     const trigger = triggerRef.current
     if (!popover || !trigger) return
 
-    const positionPopover = () => positionCalloutPopover(popover, trigger)
-
-    const openPopover = () => {
-      if (typeof popover.showPopover === 'function') popover.showPopover()
-      positionPopover()
-    }
-
-    const closePopover = () => {
-      if (typeof popover.hidePopover === 'function') popover.hidePopover()
-    }
-
-    openPopover()
+    if (typeof popover.showPopover === 'function') popover.showPopover()
+    positionCalloutPopover(popover, trigger)
 
     const onScrollOrResize = () => {
-      if (popover.matches?.(':popover-open')) positionPopover()
+      if (popover.matches?.(':popover-open')) positionCalloutPopover(popover, trigger)
     }
 
     const onOutside = (event: MouseEvent) => {
-      const wrapper = wrapperRef.current
-      if (!wrapper?.contains(event.target as Node)) {
+      if (!wrapperRef.current?.contains(event.target as Node)) {
         setOpen(false)
-        closePopover()
+        if (typeof popover.hidePopover === 'function') popover.hidePopover()
       }
     }
 
     const onKey = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
         setOpen(false)
-        closePopover()
+        if (typeof popover.hidePopover === 'function') popover.hidePopover()
       }
     }
 
     const outsideHandle = window.setTimeout(() => {
       window.addEventListener('pointerdown', onOutside)
     }, 0)
-
     window.addEventListener('resize', onScrollOrResize)
     window.addEventListener('scroll', onScrollOrResize, true)
     window.addEventListener('keydown', onKey)
@@ -173,115 +140,128 @@ function ProjectRow({ project, index, isFeatured }: ProjectRowProps) {
       window.removeEventListener('resize', onScrollOrResize)
       window.removeEventListener('scroll', onScrollOrResize, true)
       window.removeEventListener('keydown', onKey)
-      if (popover.matches?.(':popover-open')) closePopover()
+      if (popover.matches?.(':popover-open') && typeof popover.hidePopover === 'function') {
+        popover.hidePopover()
+      }
     }
   }, [open, popoverId])
 
   const onToggle = () => setOpen((value) => !value)
 
-  // First card in the visible featured slice gets priority loading; rest of
-  // featured cards load eagerly too so the page never feels half-rendered.
-  // Cards revealed only after the user expands the section load lazily.
-  const isFirstFeatured = isFeatured && index === 0
-  const loading: 'eager' | 'lazy' = isFirstFeatured || isFeatured ? 'eager' : 'lazy'
-  const fetchPriority = isFirstFeatured ? 'high' : undefined
-
   return (
-    <article
-      ref={wrapperRef as React.RefObject<HTMLElement>}
-      className="hm-proj portfolio-item-outer"
-      id={`project-${project.id}`}
-    >
-      <p className="hm-proj__path">
-        <strong>$</strong> ls {projectPath(project)}
-      </p>
-
-      <div className="hm-proj__media">
+    <article ref={wrapperRef} className={`${portfolioCardClass} flex h-full w-full flex-col`}>
+      <div className="relative h-[12.5rem] overflow-hidden border-b border-border-default">
         <picture>
           <source
             type="image/avif"
-            srcSet={pictureSrcSet(project.imageUrl, widths, 'avif')}
+            srcSet={pictureSrcSet(project.imageUrl, CARD_WIDTHS, 'avif')}
+            sizes={CARD_SIZES}
           />
           <source
             type="image/webp"
-            srcSet={pictureSrcSet(project.imageUrl, widths, 'webp')}
+            srcSet={pictureSrcSet(project.imageUrl, CARD_WIDTHS, 'webp')}
+            sizes={CARD_SIZES}
           />
           <img
-            src={`${project.imageUrl.replace(/\.[^.]+$/, '')}-1280.png`}
-            srcSet={pictureSrcSet(project.imageUrl, widths, 'png')}
+            src={withBase(project.imageUrl)}
+            srcSet={pictureSrcSet(project.imageUrl, CARD_WIDTHS, 'original')}
+            sizes={CARD_SIZES}
+            alt={project.title}
             width={project.imageWidth}
             height={project.imageHeight}
-            alt={`${project.title} preview`}
-            loading={loading}
-            fetchPriority={fetchPriority}
+            loading={imagePriority === 'lazy' ? 'lazy' : 'eager'}
             decoding="async"
-            className="hm-proj__img"
+            {...(imagePriority === 'high' ? { fetchPriority: 'high' as const } : {})}
+            className={imgCardThumbClass}
           />
         </picture>
       </div>
-
-      <h3 className="hm-proj__title">{project.title}</h3>
-      <p className="hm-proj__copy">{summary}</p>
-      <div className="hm-proj__chips">
-        {chips.map((chip) => (
-          <span key={chip} className="hm-proj__chip">
-            {chip}
-          </span>
-        ))}
-      </div>
-
-      <div className="hm-proj__actions">
-        {project.liveUrl ? (
+      <div className="flex grow flex-col gap-2 p-4">
+        <div className="relative">
+          <p className="m-0 text-copyright uppercase tracking-wide text-text-subtle pr-6">
+            {project.tech}
+          </p>
+          {/* (i) trigger - matches the Skills pattern: tiny clean circle
+              pinned to the corner of the card, fully contained. */}
+          <button
+            ref={triggerRef}
+            type="button"
+            id={triggerId}
+            aria-expanded={open}
+            aria-controls={popoverId}
+            aria-label={`About ${project.title}. Show summary and tech stack`}
+            onClick={onToggle}
+            className="skill-info-btn absolute right-0 top-1/2 -translate-y-1/2 inline-flex size-4 shrink-0 cursor-pointer items-center justify-center rounded-full bg-surface-50 text-copyright font-medium leading-none text-text-muted transition-colors duration-150 ease-in-out hover:text-text-default focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600"
+          >
+            i
+          </button>
+        </div>
+        <h3 className="m-0 text-fluid-3 font-bold leading-snug text-text-default">
+          {project.title}
+        </h3>
+        <div className="mt-auto flex flex-wrap items-center gap-3 pt-2">
+          {project.liveUrl ? (
+            <a
+              href={project.liveUrl}
+              className="inline-flex min-h-11 items-center gap-1 text-fluid-1 font-medium text-text-default underline-offset-4 hover:underline"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Icon name="external-link-alt" className="text-fluid-1" aria-hidden />
+              Live demo
+            </a>
+          ) : null}
           <a
-            href={project.liveUrl}
-            className="hm-proj__link"
+            href={project.githubUrl}
+            className="inline-flex min-h-11 items-center gap-1 text-fluid-1 font-medium text-text-muted underline-offset-4 hover:text-text-default hover:underline"
             target="_blank"
             rel="noopener noreferrer"
-            aria-label={`${project.title} live demo`}
+            aria-label={`${project.title} source on GitHub`}
           >
-            <Icon name="external-link-alt" className="text-fluid-1" aria-hidden />
-            live
+            <Icon name="github-alt" className="text-fluid-1" aria-hidden />
+            Source
           </a>
-        ) : null}
-        <a
-          href={project.githubUrl}
-          className="hm-proj__link"
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label={`${project.title} source on GitHub`}
-        >
-          <Icon name="github-alt" className="text-fluid-1" aria-hidden />
-          source
-        </a>
-        <button
-          ref={triggerRef}
-          id={triggerId}
-          type="button"
-          aria-expanded={open}
-          aria-controls={popoverId}
-          aria-label={`About ${project.title}. Show summary and tech stack`}
-          className="skill-info-btn right-2 bottom-2 size-4 hm-proj__info"
-          onClick={onToggle}
-        >
-          <span aria-hidden>[i]</span>
-        </button>
+        </div>
       </div>
-
+      {/* Popover - shares the same callout positioning strategy + CSS arrow
+          as the skill popovers. Body is auto-generated from the tech stack
+          + live-URL presence. */}
       <div
         id={popoverId}
         popover="manual"
-        className="hm-skill-popover"
+        className="skill-popover rounded-md border border-border-default bg-surface-0 p-4 text-text-default shadow-[0_1rem_2.5rem_rgb(0_0_0_/0.18)]"
         role="dialog"
         aria-label={`${project.title} details`}
       >
-        <h4 className="hm-skill-popover__name">{project.title}</h4>
-        <p className="hm-skill-popover__desc">{summary}</p>
-        <p className="hm-skill-popover__app">
-          <strong>// stack:</strong>
+        <button
+          type="button"
+          className="skill-popover__close absolute top-2 right-2 inline-flex size-7 shrink-0 cursor-pointer items-center justify-center rounded-full border-0 bg-text-default/8 text-text-muted transition-colors duration-150 ease-in-out hover:bg-text-default/15 hover:text-text-default focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600"
+          onClick={() => {
+            setOpen(false)
+            const popover = document.getElementById(popoverId)
+            if (popover && 'hidePopover' in popover) {
+              ;(popover as HTMLElement & { hidePopover: () => void }).hidePopover()
+            }
+          }}
+          aria-label="Close"
+        >
+          <X className="size-3.5" strokeWidth={2.25} aria-hidden />
+        </button>
+        <h4 className="m-0 mb-2 pr-9 text-fluid-3 font-bold leading-snug">{project.title}</h4>
+        <p className="m-0 mb-3 text-fluid-1 leading-relaxed text-text-default">
+          {summary}
         </p>
-        <ul className="hm-skill-popover__chips">
+        <p className="m-0 mb-1 text-copyright font-medium uppercase tracking-wide text-text-subtle">
+          Built with
+        </p>
+        <ul className="m-0 flex flex-wrap gap-1.5 p-0">
           {chips.map((chip) => (
-            <li key={chip}>{chip}</li>
+            <li
+              key={chip}
+              className="inline-flex items-center rounded-sm border border-border-default bg-surface-50 px-2 py-0.5 text-copyright text-text-default"
+            >
+              {chip}
+            </li>
           ))}
         </ul>
       </div>
@@ -291,54 +271,34 @@ function ProjectRow({ project, index, isFeatured }: ProjectRowProps) {
 
 export function Projects() {
   const [showAll, setShowAll] = useState(false)
-  const visible = showAll ? projects : featuredProjects
+  const visibleProjects = showAll ? projects : featuredProjects
   const hiddenCount = projects.length - featuredProjects.length
 
-  // Track which cards were featured vs revealed — the loading strategy
-  // differs between the two (eager for visible, lazy for revealed-after-expand).
-  const featuredIds = new Set(featuredProjects.map((p) => p.id))
-  let featuredCursor = 0
-
   return (
-    <section id="projects" className={sectionBlockClass}>
-      <div className={containerClass}>
-        <header className="hm-section-head">
-          <span className="hm-section-head__prompt">
-            find ~/projects -maxdepth 1 -type d
-          </span>
-          <h2 className="hm-section-head__title"># projects</h2>
-        </header>
-
-        <div className="mx-auto max-w-64rem">
-          {visible.map((project) => {
-            const isFeatured = featuredIds.has(project.id)
-            const idx = isFeatured ? featuredCursor++ : 0
-            return (
-              <ProjectRow
-                key={project.id}
-                project={project}
-                index={idx}
-                isFeatured={isFeatured}
-              />
-            )
-          })}
-        </div>
-
-        {hiddenCount > 0 ? (
-          <div className="mt-4 text-center">
-            <button
-              type="button"
-              className="hm-about__btn hm-about__btn--ghost"
-              onClick={() => setShowAll((open) => !open)}
-              aria-expanded={showAll}
-            >
-              {showAll
-                ? 'show --fewer'
-                : `View all projects (+${hiddenCount})`}
-            </button>
+    <Section id="projects" title="Projects" variant="project">
+      <div className="grid grid-cols-1 gap-3 @[36rem]:grid-cols-2 @[60rem]:grid-cols-3">
+        {visibleProjects.map((project, index) => (
+          <div key={project.id} className="flex">
+            <ProjectCard
+              project={project}
+              imagePriority={imagePriorityForIndex(index)}
+            />
           </div>
-        ) : null}
+        ))}
       </div>
-    </section>
+
+      {hiddenCount > 0 ? (
+        <div className="mt-5 text-center">
+          <button
+            type="button"
+            className="inline-flex min-h-11 cursor-pointer items-center justify-center rounded-md border border-border-default bg-transparent px-4 py-2 text-btn font-medium text-text-default transition-colors duration-150 ease-in-out hover:border-text-muted hover:bg-surface-0"
+            onClick={() => setShowAll((open) => !open)}
+            aria-expanded={showAll}
+          >
+            {showAll ? 'Show fewer projects' : `View all projects (${hiddenCount} more)`}
+          </button>
+        </div>
+      ) : null}
+    </Section>
   )
 }
