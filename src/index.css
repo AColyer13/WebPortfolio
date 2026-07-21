@@ -92,7 +92,7 @@
   /* Fixed-header clearance; App.tsx sets this to .site-header height (app-shell padding) */
   --header-offset: calc(var(--spacing-2) * 2 + 2.5rem);
   /* Vertical padding between section bands — between tight (spacing-5) and airy (spacing-8) */
-  --section-padding-y: var(--spacing-5);
+  --section-padding-y: var(--spacing-6);
   /* Hero: a bit less than section bands so the nav→headline gap stays proportional */
   --section-hero-padding-top: var(--spacing-3);
   /* Gap under in-section group titles (Skills categories) */
@@ -912,7 +912,7 @@ main {
   display: block;
   margin-inline: auto;
   max-width: 52rem;
-  margin-block-end: var(--spacing-2);
+  margin-block-end: var(--spacing-3);
   font-family: var(--hm-font-mono);
   text-align: start;
 }
@@ -1050,11 +1050,11 @@ main {
  * 3-column grid of cards, but each card is a mono command + brief. The
  * (i) trigger is a small `[i]` bracket, not a circle. */
 .hm-discipline {
-  margin-block: var(--spacing-2);
+  margin-block: var(--spacing-3);
 }
 .hm-discipline__head {
   display: block;
-  margin-block-end: var(--spacing-1);
+  margin-block-end: var(--spacing-2);
   font-family: var(--hm-font-mono);
 }
 .hm-discipline__name {
