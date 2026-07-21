@@ -178,7 +178,7 @@ export function Navbar({
 
   return (
     <header
-      className={`site-header @container/site-header fixed inset-x-0 top-0 z-[1000] w-full${
+      className={`site-header @container/site-header fixed inset-x-0 top-0 z-(--z-modal) w-full${
         headerScrollHidden ? ' site-header--scroll-hidden' : ''
       }`}
     >
@@ -231,7 +231,7 @@ export function Navbar({
           <div
             id={POPOVER_ID}
             popover="auto"
-            className="site-nav-popover fixed inset-x-0 top-[var(--header-offset)] z-[999] m-0 border-b border-border-default bg-surface-0 p-2 shadow-nav @supports([transition-behavior:allow-discrete]):opacity-0"
+            className="site-nav-popover fixed inset-x-0 top-[var(--header-offset)] z-(--z-overlay) m-0 border-b border-border-default bg-surface-0 p-2 shadow-nav @supports([transition-behavior:allow-discrete]):opacity-0"
           >
             <NavLinks
               activeSection={activeSection}

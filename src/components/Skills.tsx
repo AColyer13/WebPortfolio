@@ -2,7 +2,7 @@ import { useEffect, useId, useRef, useState } from 'react'
 import { X } from 'lucide-react'
 import { skillBlocks, type Skill, type SkillBlock } from '../data/portfolio'
 import { withBase } from '../utils/baseUrl'
-import { skillCardClass } from '../utils/layoutClasses'
+import { skillCardBareClass } from '../utils/layoutClasses'
 import { positionCalloutPopover } from './calloutPopover'
 import { Icon, isRegisteredIcon } from './Icons'
 import { Section } from './Section'
@@ -170,7 +170,7 @@ function SkillCard({ skill }: SkillCardProps) {
 
   return (
     <div ref={wrapperRef} className="relative flex w-full min-w-0 self-stretch">
-      <div className={`${skillCardClass} flex w-full`}>
+      <div className={`${skillCardBareClass} flex w-full`}>
         <div className="skill-card__body flex max-h-full w-full min-w-0 flex-col items-center justify-center gap-2">
           <h4 className="m-0 overflow-wrap-anywhere text-center text-fluid-3 font-medium leading-snug text-text-default">
             {skill.name}
@@ -188,7 +188,7 @@ function SkillCard({ skill }: SkillCardProps) {
         aria-expanded={open}
         aria-controls={popoverId}
         aria-label={`About ${skill.name}. Show description and how I use it`}
-        className="skill-info-btn right-2 bottom-2 inline-flex size-4 shrink-0 cursor-pointer items-center justify-center rounded-full bg-surface-50 text-copyright font-medium leading-none text-text-muted transition-colors duration-150 ease-in-out hover:text-text-default focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600"
+        className="skill-info-btn right-2 bottom-2 inline-flex size-4 shrink-0 cursor-pointer items-center justify-center rounded-full bg-transparent text-copyright font-medium leading-none text-text-muted transition-colors duration-150 ease-in-out hover:bg-surface-100 hover:text-text-default focus-visible:bg-surface-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600"
         onClick={onToggle}
       >
         i

@@ -84,6 +84,14 @@
   --menu-font-size: var(--font-size-fluid-1);
   --copyright-font-size: 0.875rem;
 
+  /* Z-index scale — six named layers. Replaces ad-hoc z-[999] / z-[1000] literals. */
+  --z-base: 0;
+  --z-raised: 50;
+  --z-sticky: 100;
+  --z-overlay: 999;
+  --z-modal: 1000;
+  --z-toast: 1100;
+
   /* Fixed-header clearance; App.tsx sets this to .site-header height (app-shell padding) */
   --header-offset: calc(var(--spacing-2) * 2 + 2.5rem);
   /* Vertical padding between section bands — between tight (spacing-5) and airy (spacing-8) */
@@ -255,6 +263,15 @@
 
   --container-max: var(--container-max);
   --container-inline: var(--container-inline);
+
+  /* Z-index scale — six named layers. Re-exports --z-* so Tailwind utilities
+   * (e.g. `z-(--z-modal)`) resolve. The values themselves live in :root above. */
+  --z-base: var(--z-base);
+  --z-raised: var(--z-raised);
+  --z-sticky: var(--z-sticky);
+  --z-overlay: var(--z-overlay);
+  --z-modal: var(--z-modal);
+  --z-toast: var(--z-toast);
 }
 
 @layer base {
@@ -446,6 +463,16 @@
   }
 }
 
+/* Hairline divider between adjacent Skills discipline blocks. Lives on the
+ * parent <details>, not on individual cards, so the cards themselves stay
+ * borderless. Targets `.skills-blocks > .skills-details + .skills-details`
+ * so the first block stays flush with the section top. */
+.skills-blocks > .skills-details + .skills-details {
+  border-block-start: 1px solid var(--color-border-default);
+  padding-block-start: var(--spacing-3);
+  margin-block-start: var(--spacing-3);
+}
+
 @media (hover: none), (pointer: coarse) {
   .skill-card {
     touch-action: manipulation;
@@ -453,14 +480,16 @@
   }
 
   .skill-card:active {
-    border-color: var(--color-text-muted);
+    /* Bare variant — surface shifts instead of border color. */
+    background-color: var(--color-surface-100);
   }
 }
 
-/* Highlight the card border when its (i) trigger receives focus, even though
- * the trigger is a sibling of the card rather than a descendant. */
+/* Highlight the card surface when its (i) trigger receives focus, even though
+ * the trigger is a sibling of the card rather than a descendant. Bare variant
+ * has no border, so we shift the background instead. */
 .skill-card:has(+ .skill-info-btn:focus-visible) {
-  border-color: var(--color-text-muted);
+  background-color: var(--color-surface-100);
 }
 
 /* Pin the (i) trigger absolutely. The Tailwind `.absolute` utility lives in
@@ -761,7 +790,7 @@
   pointer-events: none;
   opacity: 0;
   transition: opacity 0.15s ease, transform 0.15s ease;
-  z-index: 50;
+  z-index: var(--z-raised);
   box-shadow: 0 0.25rem 0.75rem rgb(0 0 0 / 25%);
 }
 
@@ -776,7 +805,7 @@
   pointer-events: none;
   opacity: 0;
   transition: opacity 0.15s ease;
-  z-index: 50;
+  z-index: var(--z-raised);
 }
 
 /* Show tooltips on hover (pointer-fine only — no hover on touch devices).

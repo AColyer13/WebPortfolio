@@ -22,7 +22,7 @@ function App() {
     <div className={`app-shell${headerScrollHidden ? ' app--header-hidden' : ''}`}>
       <a
         href="#main-content"
-        className="skip-link sr-only focus:not-sr-only focus:absolute focus:top-2 focus:start-2 focus:z-[1100] focus:rounded-md focus:bg-btn-bg focus:px-3 focus:py-2 focus:text-btn-fg focus:outline-2 focus:outline-offset-2 focus:outline-primary-600"
+        className="skip-link sr-only focus:not-sr-only focus:absolute focus:top-2 focus:start-2 focus:z-(--z-toast) focus:rounded-md focus:bg-btn-bg focus:px-3 focus:py-2 focus:text-btn-fg focus:outline-2 focus:outline-offset-2 focus:outline-primary-600"
       >
         Skip to main content
       </a>
