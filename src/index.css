@@ -67,8 +67,11 @@
   --font-weight-medium: 500;
   --font-weight-bold: 700;
 
-  /* System font stack: Plain (custom) → -apple-system/BlinkMacSystemFont (macOS/iOS) → Segoe UI (Windows) → system-ui (modern OS) → sans-serif (final fallback). */
-  --body-font-family: 'Plain', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  /* OS-native font stack: macOS/iOS picks SF Pro via -apple-system; Windows picks
+   * Segoe UI; modern Linux/Android pick Roboto via system-ui. No custom @font-face —
+   * referencing a named font that isn't shipped causes browsers to fall through to
+   * a generic, which on macOS lands as a thin system face without a 500 weight. */
+  --body-font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, system-ui, sans-serif;
 
   --font-size-fluid-1: clamp(0.875rem, 0.82rem + 0.15vw, 1rem);
   --font-size-fluid-2: clamp(1rem, 0.92rem + 0.28vw, 1.125rem);
@@ -461,16 +464,6 @@
   .skills-details__chevron svg {
     transition: none !important;
   }
-}
-
-/* Hairline divider between adjacent Skills discipline blocks. Lives on the
- * parent <details>, not on individual cards, so the cards themselves stay
- * borderless. Targets `.skills-blocks > .skills-details + .skills-details`
- * so the first block stays flush with the section top. */
-.skills-blocks > .skills-details + .skills-details {
-  border-block-start: 1px solid var(--color-border-default);
-  padding-block-start: var(--spacing-3);
-  margin-block-start: var(--spacing-3);
 }
 
 @media (hover: none), (pointer: coarse) {

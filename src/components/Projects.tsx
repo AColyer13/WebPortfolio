@@ -278,14 +278,7 @@ export function Projects() {
     <Section id="projects" title="Projects" variant="project">
       <div className="grid grid-cols-1 gap-3 @[36rem]:grid-cols-2 @[60rem]:grid-cols-3">
         {visibleProjects.map((project, index) => (
-          <div
-            key={project.id}
-            className={`flex${
-              // First card spans 2 columns at the 60rem breakpoint so the grid
-              // reads hand-arranged rather than as a 3-up template.
-              index === 0 ? ' @[60rem]:col-span-2' : ''
-            }`}
-          >
+          <div key={project.id} className="flex">
             <ProjectCard
               project={project}
               imagePriority={imagePriorityForIndex(index)}

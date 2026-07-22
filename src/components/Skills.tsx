@@ -257,9 +257,9 @@ export function Skills() {
       id="skills"
       title="Skills"
       variant="skills"
-      headingClassName="flow-root mb-3 mx-auto max-w-[52ch] text-center"
+      headingClassName="flow-root mb-(--spacing-4) mx-auto max-w-[52ch] text-center"
     >
-      <div className="skills-blocks flex w-full flex-col gap-3">
+      <div className="skills-blocks flex w-full flex-col gap-(--spacing-4)">
         {skillBlocks.map((block) => (
           <SkillBlockSection key={block.title} block={block} />
         ))}

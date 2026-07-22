@@ -316,14 +316,16 @@ describe('Skills', () => {
     }
   })
 
-  it('stacks categories tightly (no large vertical gap between blocks)', () => {
+  it('stacks categories with a comfortable but not section-spaced gap', () => {
     render(<Skills />)
     const blockContainer = document.querySelector<HTMLElement>('.skills-blocks')
       ?? document.querySelector<HTMLElement>('details.skills-details')?.parentElement
     expect(blockContainer).toBeTruthy()
-    // The wrapper should use the small `gap-3` class (0.75rem) instead of
-    // the page-wide `--spacing-8` (4rem) so headings aren't airy.
-    expect(blockContainer?.classList.contains('gap-3')).toBe(true)
+    // The wrapper uses --spacing-4 (2rem) between discipline blocks. Tighter
+    // than the page section band (--spacing-6 / 3rem) so the block stack
+    // reads as one cohesive section, not a series of disconnected bands.
+    const cls = blockContainer?.className ?? ''
+    expect(cls).toMatch(/gap-\(--spacing-4\)/)
   })
 
   it('does not apply the legacy "with-info" padding override to the card', () => {
