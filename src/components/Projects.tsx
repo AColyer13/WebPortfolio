@@ -275,7 +275,14 @@ export function Projects() {
   const hiddenCount = projects.length - featuredProjects.length
 
   return (
-    <Section id="projects" title="Projects" variant="project">
+    <Section
+      id="projects"
+      title="Projects"
+      variant="project"
+      // Projects ends with the "View all" CTA; the next section's top padding
+      // alone gives enough breathing room, so trim the trailing section padding.
+      className="pb-(--spacing-4)"
+    >
       <div className="grid grid-cols-1 gap-3 @[36rem]:grid-cols-2 @[60rem]:grid-cols-3">
         {visibleProjects.map((project, index) => (
           <div key={project.id} className="flex">

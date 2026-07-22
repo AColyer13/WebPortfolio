@@ -23,6 +23,11 @@ interface SectionProps {
   children: ReactNode
   contentClassName?: string
   headingClassName?: string
+  /** Extra classes merged onto the `<section>` element — use to override the
+   * shared section padding (e.g. `pb-(--spacing-4)`) when a section ends with
+   * a CTA and the next section's top padding already provides enough breathing
+   * room. */
+  className?: string
 }
 
 export function Section({
@@ -32,6 +37,7 @@ export function Section({
   children,
   contentClassName,
   headingClassName = sectionHeadingClass,
+  className,
 }: SectionProps) {
   const body = contentClassName ? (
     <div className={contentClassName}>{children}</div>
@@ -40,7 +46,10 @@ export function Section({
   )
 
   return (
-    <section className={`${variantClass[variant]} ${sectionBlockClass}`} id={id}>
+    <section
+      className={`${variantClass[variant]} ${sectionBlockClass}${className ? ` ${className}` : ''}`}
+      id={id}
+    >
       <div className={`${containerClass} ${sectionContainerClass}`}>
         <div className={headingClassName}>
           <h2 className="m-0 text-h2 font-bold leading-tight text-text-default">{title}</h2>
