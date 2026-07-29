@@ -7,21 +7,33 @@ import { positionCalloutPopover } from './calloutPopover'
 import { Icon, isRegisteredIcon } from './Icons'
 import { Section } from './Section'
 
+/** All raster skill icons live in this single sprite (built by `scripts/generate-svg-sprite.mjs`). One HTTP request covers every icon. */
+const SPRITE_PATH = 'sprite.svg'
+
+/**
+ * `images/foo-bar.svg` → `icon-foo-bar`, matching the symbol ids emitted
+ * by `scripts/generate-svg-sprite.mjs`.
+ */
+function spriteSymbolId(iconPath: string): string {
+  const stem = iconPath.replace(/^images\//, '').replace(/\.(svg|png|jpe?g|webp)$/i, '')
+  return `icon-${stem}`
+}
+
 function SkillIcon({ icon }: { icon: string }) {
   if (isRegisteredIcon(icon)) {
     return <Icon name={icon} className="shrink-0 text-[2.25rem] leading-none text-text-muted" />
   }
   if (/\.(?:svg|png|jpe?g|webp)$/i.test(icon)) {
-    const logoUrl = withBase(icon)
+    const symbolId = spriteSymbolId(icon)
+    const spriteUrl = `${withBase(SPRITE_PATH)}#${symbolId}`
     return (
-      <span
+      <svg
         className="skill-card__logo"
-        style={{
-          maskImage: `url("${logoUrl}")`,
-          WebkitMaskImage: `url("${logoUrl}")`,
-        }}
         aria-hidden
-      />
+        focusable="false"
+      >
+        <use href={spriteUrl} />
+      </svg>
     )
   }
   return (

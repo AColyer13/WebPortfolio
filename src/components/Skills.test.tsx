@@ -259,17 +259,20 @@ describe('Skills', () => {
     expect(openChevron).toBe(document.querySelector('.skills-details__chevron'))
   })
 
-  it('renders FastAPI with the logo mask like other SVG skills when expanded', () => {
+  it('renders FastAPI with the sprite <use> like other SVG skills when expanded', () => {
     render(<Skills />)
     fireEvent.click(getBlockSummaries()[0])
 
     const heading = screen.getByRole('heading', { name: 'FastAPI', level: 4 })
     const body = heading.closest('.skill-card__body')
-    const icon = body?.querySelector<HTMLElement>('.skill-card__logo')
+    const icon = body?.querySelector<SVGElement>('.skill-card__logo')
+    const use = icon?.querySelector('use')
 
     expect(icon).toBeTruthy()
-    expect(icon?.style.maskImage || icon?.style.webkitMaskImage).toBe(
-      'url("/images/fastapi.svg")',
+    // Skill icons share one sprite, referenced via fragment ID. Slug is the
+    // filename stem, matching `scripts/generate-svg-sprite.mjs`.
+    expect(use?.getAttribute('href') ?? use?.getAttribute('xlink:href')).toBe(
+      '/sprite.svg#icon-fastapi',
     )
   })
 

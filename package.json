@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build:images": "node scripts/generate-image-variants.mjs",
+    "build:images": "node scripts/generate-image-variants.mjs && node scripts/generate-svg-sprite.mjs",
     "build": "npm run build:images && tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
@@ -17,7 +17,6 @@
   "dependencies": {
     "@emailjs/browser": "^4.4.1",
     "lucide-react": "^1.23.0",
-    "pdf-parse": "^2.4.5",
     "react": "19.2.4",
     "react-dom": "19.2.4"
   },

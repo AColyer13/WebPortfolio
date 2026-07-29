@@ -437,11 +437,7 @@
   display: block;
   width: 2.25rem;
   height: 2.25rem;
-  background-color: var(--color-text-muted);
-  mask-mode: alpha;
-  mask-size: contain;
-  mask-repeat: no-repeat;
-  mask-position: center;
+  color: var(--color-text-muted);
 }
 
 /*
