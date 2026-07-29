@@ -11,10 +11,13 @@ import { Icon } from './Icons'
 const CARD_WIDTHS = [640, 1280] as const
 const CARD_SIZES = '(min-width: 60rem) 33vw, (min-width: 36rem) 50vw, 100vw'
 
-type ImagePriority = 'high' | 'eager' | 'lazy'
+type ImagePriority = 'eager' | 'lazy'
 
 function imagePriorityForIndex(index: number): ImagePriority {
-  if (index === 0) return 'high'
+  // The above-the-fold LCP is the hero photo in About, not the first project
+  // card. Featured cards (above the "View all" fold) load eagerly so they're
+  // painted when the user scrolls down; the rest lazy-load. No
+  // `fetchpriority="high"` here — that hint should only target the LCP image.
   if (index < featuredProjects.length) return 'eager'
   return 'lazy'
 }
@@ -171,7 +174,6 @@ function ProjectCard({ project, imagePriority }: ProjectCardProps) {
             height={project.imageHeight}
             loading={imagePriority === 'lazy' ? 'lazy' : 'eager'}
             decoding="async"
-            {...(imagePriority === 'high' ? { fetchPriority: 'high' as const } : {})}
             className={imgCardThumbClass}
           />
         </picture>

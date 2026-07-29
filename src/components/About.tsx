@@ -52,22 +52,23 @@ export function About() {
             <picture>
               <source
                 type="image/avif"
-                srcSet={pictureSrcSet('images/IMG_4874.JPEG', [960], 'avif')}
+                srcSet={pictureSrcSet('images/IMG_4874.JPEG', [960, 1920], 'avif')}
                 sizes="(min-width: 48rem) 45vw, 92vw"
               />
               <source
                 type="image/webp"
-                srcSet={pictureSrcSet('images/IMG_4874.JPEG', [960], 'webp')}
+                srcSet={pictureSrcSet('images/IMG_4874.JPEG', [960, 1920], 'webp')}
                 sizes="(min-width: 48rem) 45vw, 92vw"
               />
               <img
                 src={withBase('images/IMG_4874.JPEG')}
-                srcSet={`${withBase('images/IMG_4874-960.JPEG')} 960w, ${withBase('images/IMG_4874.JPEG')} 2048w`}
+                srcSet={`${withBase('images/IMG_4874-960.JPEG')} 960w, ${withBase('images/IMG_4874-1920.JPEG')} 1920w, ${withBase('images/IMG_4874.JPEG')} 2048w`}
                 sizes="(min-width: 48rem) 45vw, 92vw"
                 className={imgHeroClass}
                 alt="Desk setup photo"
                 width={2048}
                 height={1536}
+                loading="eager"
                 fetchPriority="high"
                 decoding="async"
               />

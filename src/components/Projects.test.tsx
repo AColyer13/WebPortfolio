@@ -59,12 +59,12 @@ describe('Projects', () => {
     expect(img.getAttribute('srcset')).not.toMatch(/\.avif |\.webp /)
   })
 
-  it('prioritizes only the first card image; others load eagerly when featured', () => {
+  it('featured cards load eagerly and never carry fetchpriority=high (reserved for the LCP hero)', () => {
     const { container } = render(<Projects />)
     const imgs = container.querySelectorAll<HTMLImageElement>('img')
-    expect(imgs[0].getAttribute('fetchpriority')).toBe('high')
-    expect(imgs[0].getAttribute('loading')).toBe('eager')
-    for (let i = 1; i < featuredProjects.length; i++) {
+    // Project cards are below the fold of the hero image (LCP), so we
+    // don't want fetchpriority="high" competing with the hero preload.
+    for (let i = 0; i < featuredProjects.length; i++) {
       expect(imgs[i].getAttribute('fetchpriority')).toBeNull()
       expect(imgs[i].getAttribute('loading')).toBe('eager')
     }

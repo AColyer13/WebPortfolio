@@ -44,11 +44,13 @@ async function exists(path) {
 
 /** Per-source width overrides. Sources not listed use the default `[640, 1280]`. */
 const WIDTH_MAP = {
-  // Hero photo — `About.tsx` requests only [960] + the original. A -1280
-  // variant would be wasted I/O (the source is 2048px, so `withoutEnlargement`
-  // produces a real 1280px output, not a no-op). Paired with
-  // `pictureSrcSet('images/IMG_4874.JPEG', [960], 'avif')` in `About.tsx`.
-  'IMG_4874.JPEG': [960],
+  // Hero photo — `About.tsx` requests [960, 1920] + the original 2048w
+  // fallback. 1920w covers 2x DPR on screens up to ~960 CSS pixels wide,
+  // so wide-retina viewers see a crisp image without forcing 1x users to
+  // download the full 2048w original. Paired with
+  // `pictureSrcSet('images/IMG_4874.JPEG', [960, 1920], 'avif')` in
+  // `About.tsx`.
+  'IMG_4874.JPEG': [960, 1920],
 }
 
 /** Width map per source filename. Anything not listed gets a [640, 1280] variant set (project card thumbnails are the common case). We pick 1280 as the high-end because it's the largest intrinsic width declared in `portfolio.ts` for most projects and is enough for 2x DPR at the card's ~400px CSS display size. Paired with `pictureSrcSet(project.imageUrl, [640, 1280])` in `Projects.tsx`. */

@@ -44,6 +44,20 @@ export default defineConfig(({ mode }) => {
       outDir: path.join(projectRoot, 'dist'),
       emptyOutDir: true,
       cssCodeSplit: false,
+      rollupOptions: {
+        // Split React + ReactDOM into a long-lived vendor chunk so it stays
+        // cached across deploys (only the app chunk changes when components
+        // move). `lucide-react` and `react-dom` are tiny per-icon imports,
+        // so they're inlined into the app chunk as before.
+        output: {
+          manualChunks(id) {
+            if (id.includes('node_modules/react/') || id.includes('node_modules/scheduler/')) {
+              return 'react-vendor'
+            }
+            return undefined
+          },
+        },
+      },
     },
     publicDir: path.join(projectRoot, 'public'),
     test: {
