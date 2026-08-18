@@ -34,9 +34,10 @@ class MockResizeObserver {
 
 // jsdom doesn't implement window.scrollTo — stub it so we don't see
 // "Not implemented" warnings during scroll-spy tests.
-if (!window.scrollTo || /\[native code\]/.test(window.scrollTo.toString()) === false) {
-  ;(window as unknown as { scrollTo: unknown }).scrollTo = vi.fn()
-}
+Object.defineProperty(window, 'scrollTo', {
+  writable: true,
+  value: vi.fn(),
+})
 
 // jsdom requires --localstorage-file to expose a working localStorage.
 // Provide an in-memory shim so theme/storage code can run under tests.

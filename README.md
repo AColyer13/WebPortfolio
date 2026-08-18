@@ -24,10 +24,11 @@ npm run dev          # http://localhost:5173
 | Command               | What it does                                    |
 | --------------------- | ----------------------------------------------- |
 | `npm run dev`         | Vite dev server                                 |
-| `npm run build`       | Generate image variants → `tsc` → `vite build`  |
+| `npm run build`       | Build image variants + sprite → `tsc` → `vite build` |
 | `npm run preview`     | Serve `dist/` locally (http://localhost:4173)   |
 | `npm run lint`        | ESLint (zero warnings tolerated)                |
 | `npm test`            | Vitest one-shot                                 |
+| `npm run test:watch`  | Vitest in interactive watch mode                |
 | `npm run test:a11y`   | Build, preview, scan with axe (curated rules)   |
 
 ## File map
@@ -37,7 +38,7 @@ npm run dev          # http://localhost:5173
 - `src/hooks/`           — `useSectionNavigation` (scroll-spy + header hide)
 - `src/utils/`           — `baseUrl`, `layoutClasses`, `pictureSources`, `retryWithBackoff`, `sections`, `contact`
 - `src/theme/`           — `colorScheme` (light / dark / system)
-- `scripts/`             — `generate-image-variants.mjs`, `axe-preview.mjs`
+- `scripts/`             — `generate-image-variants.mjs`, `generate-svg-sprite.mjs`, `axe-preview.mjs`
 
 ## Deploy (GitHub Pages)
 

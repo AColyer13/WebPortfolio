@@ -62,7 +62,7 @@ export function About() {
               />
               <img
                 src={withBase('images/IMG_4874.JPEG')}
-                srcSet={`${withBase('images/IMG_4874-960.JPEG')} 960w, ${withBase('images/IMG_4874-1920.JPEG')} 1920w, ${withBase('images/IMG_4874.JPEG')} 2048w`}
+                srcSet={`${withBase('images/IMG_4874-960.jpeg')} 960w, ${withBase('images/IMG_4874-1920.jpeg')} 1920w, ${withBase('images/IMG_4874.JPEG')} 2048w`}
                 sizes="(min-width: 48rem) 45vw, 92vw"
                 className={imgHeroClass}
                 alt="Desk setup photo"

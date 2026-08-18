@@ -190,6 +190,7 @@ function ProjectCard({ project, imagePriority }: ProjectCardProps) {
             type="button"
             id={triggerId}
             aria-expanded={open}
+            aria-haspopup="dialog"
             aria-controls={popoverId}
             aria-label={`About ${project.title}. Show summary and tech stack`}
             onClick={onToggle}

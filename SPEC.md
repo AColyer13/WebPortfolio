@@ -5,9 +5,9 @@ Plain checklist for what this site must do. Content lives in [`src/data/portfoli
 ## Must-haves
 
 1. **Intro** — Name, role, short bio, resume download, link to contact (`#about`).
-2. **Skills** — Three skill groups in a grid (`#skills`).
-3. **Experience** — Work history timeline (`#experience`).
-4. **Projects** — Featured cards first; button reveals the rest. Each card links to live demo and/or GitHub (`#projects`).
+2. **Experience** — Work history timeline (`#experience`).
+3. **Projects** — Featured cards first; button reveals the rest. Each card links to live demo, GitHub, and details popover (`#projects`).
+4. **Skills** — Engineering discipline blocks in collapsible rows with detailed popovers (`#skills`).
 5. **Contact** — Email form (EmailJS, loaded only on submit), map (click to load), social links (`#contact`).
 6. **Navigation** — Sticky header, scroll-spy highlights the current section, URL hash stays in sync.
 7. **Every device** — Light / dark / system theme. Works on phone and desktop. Respects reduced motion, high contrast, and forced-colors. Browser details: [`docs/COMPAT.md`](docs/COMPAT.md).
@@ -19,9 +19,9 @@ Plain checklist for what this site must do. Content lives in [`src/data/portfoli
 | Section id   | Component     | What it shows                          |
 | ------------ | ------------- | -------------------------------------- |
 | `#about`     | `About`       | Intro, resume, contact CTA             |
-| `#skills`    | `Skills`      | Skill groups                           |
 | `#experience`| `Experiences` | Timeline                               |
 | `#projects`  | `Projects`    | Project cards                          |
+| `#skills`    | `Skills`      | Skill discipline groups                |
 | `#contact`   | `Contact`     | Form, map, socials                     |
 
 ## Stack

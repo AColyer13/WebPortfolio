@@ -35,4 +35,6 @@ dist-ssr
 .tsbuildinfo
 .tmp-previews/
 coverage/
+.vite-pid
+*.pid
 
