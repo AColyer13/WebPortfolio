@@ -21,6 +21,7 @@ import {
   Moon,
   MousePointer2,
   Orbit,
+  Phone,
   Shield,
   ShieldCheck,
   ShieldUser,
@@ -48,6 +49,7 @@ export type IconKey =
   | 'microchip'
   | 'mouse-pointer-2'
   | 'orbit'
+  | 'phone'
   | 'robot'
   | 'shield-check'
   | 'shield-halved'
@@ -92,6 +94,7 @@ const LUCIDE: Partial<Record<IconKey, Lucide>> = {
   'microchip': Cpu,
   'mouse-pointer-2': MousePointer2,
   'orbit': Orbit,
+  'phone': Phone,
   'robot': Bot,
   'shield-check': ShieldCheck,
   'shield-halved': Shield,

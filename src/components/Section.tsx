@@ -12,6 +12,7 @@ const variantClass = {
   resume: `${sectionDeferredClass} bg-surface-0 @container/resume`,
   // No content-visibility here — it can leave project links unclickable after tab/BFCache restore.
   project: 'bg-surface-50 @container/portfolio',
+  contact: `${sectionDeferredClass} bg-surface-0 @container/contact`,
 } as const
 
 export type SectionVariant = keyof typeof variantClass
