@@ -13,9 +13,7 @@
   --color-primary-700: oklch(20% 0.02 260);
   --color-primary-500: oklch(40% 0.02 260);
 
-  /* Surfaces — 4-tier elevation: page bg < cards < section bands < deep.
-   * Each tier is one notch lighter than the previous so elevated surfaces
-   * (cards on page, cards on band) always have visible contrast. */
+  /* Surfaces — 4-tier elevation: page bg < cards < section bands < deep. */
   --color-bg: oklch(98% 0.005 260);
   --color-surface-0: oklch(100% 0 0);
   --color-surface-50: oklch(96% 0.01 260);
@@ -54,23 +52,19 @@
   --radius-lg: 1.25rem;
   --radius-pill: 624.9375rem;
 
-  /* Shadows — minimal; borders carry hierarchy */
+  /* Shadows */
   --shadow-nav: 0 1px 0 oklch(0% 0 0 / 8%);
   --shadow-card: none;
   --shadow-card-hover: none;
   --shadow-btn: none;
   --shadow-image: none;
 
-  /* Typography — fluid scale (modular ~1.28) */
+  /* Typography — fluid scale */
   --font-weight-light: 300;
   --font-weight-normal: 400;
   --font-weight-medium: 500;
   --font-weight-bold: 700;
 
-  /* OS-native font stack: macOS/iOS picks SF Pro via -apple-system; Windows picks
-   * Segoe UI; modern Linux/Android pick Roboto via system-ui. No custom @font-face —
-   * referencing a named font that isn't shipped causes browsers to fall through to
-   * a generic, which on macOS lands as a thin system face without a 500 weight. */
   --body-font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, system-ui, sans-serif;
 
   --font-size-fluid-1: clamp(0.875rem, 0.82rem + 0.15vw, 1rem);
@@ -87,7 +81,7 @@
   --menu-font-size: var(--font-size-fluid-1);
   --copyright-font-size: 0.875rem;
 
-  /* Z-index scale — six named layers. Replaces ad-hoc z-[999] / z-[1000] literals. */
+  /* Z-index scale */
   --z-base: 0;
   --z-raised: 50;
   --z-sticky: 100;
@@ -95,24 +89,16 @@
   --z-modal: 1000;
   --z-toast: 1100;
 
-  /* Fixed-header clearance; App.tsx sets this to .site-header height (app-shell padding) */
+  /* Fixed-header clearance */
   --header-offset: calc(var(--spacing-2) * 2 + 2.5rem);
-  /* Vertical padding between section bands — between tight (spacing-5) and airy (spacing-8) */
   --section-padding-y: var(--spacing-6);
-  /* Hero: a bit less than section bands so the nav→headline gap stays proportional */
   --section-hero-padding-top: var(--spacing-3);
-  /* Gap under in-section group titles (Skills categories) */
   --section-subheading-gap: var(--spacing-3);
   --container-max: 75rem;
   --container-inline: clamp(var(--spacing-2), 2vw + 0.5rem, var(--spacing-3));
 }
 
-/*
- * Dark palette — hex/sRGB (not OKLCH) so:
- * - `prefers-color-scheme: dark` paints a real dark page even when extensions read computed colors.
- * - Dark Reader / similar tools can classify backgrounds without OKLCH-only variable chains.
- * Default `data-theme="system"` (see inline script in index.html) so OS scheduled light/dark drives tokens until a session-only override sets light/dark.
- */
+/* Dark palette */
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme]),
   :root[data-theme='system'] {
@@ -126,7 +112,6 @@
     --color-primary-700: #fafafa;
     --color-primary-500: #a1a1aa;
 
-    /* Page bg sits one tone darker than cards so cards visibly elevate. */
     --color-bg: #0e0e13;
     --color-surface-0: #18181c;
     --color-surface-50: #23232c;
@@ -137,9 +122,7 @@
     --color-text-subtle: #8e8e96;
     --color-text-on-primary: #fafafa;
 
-    /* Bumped from #3f3f46 so card edges are clearly defined on the new darker page bg. */
     --color-border-default: #3f3f46;
-
     --color-focus-ring: rgb(228 228 231 / 35%);
 
     --color-danger-600: #f87171;
@@ -165,7 +148,6 @@
   --color-primary-700: #fafafa;
   --color-primary-500: #a1a1aa;
 
-  /* Page bg sits one tone darker than cards so cards visibly elevate. */
   --color-bg: #0e0e13;
   --color-surface-0: #18181c;
   --color-surface-50: #23232c;
@@ -177,7 +159,6 @@
   --color-text-on-primary: #fafafa;
 
   --color-border-default: #3f3f46;
-
   --color-focus-ring: rgb(228 228 231 / 35%);
 
   --color-danger-600: #f87171;
@@ -191,13 +172,12 @@
   --shadow-image: none;
 }
 
-/* Force light while OS is dark */
 :root[data-theme='light'] {
   color-scheme: light;
 }
+
 @import 'tailwindcss';
 
-/* Hover lift/shadow only on devices with a real hover pointer; touch uses :active instead. */
 @custom-variant pointer-fine (@media (hover: hover) and (pointer: fine));
 
 @theme inline {
@@ -267,8 +247,6 @@
   --container-max: var(--container-max);
   --container-inline: var(--container-inline);
 
-  /* Z-index scale — six named layers. Re-exports --z-* so Tailwind utilities
-   * (e.g. `z-(--z-modal)`) resolve. The values themselves live in :root above. */
   --z-base: var(--z-base);
   --z-raised: var(--z-raised);
   --z-sticky: var(--z-sticky);
@@ -285,11 +263,9 @@
   html {
     scroll-behavior: auto;
     background-color: var(--color-bg);
-    /* Reserve a stable gutter for the scrollbar so Windows "always show scrollbars" / overlay-scrollbar engines (macOS) don't cause horizontal layout shift between pages of different heights. */
     scrollbar-gutter: stable;
   }
 
-  /* Block trackpad rubber-band at the top on desktop only; `none` on all viewports breaks pull-to-refresh. */
   @media (hover: hover) and (pointer: fine) {
     html {
       overscroll-behavior-y: none;
@@ -372,9 +348,7 @@
   }
 }
 
-/* Pseudo-elements / masks / autofill — not expressible as Tailwind utilities in TSX */
-
-/* App shell + header — scroll hide/show (padding + transform stay in sync) */
+/* App shell + header — scroll hide/show */
 .app-shell {
   padding-block-start: var(--header-offset);
   transition: padding-block-start 0.22s cubic-bezier(0.4, 0, 0.2, 1);
@@ -394,7 +368,7 @@
   pointer-events: none;
 }
 
-/* Hamburger icon (three lines via box-shadow) */
+/* Hamburger icon */
 .nav-toggle-icon {
   position: relative;
   width: 1.25rem;
@@ -405,15 +379,6 @@
     0 0.375rem 0 currentColor;
 }
 
-/*
- * Touch / coarse pointer — pressed feedback via declarative :active / :has(:active)
- * (2026 standard). :has() is Baseline; iOS Safari 15.4+ matches parent :active
- * for descendants when `touch-action: manipulation` is set on the host element.
- * `cursor: pointer` is also required so iOS Safari fires `:active` on non-anchor
- * elements; `-webkit-tap-highlight-color: transparent` suppresses the default
- * grey flash so our custom border-color transition is the only feedback.
- * Replaces the previous `initTouchPressFeedback()` JS path in App.tsx.
- */
 @media (hover: none), (pointer: coarse) {
   .portfolio-item-inner {
     touch-action: manipulation;
@@ -431,149 +396,10 @@
   }
 }
 
-/* Skill logo mask — per-icon URL is set inline; geometry lives here. */
-.skill-card__logo {
-  flex-shrink: 0;
-  display: block;
-  width: 2.25rem;
-  height: 2.25rem;
-  color: var(--color-text-muted);
-}
-
-/*
- * Skills section — collapsible discipline rows.
- * - Heading is text-only (matches the original always-open look).
- * - Only the chevron animates: rotates 180° on expand.
- * - The body itself appears instantly (no slide). Keeping this minimal so
- *   the section doesn't feel over-animated.
- */
-.skills-details__chevron {
-  transform: rotate(0deg);
-}
-
-.skills-details[open] > .skills-details__summary .skills-details__chevron {
-  transform: rotate(180deg);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .skills-details__chevron,
-  .skills-details__chevron svg {
-    transition: none !important;
-  }
-}
-
-@media (hover: none), (pointer: coarse) {
-  .skill-card {
-    touch-action: manipulation;
-    -webkit-tap-highlight-color: transparent;
-  }
-
-  .skill-card:active {
-    /* Bare variant — surface shifts instead of border color. */
-    background-color: var(--color-surface-100);
-  }
-}
-
-/* Highlight the card surface when its (i) trigger receives focus, even though
- * the trigger is a sibling of the card rather than a descendant. Bare variant
- * has no border, so we shift the background instead. */
-.skill-card:has(+ .skill-info-btn:focus-visible) {
-  background-color: var(--color-surface-100);
-}
-
-/*
- * Skill-card (i) button + popover.
- * The (i) trigger is positioned on the wrapper (not inside the card surface)
- * so it never affects the logo or text size — it's a peer, not a child.
- * Pin the (i) trigger absolutely with tabular figures.
- */
-.skill-info-btn {
-  font-feature-settings: 'tnum' 1;
-  position: absolute;
-  z-index: 1;
-}
-
-.skill-popover {
-  /* JS-owned sizing: width is fixed (22rem class) and height + overflow-y
-     are written inline on every open so a scrollbar only appears when
-     the content actually exceeds the available viewport height.
-     `overflow: hidden` here is a fallback for the brief moment between
-     showPopover() and the JS measure pass. */
-  overflow: hidden;
-  color: inherit;
-
-  /* In/out animation (allow-discrete enables the `display` transition).
-     Lift a tiny bit on open so the arrow lands cleanly on the (i). */
-  transition:
-    opacity 0.18s ease,
-    transform 0.18s cubic-bezier(0.05, 0.7, 0.1, 1),
-    overlay 0.18s ease allow-discrete,
-    display 0.18s ease allow-discrete;
-  opacity: 1;
-  transform: translateY(0) scale(1);
-  /* Arrow sits flush against the popover; the body uses the inner wrapper. */
-  --arrow-size: 0.5rem;
-  --arrow-color: var(--color-surface-0);
-}
-
-@starting-style {
-  .skill-popover:popover-open {
-    opacity: 0;
-    transform: translateY(0.25rem) scale(0.98);
-  }
-}
-
-/* Arrow that points at the (i) trigger. JS sets data-placement="bottom-end"
- * when the popover opens above-and-left of the chip; the arrow then sits
- * at the popover's bottom-right edge and points down-right. */
-.skill-popover[data-placement='bottom-end']::after {
-  content: '';
-  position: absolute;
-  /* Pin to the bottom-right corner of the popover so the arrow lands near
-   * the (i). The 1rem inset offsets away from the popover corner so the
-   * notch reads as pointing at the chip rather than kissing the panel. */
-  right: 1rem;
-  bottom: calc(var(--arrow-size) * -1);
-  width: 0;
-  height: 0;
-  border-left: var(--arrow-size) solid transparent;
-  border-right: var(--arrow-size) solid transparent;
-  border-top: var(--arrow-size) solid var(--arrow-color);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .skill-popover {
-    transition: none !important;
-  }
-}
-
-@media (forced-colors: active) {
-  .skill-info-btn:focus-visible {
-    outline: 2px solid Highlight !important;
-    outline-offset: 2px;
-  }
-
-  .skill-popover {
-    border: 1px solid CanvasText !important;
-    background: Canvas !important;
-    color: CanvasText !important;
-  }
-
-  .skill-popover__close {
-    background: ButtonFace !important;
-    color: ButtonText !important;
-    forced-color-adjust: none;
-  }
-}
-
-/* Contact form — autofill, placeholders, color-scheme */
+/* Contact form */
 .contact-form-input:not(.submit-btn)::placeholder {
   color: var(--color-text-muted);
   opacity: 1;
-}
-
-.contact-form-input:not(.submit-btn)::-webkit-input-placeholder {
-  color: var(--color-text-muted);
 }
 
 .contact-form-input:not(.submit-btn):autofill,
@@ -598,121 +424,22 @@
 }
 
 @media (forced-colors: active) {
-  .contact-form-label,
-  .contact-form-title {
-    color: CanvasText;
-  }
-
   .field-error {
     color: Mark;
   }
-}
 
-/* =====================================================================
- * 2026 user-preference media queries
- * ===================================================================== */
-
-/* WCAG 2.2 / 2026 — bump contrast for users who request it. */
-@media (prefers-contrast: more) {
-  :root {
-    --color-border-default: oklch(70% 0.01 260);
-    --color-text-muted: oklch(35% 0.03 260);
-    --color-text-subtle: oklch(45% 0.03 260);
-  }
-
-  :root[data-theme='dark'],
-  :root[data-theme='system'] {
-    --color-border-default: #71717a;
-    --color-text-muted: #d4d4d8;
-    --color-text-subtle: #e4e4e7;
-  }
-}
-
-/*
- * Reduced transparency — solid surfaces, friendlier to low-vision / OLED users.
- * Chrome 118+, Edge 118+, Opera 104+, Firefox 113+ (flag), Safari: no support.
- */
-@media (prefers-reduced-transparency: reduce) {
-  .contact-map-placeholder,
-  .contact-form,
   .portfolio-item-inner {
-    background-color: var(--color-surface-0) !important;
-  }
-}
-
-/*
- * Forced colors (Windows High Contrast Mode) — the browser wipes box-shadow
- * and background-image (non-URL), and forces border-color etc. to system
- * palette keywords. Replace shadow-based emphasis with explicit borders using
- * system color keywords so HCM users see visible state.
- */
-@media (forced-colors: active) {
-  .portfolio-item-inner,
-  .contact-map-placeholder,
-  .contact-form,
-  .contact > div > div {
     border: 1px solid CanvasText !important;
   }
 
-  .primary-btn,
-  .secondary-btn,
-  [class*='bg-primary-600'] {
-    border: 1px solid ButtonText !important;
-    background: ButtonFace !important;
-    color: ButtonText !important;
-    forced-color-adjust: none;
-  }
-
-  .field-error {
-    color: Mark;
-  }
-
-  /* Visible pressed state via system Highlight keyword */
-  .portfolio-item-inner:has(:active) {
-    outline: 2px solid Highlight;
-    outline-offset: -2px;
-  }
-
-  /* Focus indicator must be a system color, not a custom CSS var */
   *:focus-visible {
     outline: 2px solid Highlight !important;
     outline-offset: 2px;
   }
 }
 
-/* =====================================================================
- * View Transitions API — fade between sections on hash navigation.
- * Material Design 3 "Emphasized" decelerate easing for the entering view,
- * standard ease for the leaving view. Both pseudo-elements gated on
- * reduced-motion (reduced-motion users get an instant cut, no animation).
- * Direction-aware animations: App.tsx passes a view-transition type
- * ("forward" / "back") based on scroll direction; the matching CSS
- * pseudo-class picks the right keyframes so navigating to a section below
- * the current one slides up while going back slides down.
- * ===================================================================== */
-::view-transition-old(root),
-::view-transition-new(root) {
-  animation: none !important;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  ::view-transition-old(root),
-  ::view-transition-new(root) {
-    animation: none !important;
-  }
-}
-
-/* =====================================================================
- * Popover API — mobile nav menu.
- * Popovers are hidden by default (UA stylesheet) and rendered in the top
- * layer when open. We anchor it under the fixed header and slide it in
- * using @starting-style + transition-behavior: allow-discrete (Baseline
- * 2024+) so we get an enter animation in addition to the default exit.
- * ===================================================================== */
+/* Mobile Nav Popover */
 .site-nav-popover {
-  /* Reset UA popover defaults that don't fit a dropdown-menu look. Keep the
-   * explicit top/inset here (rather than only in Tailwind utilities) because
-   * this unlayered rule outranks Tailwind's utility layer. */
   margin: 0;
   inset: auto;
   inset-inline: 0;
@@ -722,16 +449,12 @@
   height: auto;
   overflow: visible;
   color: inherit;
-
-  /* Enter/exit transition (allow-discrete enables transition on `display`) */
   transition: opacity 0.2s ease, transform 0.2s cubic-bezier(0.05, 0.7, 0.1, 1),
     overlay 0.2s ease allow-discrete, display 0.2s ease allow-discrete;
   opacity: 1;
   transform: translateY(0);
 }
 
-/* The `@starting-style` rule sets the *initial* state when the popover
- * transitions from closed → open, so the transition has somewhere to start. */
 @starting-style {
   .site-nav-popover:popover-open {
     opacity: 0;
@@ -741,94 +464,6 @@
 
 @media (prefers-reduced-motion: reduce) {
   .site-nav-popover {
-    transition: none !important;
-  }
-}
-
-/* =====================================================================
- * CSS-only tooltip via data-tooltip attribute.
- * Used on toolbar buttons where the `title` attribute UX (hover-delay)
- * is too slow. Renders on :hover and :focus-visible for keyboard parity.
- * `pointer-fine` guard avoids showing on touch (where there's no hover).
- * ===================================================================== */
-[data-tooltip] {
-  position: relative;
-}
-
-[data-tooltip]::after {
-  content: attr(data-tooltip);
-  position: absolute;
-  top: calc(100% + 0.5rem);
-  left: 50%;
-  transform: translateX(-50%);
-  white-space: nowrap;
-  padding: 0.375rem 0.625rem;
-  border-radius: 0.3125rem;
-  background-color: var(--color-text-default);
-  color: var(--color-surface-0);
-  font-size: 0.75rem;
-  font-weight: 500;
-  line-height: 1.2;
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity 0.15s ease, transform 0.15s ease;
-  z-index: var(--z-raised);
-  box-shadow: 0 0.25rem 0.75rem rgb(0 0 0 / 25%);
-}
-
-[data-tooltip]::before {
-  content: '';
-  position: absolute;
-  top: 100%;
-  left: 50%;
-  transform: translateX(-50%);
-  border: 0.3125rem solid transparent;
-  border-bottom-color: var(--color-text-default);
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity 0.15s ease;
-  z-index: var(--z-raised);
-}
-
-/* Show tooltips on hover (pointer-fine only — no hover on touch devices).
- * Keyboard focus always shows the tooltip so :focus-visible parity holds. */
-@media (hover: hover) and (pointer: fine) {
-  [data-tooltip]:hover::after,
-  [data-tooltip]:focus-visible::after,
-  [data-tooltip]:hover::before,
-  [data-tooltip]:focus-visible::before {
-    opacity: 1;
-  }
-  [data-tooltip]:hover::after,
-  [data-tooltip]:focus-visible::after {
-    transform: translateX(-50%) translateY(0);
-  }
-}
-
-/* On mobile (touch devices), the popover menu is the navigation target — the
- * toolbar buttons get larger `data-tooltip` text positioned above the button
- * so it doesn't get clipped by the popover when it opens. */
-@media (hover: none), (pointer: coarse) {
-  [data-tooltip]::after {
-    top: auto;
-    bottom: calc(100% + 0.5rem);
-  }
-  [data-tooltip]::before {
-    top: auto;
-    bottom: 100%;
-    border-bottom-color: transparent;
-    border-top-color: var(--color-text-default);
-  }
-  /* Tooltips on touch are usually noise; only show when the button is focused */
-  [data-tooltip]:focus-visible::after,
-  [data-tooltip]:focus-visible::before {
-    opacity: 1;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  [data-tooltip]::after,
-  [data-tooltip]::before {
     transition: none !important;
   }
 }

@@ -83,36 +83,6 @@ describe('useSectionNavigation', () => {
     expect(result.current.activeSection).toBe('projects')
   })
 
-  it('uses the View Transitions API when available', () => {
-    const start = vi.fn().mockReturnValue({})
-    Object.defineProperty(document, 'startViewTransition', {
-      configurable: true,
-      value: (cb: () => void, opts?: { types?: readonly string[] }) =>
-        start(cb, opts),
-    })
-
-    const { result } = renderHook(() => useSectionNavigation())
-    act(() => result.current.navigateToSection('contact'))
-    expect(start).toHaveBeenCalled()
-    const opts = start.mock.calls[0][1] as { types: readonly string[] }
-    expect(opts.types[0]).toBe('forward') // about → contact is forward
-  })
-
-  it('passes "back" direction when navigating upward', () => {
-    const start = vi.fn().mockReturnValue({})
-    Object.defineProperty(document, 'startViewTransition', {
-      configurable: true,
-      value: (cb: () => void, opts?: { types?: readonly string[] }) =>
-        start(cb, opts),
-    })
-
-    const { result } = renderHook(() => useSectionNavigation())
-    act(() => result.current.navigateToSection('contact'))
-    act(() => result.current.navigateToSection('about'))
-    const secondCallOpts = start.mock.calls[1][1] as { types: readonly string[] }
-    expect(secondCallOpts.types[0]).toBe('back')
-  })
-
   it('forces the header visible when forceHeaderVisible is true', () => {
     const { result, rerender } = renderHook(
       ({ visible }: { visible: boolean }) =>
@@ -127,3 +97,4 @@ describe('useSectionNavigation', () => {
     expect(result.current.headerScrollHidden).toBe(false)
   })
 })
+

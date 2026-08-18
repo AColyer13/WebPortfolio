@@ -1,268 +1,5 @@
-import { useEffect, useId, useRef, useState } from 'react'
-import { X } from 'lucide-react'
-import { skillBlocks, type Skill, type SkillBlock } from '../data/portfolio'
-import { withBase } from '../utils/baseUrl'
-import { skillCardBareClass } from '../utils/layoutClasses'
-import { positionCalloutPopover } from './calloutPopover'
-import { Icon, isRegisteredIcon } from './Icons'
+import { skillBlocks } from '../data/portfolio'
 import { Section } from './Section'
-
-/** All raster skill icons live in this single sprite (built by `scripts/generate-svg-sprite.mjs`). One HTTP request covers every icon. */
-const SPRITE_PATH = 'sprite.svg'
-
-/**
- * `images/foo-bar.svg` → `icon-foo-bar`, matching the symbol ids emitted
- * by `scripts/generate-svg-sprite.mjs`.
- */
-function spriteSymbolId(iconPath: string): string {
-  const stem = iconPath.replace(/^images\//, '').replace(/\.(svg|png|jpe?g|webp)$/i, '')
-  return `icon-${stem}`
-}
-
-function SkillIcon({ icon }: { icon: string }) {
-  if (isRegisteredIcon(icon)) {
-    return <Icon name={icon} className="shrink-0 text-[2.25rem] leading-none text-text-muted" />
-  }
-  if (/\.(?:svg|png|jpe?g|webp)$/i.test(icon)) {
-    const symbolId = spriteSymbolId(icon)
-    const spriteUrl = `${withBase(SPRITE_PATH)}#${symbolId}`
-    return (
-      <svg
-        className="skill-card__logo"
-        aria-hidden
-        focusable="false"
-      >
-        <use href={spriteUrl} />
-      </svg>
-    )
-  }
-  return (
-    <i className="skill-card__emoji shrink-0 text-[1.875rem] not-italic" aria-hidden>
-      {icon}
-    </i>
-  )
-}
-
-interface SkillPopoverProps {
-  skill: Skill
-  /** Unique id pairing the trigger button to the popover region. */
-  popoverId: string
-  onClose: () => void
-}
-
-/**
- * Detailed view of a skill, rendered inside a native `popover="manual"` element.
- * We disable the UA's auto-placement so we can anchor the popover directly on
- * top of the originating skill card. Inline `top`/`left`/`width` are written
- * from JS at open-time (and on resize/scroll) so the popover overlays the
- * skill rather than centering in the viewport.
- */
-function SkillPopover({ skill, popoverId, onClose }: SkillPopoverProps) {
-  return (
-    <div
-      id={popoverId}
-      popover="manual"
-      className="skill-popover rounded-md border border-border-default bg-surface-0 p-4 text-text-default shadow-[0_1rem_2.5rem_rgb(0_0_0_/0.18)]"
-      role="dialog"
-      aria-label={`${skill.name} details`}
-    >
-      <button
-        type="button"
-        className="skill-popover__close absolute top-2 right-2 inline-flex size-7 shrink-0 cursor-pointer items-center justify-center rounded-full border-0 bg-text-default/8 text-text-muted transition-colors duration-150 ease-in-out hover:bg-text-default/15 hover:text-text-default focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600"
-        onClick={onClose}
-        aria-label="Close"
-      >
-        <X className="size-3.5" strokeWidth={2.25} aria-hidden />
-      </button>
-      <div className="mb-2 flex items-center gap-2 pr-9">
-        <SkillIcon icon={skill.icon} />
-        <h4 className="m-0 text-fluid-3 font-bold leading-snug">{skill.name}</h4>
-      </div>
-      <p className="m-0 mb-2 text-fluid-1 leading-relaxed text-text-default">
-        {skill.description}
-      </p>
-      <p className="m-0 text-fluid-1 leading-relaxed text-text-muted">
-        <span className="font-medium text-text-default">In practice:</span>{' '}
-        {skill.application}
-      </p>
-    </div>
-  )
-}
-
-interface SkillCardProps {
-  skill: Skill
-}
-
-/**
- * One skill tile: name on top, the logo centered below, and a tiny (i) trigger
- * in the bottom-right corner. The (i) opens a `popover="manual"` element that
- * is positioned in JS to overlay this specific card — so it never floats to
- * viewport center. Light-dismiss (clicking outside) still closes it because
- * the popover stays in the top layer.
- */
-function SkillCard({ skill }: SkillCardProps) {
-  const popoverId = useId()
-  const triggerId = `${popoverId}-trigger`
-  const wrapperRef = useRef<HTMLDivElement>(null)
-  const triggerRef = useRef<HTMLButtonElement>(null)
-  const [open, setOpen] = useState(false)
-
-  // Position the popover as a small callout anchored to the (i) trigger.
-  // The popover's bottom-right corner sits flush with the (i), with a
-  // small offset so the arrow can point at it. JS writes right/bottom
-  // (not top/left) so the popover extends up-and-to-the-left of the chip,
-  // reading as "info coming out of (i)".
-  useEffect(() => {
-    if (!open) return
-
-    const popover = document.getElementById(popoverId) as
-      | (HTMLElement & { showPopover?: () => void; hidePopover?: () => void })
-      | null
-    const trigger = triggerRef.current
-    if (!popover || !trigger) return
-
-    const positionPopover = () => positionCalloutPopover(popover, trigger)
-
-    const openPopover = () => {
-      if (typeof popover.showPopover === 'function') popover.showPopover()
-      // Position *after* showPopover so the popover has been laid out and
-      // we can measure its real height for the top calculation.
-      positionPopover()
-    }
-
-    const closePopover = () => {
-      if (typeof popover.hidePopover === 'function') popover.hidePopover()
-    }
-
-    // Open immediately so the user sees the overlay.
-    openPopover()
-
-    const onScrollOrResize = () => {
-      if (popover.matches?.(':popover-open')) positionPopover()
-    }
-
-    // Light-dismiss: any pointerdown outside the wrapper hides the popover.
-    const onOutside = (event: MouseEvent) => {
-      const wrapper = wrapperRef.current
-      if (!wrapper?.contains(event.target as Node)) {
-        setOpen(false)
-        closePopover()
-      }
-    }
-
-    // Esc closes too.
-    const onKey = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
-        setOpen(false)
-        closePopover()
-      }
-    }
-
-    // Defer the outside-click listener so the click that opened us
-    // doesn't immediately close us.
-    const outsideHandle = window.setTimeout(() => {
-      window.addEventListener('pointerdown', onOutside)
-    }, 0)
-
-    window.addEventListener('resize', onScrollOrResize)
-    window.addEventListener('scroll', onScrollOrResize, true)
-    window.addEventListener('keydown', onKey)
-
-    return () => {
-      window.clearTimeout(outsideHandle)
-      window.removeEventListener('pointerdown', onOutside)
-      window.removeEventListener('resize', onScrollOrResize)
-      window.removeEventListener('scroll', onScrollOrResize, true)
-      window.removeEventListener('keydown', onKey)
-      if (popover.matches?.(':popover-open')) closePopover()
-    }
-  }, [open, popoverId])
-
-  const onToggle = () => setOpen((value) => !value)
-
-  return (
-    <div ref={wrapperRef} className="relative flex w-full min-w-0 self-stretch">
-      <div className={`${skillCardBareClass} flex w-full`}>
-        <div className="skill-card__body flex max-h-full w-full min-w-0 flex-col items-center justify-center gap-2">
-          <h4 className="m-0 overflow-wrap-anywhere text-center text-fluid-3 font-medium leading-snug text-text-default">
-            {skill.name}
-          </h4>
-          <SkillIcon icon={skill.icon} />
-        </div>
-      </div>
-      {/* (i) sits as a tiny clean circle tucked into the bottom-right corner of
-          the card. Fully contained inside the card surface - no negative
-          translate that would let it spill past the card border. */}
-      <button
-        ref={triggerRef}
-        type="button"
-        id={triggerId}
-        aria-expanded={open}
-        aria-haspopup="dialog"
-        aria-controls={popoverId}
-        aria-label={`About ${skill.name}. Show description and how I use it`}
-        className="skill-info-btn right-2 bottom-2 inline-flex size-4 shrink-0 cursor-pointer items-center justify-center rounded-full bg-transparent text-copyright font-medium leading-none text-text-muted transition-colors duration-150 ease-in-out hover:bg-surface-100 hover:text-text-default focus-visible:bg-surface-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600"
-        onClick={onToggle}
-      >
-        i
-      </button>
-      <SkillPopover
-        skill={skill}
-        popoverId={popoverId}
-        onClose={() => setOpen(false)}
-      />
-    </div>
-  )
-}
-
-interface SkillBlockSectionProps {
-  block: SkillBlock
-}
-
-/**
- * One top-level discipline block. Starts collapsed; clicking the heading
- * expands the row. The heading itself stays minimal — just like the original
- * always-open style. Only the chevron animates (rotates 90 deg on expand).
- */
-function SkillBlockSection({ block }: SkillBlockSectionProps) {
-  const summaryId = useId()
-  return (
-    <details className="skills-details w-full">
-      <summary className="skills-details__summary mx-auto mb-(--section-subheading-gap) flex w-full max-w-[52ch] cursor-pointer list-none items-center justify-between gap-2 text-left [&::-webkit-details-marker]:hidden">
-        <h3 className="m-0 text-fluid-4 font-bold leading-tight tracking-tight text-text-default">
-          {block.title}
-        </h3>
-        <span className="skills-details__chevron inline-flex shrink-0 text-text-muted transition-transform duration-200 ease-out" aria-hidden>
-          <svg
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth={2.25}
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            className="size-4"
-          >
-            <path d="M6 9l6 6 6-6" />
-          </svg>
-        </span>
-      </summary>
-      <p
-        id={summaryId}
-        className="mx-auto mb-(--section-subheading-gap) max-w-[52ch] text-center text-fluid-1 leading-relaxed text-text-muted"
-      >
-        {block.summary}
-      </p>
-      <div
-        className="grid w-full grid-cols-2 items-stretch justify-items-stretch gap-x-(--container-inline) gap-y-4 pb-3 @[56rem]:grid-cols-4 @[56rem]:gap-x-4"
-        aria-describedby={summaryId}
-      >
-        {block.skills.map((skill) => (
-          <SkillCard key={skill.name} skill={skill} />
-        ))}
-      </div>
-    </details>
-  )
-}
 
 export function Skills() {
   return (
@@ -270,11 +7,28 @@ export function Skills() {
       id="skills"
       title="Skills"
       variant="skills"
-      headingClassName="flow-root mb-(--spacing-4) mx-auto max-w-[52ch] text-center"
+      headingClassName="flow-root mb-6 mx-auto max-w-[52ch] text-center"
     >
-      <div className="skills-blocks flex w-full flex-col gap-(--spacing-4)">
+      <div className="mx-auto grid max-w-4xl grid-cols-1 gap-5 sm:grid-cols-2">
         {skillBlocks.map((block) => (
-          <SkillBlockSection key={block.title} block={block} />
+          <div
+            key={block.title}
+            className="rounded-lg border border-border-default bg-surface-0 p-5 shadow-xs transition-colors"
+          >
+            <h3 className="mb-3 text-fluid-3 font-bold text-text-default">
+              {block.title}
+            </h3>
+            <div className="flex flex-wrap gap-2">
+              {block.skills.map((skill) => (
+                <span
+                  key={skill}
+                  className="inline-flex items-center rounded-md border border-border-default bg-surface-50 px-2.5 py-1 text-fluid-1 font-medium text-text-default transition-colors hover:bg-surface-100"
+                >
+                  {skill}
+                </span>
+              ))}
+            </div>
+          </div>
         ))}
       </div>
     </Section>

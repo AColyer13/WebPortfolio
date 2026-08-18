@@ -6,7 +6,6 @@ import {
   isSectionId,
   scrollToSection,
   syncLocationHashWithActiveSection,
-  viewDirection,
 } from './sections'
 
 /**
@@ -243,19 +242,3 @@ describe('getActiveSectionId', () => {
   })
 })
 
-describe('viewDirection', () => {
-  it('returns forward for downward navigation', () => {
-    expect(viewDirection('about', 'projects')).toBe('forward')
-  })
-
-  it('returns back for upward navigation', () => {
-    expect(viewDirection('projects', 'about')).toBe('back')
-  })
-
-  it('falls back to forward when either id is unknown', () => {
-    // Cast to bypass the literal-type guard; this is what TS callers do
-    // at the boundary when an `id` is computed from `window.location.hash`.
-    expect(viewDirection('about', 'bogus' as never)).toBe('forward')
-    expect(viewDirection('bogus' as never, 'about')).toBe('forward')
-  })
-})

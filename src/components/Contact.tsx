@@ -9,7 +9,6 @@ import {
   containerClass,
   primaryBtnSubmitClass,
   sectionContainerClass,
-  sectionDeferredClass,
 } from '../utils/layoutClasses'
 import { sendContactForm } from '../utils/contact'
 import { Icon } from './Icons'
@@ -21,21 +20,16 @@ type FormStatus =
   | { kind: 'success' | 'error'; message: string }
 
 const inputClass =
-  'contact-form-input w-full rounded-sm border border-border-default bg-surface-0 px-3 py-2 text-base text-text-default transition-[border-color,box-shadow] duration-200 ease-in-out placeholder:text-text-muted focus:border-primary-600 focus:outline-none focus:shadow-[0_0_0_3px_var(--color-focus-ring)] aria-invalid:border-danger-600'
+  'contact-form-input w-full rounded-md border border-border-default bg-surface-0 px-3 py-2 text-base text-text-default transition-all duration-150 placeholder:text-text-muted focus:border-primary-600 focus:outline-none focus:ring-2 focus:ring-primary-500/20 aria-invalid:border-danger-600'
 
 const socialLinkClass =
   'social-link inline-flex h-11 w-11 items-center justify-center rounded-md border border-border-default bg-surface-0 text-text-default no-underline transition-colors duration-150 ease-in-out hover:border-text-muted hover:bg-surface-50'
-
-/* `<input type="email">` already runs the browser's RFC-5321/5322 check via
- * the Constraint Validation API. Our `emailInputRef.current.checkValidity()`
- * uses that instead — no custom `pattern` attribute needed. */
 
 function requiredField(value: string, label: string): string {
   if (!value.trim()) return `${label} is required.`
   return ''
 }
 
-/** Read the browser's native validity message for `email`, or '' when valid. */
 function validateEmailField(input: HTMLInputElement): string {
   if (!input.value.trim()) return 'Email is required.'
   if (!input.checkValidity()) return 'Enter a valid email address.'
@@ -56,12 +50,9 @@ export function Contact() {
   const [errors, setErrors] = useState<Partial<Record<FieldName, string>>>({})
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [status, setStatus] = useState<FormStatus>({ kind: 'idle' })
-  const [mapLoaded, setMapLoaded] = useState(false)
   const timestampRef = useRef<HTMLInputElement | null>(null)
   const formRef = useRef<HTMLFormElement | null>(null)
-  const nameInputRef = useRef<HTMLInputElement | null>(null)
   const emailInputRef = useRef<HTMLInputElement | null>(null)
-  const messageInputRef = useRef<HTMLTextAreaElement | null>(null)
 
   const runFieldValidation = (name: FieldName, value: string) => {
     let msg = ''
@@ -138,58 +129,42 @@ export function Contact() {
   }
 
   return (
-    <section
-      className={`contact ${sectionDeferredClass} bg-surface-0 @container/contact py-(--spacing-5) [contain:layout]`}
-      id="contact"
-    >
+    <section className="bg-surface-0 py-12" id="contact">
       <div className={`${containerClass} ${sectionContainerClass}`}>
-        <div className="grid grid-cols-1 items-start gap-5 @[62rem]:grid-cols-[minmax(0,5fr)_minmax(0,6fr)]">
-          <div className="flex flex-col overflow-hidden rounded-lg border border-border-default bg-surface-0 contain-[layout_style]">
-            <div className="w-full p-3">
-              {mapLoaded ? (
-                // loading="eager" (not "lazy") on purpose: lazy iframes can stick at
-                // about:blank when the parent section uses content-visibility: auto
-                // and Chromium's IntersectionObserver decides the iframe isn't near
-                // enough to the viewport to start loading. The iframe only mounts
-                // after the user clicks the placeholder, so eager is the right
-                // behavior here.
-                <iframe
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d90444.17968810473!2d-93.44258962458554!3d44.89525237382178!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x87f6213ace55a039%3A0xcdaf9c3796fa2779!2sEdina%2C%20MN!5e0!3m2!1sen!2sus!4v1764804107343!5m2!1sen!2sus"
-                  width="100%"
-                  height="100%"
-                  style={{ minHeight: 'clamp(14rem, 30vh, 22rem)', border: 0 }}
-                  allowFullScreen
-                  loading="eager"
-                  referrerPolicy="no-referrer-when-downgrade"
-                  title="Map of Edina, MN"
-                  className="contact-map block h-[clamp(14rem,30vh,22rem)] w-full rounded-md"
-                />
-              ) : (
-                <button
-                  type="button"
-                  onClick={() => setMapLoaded(true)}
-                  aria-label="Load interactive map of Edina, MN"
-                  className="contact-map-placeholder flex h-[clamp(14rem,30vh,22rem)] w-full cursor-pointer flex-col items-center justify-center gap-2 rounded-md border border-border-default bg-surface-50 text-center text-text-default transition-colors duration-150 ease-in-out focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600 hover:border-text-muted"
-                >
-                  <span className="text-fluid-3 font-medium text-text-default">Edina, MN</span>
-                  <span className="inline-flex items-center gap-1 text-fluid-1 text-text-muted">
-                    <Icon name="map-marker-alt" aria-hidden />
-                    Load map
-                  </span>
-                </button>
-              )}
+        <div className="grid grid-cols-1 items-start gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.3fr)]">
+          <div className="flex flex-col gap-6 rounded-lg border border-border-default bg-surface-50 p-6">
+            <div>
+              <h2 className="mb-2 text-fluid-4 font-bold text-text-default">
+                Get in Touch
+              </h2>
+              <p className="m-0 text-fluid-1 text-text-muted">
+                Available for full-stack engineering roles and consulting.
+              </p>
             </div>
-            <div className="mt-0 flex flex-wrap items-center justify-between gap-3 rounded-b-lg border border-t-0 border-border-default bg-surface-50 px-3 py-4">
-              <div>
-                <h3 className="mb-2 text-fluid-3 text-text-default">Say hello</h3>
-                <p className="m-0 text-fluid-2 text-text-default">612.710.7700</p>
-                <p>
-                  <a href="mailto:adamcolyer@gmail.com">adamcolyer@gmail.com</a>
-                </p>
-              </div>
 
-              <ul className="m-0 flex list-none flex-wrap items-center gap-2 p-0">
-                <li className="flex">
+            <div className="flex flex-col gap-3 text-fluid-1 text-text-default">
+              <div className="flex items-center gap-2 text-text-muted">
+                <Icon name="map-marker-alt" className="text-fluid-2" aria-hidden />
+                <span>Edina, MN</span>
+              </div>
+              <div>
+                <span className="font-medium text-text-muted">Phone: </span>
+                <span>612.710.7700</span>
+              </div>
+              <div>
+                <span className="font-medium text-text-muted">Email: </span>
+                <a href="mailto:adamcolyer@gmail.com" className="font-medium text-text-default underline">
+                  adamcolyer@gmail.com
+                </a>
+              </div>
+            </div>
+
+            <div className="pt-2">
+              <p className="mb-3 text-copyright uppercase tracking-wider text-text-subtle font-semibold">
+                Social Profiles
+              </p>
+              <ul className="m-0 flex list-none items-center gap-3 p-0">
+                <li>
                   <a
                     href="https://github.com/acolyer13"
                     target="_blank"
@@ -200,7 +175,7 @@ export function Contact() {
                     <Icon name="github" className="block text-2xl leading-none" aria-hidden="true" />
                   </a>
                 </li>
-                <li className="flex">
+                <li>
                   <a
                     href="https://www.linkedin.com/in/colyeradam/"
                     target="_blank"
@@ -215,17 +190,17 @@ export function Contact() {
             </div>
           </div>
 
-          <div className="contact-form w-full rounded-lg border border-border-default bg-surface-50 p-4">
-            <h2 className="contact-form-title mb-3 text-text-default">
-              Want to know more? <br /> Let&apos;s talk
-            </h2>
+          <div className="w-full rounded-lg border border-border-default bg-surface-50 p-6">
+            <h3 className="mb-4 text-fluid-3 font-bold text-text-default">
+              Send a Message
+            </h3>
 
             {status.kind !== 'idle' ? (
               <div
                 role="status"
                 aria-live="polite"
                 aria-atomic="true"
-                className={`mb-2 rounded-sm p-2 text-fluid-1 ${
+                className={`mb-4 rounded-md p-3 text-fluid-1 ${
                   status.kind === 'success'
                     ? 'bg-surface-100 text-text-default'
                     : 'bg-danger-bg text-danger-700'
@@ -236,10 +211,10 @@ export function Contact() {
             ) : null}
 
             <form id="form" ref={formRef} onSubmit={handleSubmit} noValidate>
-              <div className="flex flex-col gap-2">
-                <div className="grid grid-cols-1 gap-2 @[62rem]:grid-cols-2 @[62rem]:items-start">
+              <div className="flex flex-col gap-4">
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                   <div className="flex flex-col gap-1">
-                    <label htmlFor="contact-name" className="contact-form-label text-fluid-1 font-medium text-text-default">
+                    <label htmlFor="contact-name" className="text-fluid-1 font-medium text-text-default">
                       Name
                     </label>
                     <input
@@ -251,7 +226,6 @@ export function Contact() {
                       value={formData.name}
                       onChange={handleChange}
                       onBlur={handleBlur}
-                      ref={nameInputRef}
                       required
                       autoComplete="name"
                       aria-invalid={touched.name && !!errors.name}
@@ -264,7 +238,7 @@ export function Contact() {
                     ) : null}
                   </div>
                   <div className="flex flex-col gap-1">
-                    <label htmlFor="contact-email" className="contact-form-label text-fluid-1 font-medium text-text-default">
+                    <label htmlFor="contact-email" className="text-fluid-1 font-medium text-text-default">
                       Email
                     </label>
                     <input
@@ -293,19 +267,18 @@ export function Contact() {
                 </div>
 
                 <div className="flex flex-col gap-1">
-                  <label htmlFor="contact-message" className="contact-form-label text-fluid-1 font-medium text-text-default">
+                  <label htmlFor="contact-message" className="text-fluid-1 font-medium text-text-default">
                     Message
                   </label>
                   <textarea
                     id="contact-message"
                     name="message"
                     rows={4}
-                    className={`${inputClass} field-sizing-content min-h-[8rem] max-h-[20rem] resize-y`}
-                    placeholder="Message"
+                    className={`${inputClass} min-h-[7rem] resize-y`}
+                    placeholder="Your message..."
                     value={formData.message}
                     onChange={handleChange}
                     onBlur={handleBlur}
-                    ref={messageInputRef}
                     required
                     minLength={10}
                     maxLength={2000}
@@ -325,11 +298,11 @@ export function Contact() {
                 <input type="hidden" name="reply_to" value={formData.email} />
                 <input type="hidden" name="time" ref={timestampRef} />
 
-                <div className="mt-2 @[62rem]:ms-auto @[62rem]:w-full @[62rem]:max-w-56">
+                <div>
                   <input
                     type="submit"
-                    className={`submit-btn contact-form-input ${primaryBtnSubmitClass}`}
-                    value={isSubmitting ? 'Sending...' : 'Send'}
+                    className={`submit-btn ${primaryBtnSubmitClass}`}
+                    value={isSubmitting ? 'Sending...' : 'Send Message'}
                     disabled={isSubmitting}
                   />
                 </div>
@@ -341,3 +314,4 @@ export function Contact() {
     </section>
   )
 }
+

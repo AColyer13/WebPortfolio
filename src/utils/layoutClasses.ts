@@ -28,16 +28,8 @@ export const cardClass =
 export const imgHeroClass =
   'mx-auto block h-auto max-w-full rounded-md border border-border-default'
 
-export const skillCardClass = `${cardClass} skill-card flex h-[9.375rem] min-h-[9.375rem] max-h-[9.375rem] w-full flex-1 items-center justify-center px-3 py-4 text-center pointer-fine:hover:border-text-muted`
-
-/** Borderless skill tile — drops the border so the section band reads as the
- * canvas; discipline-block dividers (added in index.css) carry the rhythm.
- * Sits on `bg-surface-0` so each tile is still a discrete block against the
- * `bg-surface-50` section band it lives on. */
-export const skillCardBareClass =
-  'skill-card flex h-[9.375rem] min-h-[9.375rem] max-h-[9.375rem] w-full flex-1 items-center justify-center rounded-md bg-surface-0 px-3 py-4 text-center pointer-fine:hover:bg-surface-100 focus-within:bg-surface-100'
-
 export const portfolioCardClass = `${cardClass} portfolio-item-inner mx-auto min-h-[20rem] max-w-full overflow-hidden pointer-fine:hover:border-text-muted`
+
 
 /** Contact submit — primary button with full-width / square corners */
 export const primaryBtnSubmitClass = `${primaryBtnClass} w-full cursor-pointer disabled:cursor-not-allowed disabled:opacity-60`

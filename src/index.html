@@ -35,30 +35,8 @@
          Each format is gated by `type=` so a browser only fetches the one
          matching its capabilities (AVIF-capable → AVIF, otherwise WebP,
          otherwise JPEG fallback). -->
-    <link
-      rel="preload"
-      as="image"
-      type="image/avif"
-      imagesrcset="/images/IMG_4874-960.avif 960w, /images/IMG_4874-1920.avif 1920w"
-      imagesizes="(min-width: 48rem) 45vw, 92vw"
-    />
-    <link
-      rel="preload"
-      as="image"
-      type="image/webp"
-      imagesrcset="/images/IMG_4874-960.webp 960w, /images/IMG_4874-1920.webp 1920w"
-      imagesizes="(min-width: 48rem) 45vw, 92vw"
-    />
-    <link
-      rel="preload"
-      as="image"
-      imagesrcset="/images/IMG_4874-960.jpeg 960w, /images/IMG_4874-1920.jpeg 1920w, /images/IMG_4874.JPEG 2048w"
-      imagesizes="(min-width: 48rem) 45vw, 92vw"
-    />
-    <!-- DNS + TLS warm-up before the user clicks "Load map" or submits the form. -->
+    <link rel="preload" as="image" href="/images/IMG_4874.JPEG" />
     <link rel="preconnect" href="https://api.emailjs.com" crossorigin />
-    <link rel="preconnect" href="https://www.google.com" crossorigin />
-    <link rel="preconnect" href="https://www.google.com/maps" />
     <title>Adam Colyer — Full-stack Developer Portfolio</title>
     <link rel="stylesheet" href="/index.css" />
     <script>

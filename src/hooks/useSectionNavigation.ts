@@ -5,7 +5,6 @@ import {
   isSectionId,
   scrollToSection,
   syncLocationHashWithActiveSection,
-  viewDirection,
   type SectionId,
 } from '../utils/sections'
 
@@ -29,23 +28,6 @@ interface UseSectionNavigationResult {
   navigateToSection: (section: string) => void
 }
 
-/**
- * Owns the three pieces of scroll behaviour that used to live inline in
- * `App.tsx`:
- *   1. On mount + on resize + on header resize: sync the `--header-offset`
- *      CSS var, jump to any hash on first paint, and publish the active
- *      section to state + URL.
- *   2. On scroll: rAF-throttled update of the active section + URL hash,
- *      and toggle the header hide-on-scroll-down rule.
- *   3. On `navigateToSection`: scroll to the section under the header and
- *      wrap the jump in a View-Transitions API call when available so CSS
- *      can pick directional keyframes.
- *
- * Each piece can be tested in isolation:
- *   - The pure helpers live in `src/utils/sections.ts` (no DOM mutation
- *     beyond `history`).
- *   - This hook only wires them to the DOM event loop.
- */
 export function useSectionNavigation(
   options: UseSectionNavigationOptions = {},
 ): UseSectionNavigationResult {
@@ -76,9 +58,7 @@ export function useSectionNavigation(
       scrollToSection(hash, header)
     }
 
-    // Sync scroll spy after layout + optional hash jump; must run in this
-    // layout effect.
-    // eslint-disable-next-line react-hooks/set-state-in-effect -- one-time init after DOM measurements
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- initial sync from DOM geometry after layout
     setActiveSection(getActiveSectionId(header))
     lastScrollYRef.current = window.scrollY
 
@@ -121,15 +101,13 @@ export function useSectionNavigation(
           : null
       const suppressRevealOnScrollUp =
         contactTopDoc != null &&
-        y > contactTopDoc - CONTACT_SCROLL_UP_REVEAL_BUFFER_PX
+          y > contactTopDoc - CONTACT_SCROLL_UP_REVEAL_BUFFER_PX
 
       if (forceHeaderVisible) {
         setHeaderScrollHidden(false)
       } else if (y <= 0) {
         setHeaderScrollHidden(false)
       } else if (suppressRevealOnScrollUp) {
-        // In contact / lower page: only hide on scroll-down; ignore
-        // scroll-up until well into projects.
         if (delta >= SCROLL_DIR_THRESHOLD_PX && y > navH) {
           setHeaderScrollHidden(true)
         }
@@ -166,34 +144,11 @@ export function useSectionNavigation(
   const navigateToSection = (section: string) => {
     const header = document.querySelector<HTMLElement>('.site-header')
     const target: SectionId = isSectionId(section) ? section : 'about'
-    const direction = viewDirection(activeSection, target)
-
-    const run = () => {
-      if (header) scrollToSection(target, header)
-      setActiveSection(target)
-      syncLocationHashWithActiveSection(target)
-    }
-
-    // View Transitions API (Baseline 2024+) — opt in for a smooth
-    // cross-fade when navigating between sections. `types`
-    // (Chrome 125+/FF 147+/Safari 18.2+) lets CSS pick directional
-    // keyframes via :active-view-transition-type().
-    const doc = document as Document & {
-      startViewTransition?: (
-        cb: () => void,
-        opts?: { types?: readonly string[] },
-      ) => unknown
-    }
-    if (typeof doc.startViewTransition === 'function') {
-      try {
-        void doc.startViewTransition(run, { types: [direction] })
-        return
-      } catch {
-        // API rejected (e.g. unsupported types) — fall through to plain run.
-      }
-    }
-    run()
+    if (header) scrollToSection(target, header)
+    setActiveSection(target)
+    syncLocationHashWithActiveSection(target)
   }
 
   return { activeSection, headerScrollHidden, navigateToSection }
 }
+

@@ -28,14 +28,7 @@ describe('About', () => {
     const hero = container.querySelector('img')!
     expect(hero.getAttribute('fetchpriority')).toBe('high')
     expect(hero.getAttribute('decoding')).toBe('async')
-  })
-
-  it('uses <picture> for AVIF + WebP variants of the hero', () => {
-    const { container } = render(<About />)
-    const sources = container.querySelectorAll('picture source')
-    expect(sources.length).toBeGreaterThanOrEqual(2)
-    const types = Array.from(sources).map((s) => s.getAttribute('type'))
-    expect(types).toContain('image/avif')
-    expect(types).toContain('image/webp')
+    expect(hero.getAttribute('src')).toContain('IMG_4874.JPEG')
   })
 })
+

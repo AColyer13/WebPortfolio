@@ -129,12 +129,3 @@ export function getActiveSectionId(header: HTMLElement): SectionId {
   return best
 }
 
-/** Direction for View-Transitions API keyframe selection. */
-export type ViewDirection = 'forward' | 'back'
-
-export function viewDirection(from: SectionId, to: SectionId): ViewDirection {
-  if (!isSectionId(from) || !isSectionId(to)) return 'forward'
-  return SECTION_IDS.indexOf(to) > SECTION_IDS.indexOf(from)
-    ? 'forward'
-    : 'back'
-}

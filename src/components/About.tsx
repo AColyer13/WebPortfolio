@@ -1,5 +1,4 @@
 import { withBase } from '../utils/baseUrl'
-import { pictureSrcSet } from '../utils/pictureSources'
 import {
   containerClass,
   imgHeroClass,
@@ -49,33 +48,20 @@ export function About() {
           </div>
 
           <div>
-            <picture>
-              <source
-                type="image/avif"
-                srcSet={pictureSrcSet('images/IMG_4874.JPEG', [960, 1920], 'avif')}
-                sizes="(min-width: 48rem) 45vw, 92vw"
-              />
-              <source
-                type="image/webp"
-                srcSet={pictureSrcSet('images/IMG_4874.JPEG', [960, 1920], 'webp')}
-                sizes="(min-width: 48rem) 45vw, 92vw"
-              />
-              <img
-                src={withBase('images/IMG_4874.JPEG')}
-                srcSet={`${withBase('images/IMG_4874-960.jpeg')} 960w, ${withBase('images/IMG_4874-1920.jpeg')} 1920w, ${withBase('images/IMG_4874.JPEG')} 2048w`}
-                sizes="(min-width: 48rem) 45vw, 92vw"
-                className={imgHeroClass}
-                alt="Desk setup photo"
-                width={2048}
-                height={1536}
-                loading="eager"
-                fetchPriority="high"
-                decoding="async"
-              />
-            </picture>
+            <img
+              src={withBase('images/IMG_4874.JPEG')}
+              className={imgHeroClass}
+              alt="Desk setup photo"
+              width={2048}
+              height={1536}
+              loading="eager"
+              fetchPriority="high"
+              decoding="async"
+            />
           </div>
         </div>
       </div>
     </section>
   )
 }
+

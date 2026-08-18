@@ -40,29 +40,11 @@ describe('Contact form', () => {
     expect(container.querySelector('[class*="fa-"]')).toBeNull()
   })
 
-  it('renders the map placeholder until clicked — iframe is gated, not lazy', () => {
-    const { container } = render(<Contact />)
-    // No iframe rendered until the user opts in (saves ~150 KB on first paint).
-    expect(container.querySelector('iframe')).toBeNull()
-    expect(
-      container.querySelector('button[aria-label*="interactive map" i]'),
-    ).toBeInTheDocument()
-  })
-
-  it('loads the map iframe eagerly once the placeholder is clicked', () => {
-    // Regression: the iframe must use loading="eager". A lazy iframe inside a
-    // section that uses content-visibility: auto can stick at about:blank on
-    // Chromium because the IntersectionObserver never decides it's near the
-    // viewport. Since the iframe only mounts after an explicit user click,
-    // eager is the right default.
-    const { container } = render(<Contact />)
-    const placeholder = container.querySelector<HTMLButtonElement>(
-      'button[aria-label*="interactive map" i]',
-    )!
-    fireEvent.click(placeholder)
-    const iframe = container.querySelector('iframe')
-    expect(iframe).not.toBeNull()
-    expect(iframe?.getAttribute('loading')).toBe('eager')
-    expect(iframe?.getAttribute('title')).toMatch(/Edina/i)
+  it('renders direct location and contact details', () => {
+    render(<Contact />)
+    expect(screen.getByText(/Edina, MN/i)).toBeInTheDocument()
+    expect(screen.getByText(/612\.710\.7700/i)).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: /adamcolyer@gmail\.com/i })).toBeInTheDocument()
   })
 })
+
