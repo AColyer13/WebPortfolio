@@ -7,8 +7,8 @@
       name="viewport"
       content="width=device-width, initial-scale=1.0, viewport-fit=cover, interactive-widget=resizes-content"
     />
-    <meta name="theme-color" content="#fafafa" media="(prefers-color-scheme: light)" />
-    <meta name="theme-color" content="#18181c" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#f7f7f8" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#121218" media="(prefers-color-scheme: dark)" />
     <meta
       name="description"
       content="Portfolio of Adam Colyer, a full-stack developer building React, Next.js, Python, and AI applications with live project demos and a downloadable resume."
@@ -30,12 +30,23 @@
     <meta name="twitter:image" content="https://acolyer13.github.io/Portfolio-Website/images/IMG_4874.JPEG" />
     <link rel="canonical" href="https://acolyer13.github.io/Portfolio-Website/" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <!-- Hero (LCP) preload. `imagesrcset` lets the browser pick the right
-         width for the viewport while fetching in parallel with the JS parse.
-         Each format is gated by `type=` so a browser only fetches the one
-         matching its capabilities (AVIF-capable → AVIF, otherwise WebP,
-         otherwise JPEG fallback). -->
-    <link rel="preload" as="image" href="/images/IMG_4874.JPEG" />
+    <!-- Hero (LCP) preload — AVIF first, then WebP; JPEG fallback in <picture>. -->
+    <link
+      rel="preload"
+      as="image"
+      href="/images/IMG_4874-1920.avif"
+      type="image/avif"
+      imagesrcset="/images/IMG_4874-960.avif 960w, /images/IMG_4874-1920.avif 1920w"
+      imagesizes="100vw"
+    />
+    <link
+      rel="preload"
+      as="image"
+      href="/images/IMG_4874-1920.webp"
+      type="image/webp"
+      imagesrcset="/images/IMG_4874-960.webp 960w, /images/IMG_4874-1920.webp 1920w"
+      imagesizes="100vw"
+    />
     <link rel="preconnect" href="https://api.emailjs.com" crossorigin />
     <title>Adam Colyer — Full-stack Developer Portfolio</title>
     <link rel="stylesheet" href="/index.css" />

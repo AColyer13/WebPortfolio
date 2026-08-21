@@ -21,11 +21,8 @@ interface NavbarProps {
 const base = import.meta.env.BASE_URL
 const POPOVER_ID = 'site-nav-menu'
 
+/** 44×44 pt minimum — fine and coarse pointers. */
 const iconBtnClass =
-  'inline-flex size-9 shrink-0 cursor-pointer items-center justify-center rounded-md border border-border-default bg-surface-0 p-0 text-text-default focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600'
-
-/** 44px touch targets on mobile toolbar (HIG / Material). */
-const iconBtnMobileClass =
   'inline-flex size-11 shrink-0 cursor-pointer items-center justify-center rounded-md border border-border-default bg-surface-0 p-0 text-text-default focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600'
 
 const navLinkClass =
@@ -193,7 +190,7 @@ export function Navbar({
           <div className="flex items-center justify-end gap-1 @[48rem]/site-header:hidden">
             <button
               type="button"
-              className={iconBtnMobileClass}
+              className={iconBtnClass}
               onClick={() =>
                 setSessionOverride((o) => cycleSessionOverride(o, osDark))
               }
@@ -207,7 +204,7 @@ export function Navbar({
             </button>
             <button
               type="button"
-              className={iconBtnMobileClass}
+              className={iconBtnClass}
               // Popover API: popovertarget toggles the popover open/closed.
               // No manual state needed — the `toggle` event fires automatically.
               popoverTarget={POPOVER_ID}

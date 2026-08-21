@@ -8,30 +8,30 @@ export const sectionContainerClass =
   'ps-[max(var(--container-inline),env(safe-area-inset-left,0px))] pe-[max(var(--container-inline),env(safe-area-inset-right,0px))]'
 
 export const sectionHeadingClass =
-  'flow-root mb-(--section-padding-y) mx-auto max-w-[50ch] text-center'
+  'flow-root mb-(--section-padding-y) max-w-[40rem] text-start'
 
 /** Below-the-fold sections — defer layout/paint until near viewport */
 export const sectionDeferredClass =
   '[content-visibility:auto] [contain-intrinsic-size:auto_50rem]'
 
 export const primaryBtnClass =
-  'inline-flex min-h-11 items-center justify-center gap-1 whitespace-nowrap rounded-md border-none bg-btn-bg px-4 py-2 text-btn font-medium text-btn-fg transition-colors duration-150 ease-in-out hover:bg-btn-hover'
+  'inline-flex min-h-11 items-center justify-center gap-1 whitespace-nowrap rounded-md border-none bg-btn-bg px-4 py-2 text-btn font-medium text-btn-fg transition-colors duration-150 ease-out hover:bg-btn-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600'
 
 /** Secondary (outline) CTA — for hero pairing, keeps one clear primary action. */
 export const secondaryBtnClass =
-  'inline-flex min-h-11 items-center justify-center gap-1 whitespace-nowrap rounded-md border border-border-default bg-transparent px-4 py-2 text-btn font-medium text-text-default transition-colors duration-150 ease-in-out hover:border-text-muted hover:bg-surface-50'
+  'inline-flex min-h-11 items-center justify-center gap-1 whitespace-nowrap rounded-md border border-border-default bg-transparent px-4 py-2 text-btn font-medium text-text-default transition-colors duration-150 ease-out hover:border-text-muted hover:bg-surface-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600'
 
+/** Timeline / list rows — hairline, not card chrome */
 export const cardClass =
-  'rounded-md border border-border-default bg-surface-0 contain-[layout_style] transition-colors duration-150 ease-in-out'
+  'border-b border-border-default bg-transparent contain-[layout_style] transition-colors duration-150 ease-out'
 
-/** Above-the-fold LCP (hero) */
-export const imgHeroClass =
-  'mx-auto block h-auto max-w-full rounded-md border border-border-default'
+/** Above-the-fold LCP (hero) — chrome-free; sizing owned by `.hero-media` */
+export const imgHeroClass = 'block h-auto w-full max-w-full'
 
-export const portfolioCardClass = `${cardClass} portfolio-item-inner mx-auto min-h-[20rem] max-w-full overflow-hidden pointer-fine:hover:border-text-muted`
+export const portfolioCardClass =
+  'portfolio-item-inner flex h-full w-full min-w-0 flex-col border-b border-border-default bg-transparent contain-[layout_style] transition-colors duration-150 ease-out pointer-fine:hover:border-text-muted'
 
-
-/** Contact submit — primary button with full-width / square corners */
+/** Contact submit — primary button with full-width */
 export const primaryBtnSubmitClass = `${primaryBtnClass} w-full cursor-pointer disabled:cursor-not-allowed disabled:opacity-60`
 
 /** Below-the-fold card thumbs — fixed crop box in Projects */

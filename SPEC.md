@@ -33,4 +33,8 @@ Plain checklist for what this site must do. Content lives in [`src/data/portfoli
 
 ## Out of scope
 
-- No CMS, no web fonts, no analytics, no client-side router.
+- No CMS, no analytics, no client-side router.
+
+## Typography
+
+- Self-hosted variable fonts only (`@fontsource-variable/newsreader`, `@fontsource-variable/source-sans-3`). No remote font CDNs.

@@ -8,11 +8,11 @@ import {
 } from '../utils/layoutClasses'
 
 const variantClass = {
-  skills: `${sectionDeferredClass} bg-surface-50 @container/skills`,
-  resume: `${sectionDeferredClass} bg-surface-0 @container/resume`,
+  skills: `${sectionDeferredClass} bg-bg @container/skills`,
+  resume: `${sectionDeferredClass} bg-bg @container/resume`,
   // No content-visibility here — it can leave project links unclickable after tab/BFCache restore.
-  project: 'bg-surface-50 @container/portfolio',
-  contact: `${sectionDeferredClass} bg-surface-0 @container/contact`,
+  project: 'bg-bg @container/portfolio',
+  contact: `${sectionDeferredClass} bg-bg @container/contact`,
 } as const
 
 export type SectionVariant = keyof typeof variantClass

@@ -1,7 +1,11 @@
-import { describe, it, expect } from 'vitest'
+import { beforeEach, describe, it, expect } from 'vitest'
 import { fireEvent, render, screen } from '@testing-library/react'
 import { featuredProjects } from '../data/portfolio'
 import { Projects } from './Projects'
+
+beforeEach(() => {
+  window.history.replaceState(null, '', '/')
+})
 
 describe('Projects', () => {
   it('renders featured project titles by default', () => {

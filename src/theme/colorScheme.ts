@@ -5,9 +5,10 @@ export type ThemePreference = 'light' | 'dark' | 'system'
 export type ResolvedTheme = 'light' | 'dark'
 
 /** Browser chrome — matches the page background (`--color-bg` in index.css) */
+/** Approximate sRGB of `--color-bg` for browser chrome (meta theme-color). */
 const THEME_COLOR: Record<ResolvedTheme, string> = {
-  light: '#fafafa',
-  dark: '#0e0e13',
+  light: '#f7f7f8',
+  dark: '#121218',
 }
 
 /** Legacy storage key — dropped on first paint so scheduled OS themes always apply. */

@@ -1,23 +1,65 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { featuredProjects, projects, type Project } from '../data/portfolio'
 import { withBase } from '../utils/baseUrl'
+import { projectPictureBase } from '../utils/images'
 import { imgCardThumbClass, portfolioCardClass } from '../utils/layoutClasses'
 import { Section } from './Section'
 import { Icon } from './Icons'
 
-function ProjectCard({ project, isPriority }: { project: Project; isPriority: boolean }) {
+const PROJECTS_PARAM = 'projects'
+
+function readShowAllFromUrl(): boolean {
+  if (typeof window === 'undefined') return false
+  return new URLSearchParams(window.location.search).get(PROJECTS_PARAM) === 'all'
+}
+
+function writeShowAllToUrl(showAll: boolean) {
+  const url = new URL(window.location.href)
+  if (showAll) url.searchParams.set(PROJECTS_PARAM, 'all')
+  else url.searchParams.delete(PROJECTS_PARAM)
+  window.history.replaceState(null, '', `${url.pathname}${url.search}${url.hash}`)
+}
+
+function ProjectCard({
+  project,
+  isPriority,
+  featured,
+}: {
+  project: Project
+  isPriority: boolean
+  featured: boolean
+}) {
+  const base = projectPictureBase(project.imageUrl)
+  const sizes = featured
+    ? '(min-width: 1024px) 66vw, 100vw'
+    : '(min-width: 1024px) 33vw, 100vw'
+
   return (
-    <article className={`${portfolioCardClass} flex h-full w-full flex-col`}>
-      <div className="relative h-[12.5rem] overflow-hidden border-b border-border-default">
-        <img
-          src={withBase(project.imageUrl)}
-          alt={project.title}
-          loading={isPriority ? 'eager' : 'lazy'}
-          decoding="async"
-          className={imgCardThumbClass}
-        />
+    <article className={`${portfolioCardClass} ${featured ? 'lg:col-span-2' : ''}`}>
+      <div className="relative aspect-16/10 overflow-hidden bg-surface-100">
+        <picture>
+          <source
+            type="image/avif"
+            srcSet={`${withBase(`${base}-640.avif`)} 640w, ${withBase(`${base}-1280.avif`)} 1280w`}
+            sizes={sizes}
+          />
+          <source
+            type="image/webp"
+            srcSet={`${withBase(`${base}-640.webp`)} 640w, ${withBase(`${base}-1280.webp`)} 1280w`}
+            sizes={sizes}
+          />
+          <img
+            src={withBase(project.imageUrl)}
+            alt={project.title}
+            loading={isPriority ? 'eager' : 'lazy'}
+            decoding="async"
+            className={imgCardThumbClass}
+            width={1280}
+            height={800}
+          />
+        </picture>
       </div>
-      <div className="flex grow flex-col gap-2 p-4">
+      <div className="flex grow flex-col gap-2 py-4">
         <p className="m-0 text-copyright uppercase tracking-wide text-text-subtle">
           {project.tech}
         </p>
@@ -53,34 +95,43 @@ function ProjectCard({ project, isPriority }: { project: Project; isPriority: bo
 }
 
 export function Projects() {
-  const [showAll, setShowAll] = useState(false)
+  const [showAll, setShowAll] = useState(readShowAllFromUrl)
   const visibleProjects = showAll ? projects : featuredProjects
   const hiddenCount = projects.length - featuredProjects.length
 
+  useEffect(() => {
+    const onPopState = () => setShowAll(readShowAllFromUrl())
+    window.addEventListener('popstate', onPopState)
+    return () => window.removeEventListener('popstate', onPopState)
+  }, [])
+
+  const toggleShowAll = () => {
+    setShowAll((open) => {
+      const next = !open
+      writeShowAllToUrl(next)
+      return next
+    })
+  }
+
   return (
-    <Section
-      id="projects"
-      title="Projects"
-      variant="project"
-      className="pb-4"
-    >
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+    <Section id="projects" title="Projects" variant="project" className="pb-4">
+      <div className="grid grid-cols-1 gap-x-6 gap-y-2 sm:grid-cols-2 lg:grid-cols-3">
         {visibleProjects.map((project, index) => (
-          <div key={project.id} className="flex">
-            <ProjectCard
-              project={project}
-              isPriority={index < 3}
-            />
-          </div>
+          <ProjectCard
+            key={project.id}
+            project={project}
+            isPriority={index < 3}
+            featured={Boolean(project.featured) && index === 0}
+          />
         ))}
       </div>
 
       {hiddenCount > 0 ? (
-        <div className="mt-6 text-center">
+        <div className="mt-6">
           <button
             type="button"
-            className="inline-flex min-h-11 cursor-pointer items-center justify-center rounded-md border border-border-default bg-transparent px-4 py-2 text-btn font-medium text-text-default transition-colors duration-150 ease-in-out hover:border-text-muted hover:bg-surface-0"
-            onClick={() => setShowAll((open) => !open)}
+            className="inline-flex min-h-11 cursor-pointer items-center justify-center rounded-md border border-border-default bg-transparent px-4 py-2 text-btn font-medium text-text-default transition-colors duration-150 ease-out hover:border-text-muted hover:bg-surface-0 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600"
+            onClick={toggleShowAll}
             aria-expanded={showAll}
           >
             {showAll ? 'Show fewer projects' : `View all projects (${hiddenCount} more)`}
@@ -89,4 +140,4 @@ export function Projects() {
       ) : null}
     </Section>
   )
-}
+}

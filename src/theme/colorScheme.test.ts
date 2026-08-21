@@ -40,13 +40,13 @@ describe('syncThemeColor', () => {
   it('uses light surface for light mode', () => {
     syncThemeColor('light')
     const meta = document.head.querySelector('meta[name="theme-color"]')
-    expect(meta?.getAttribute('content')).toBe('#fafafa')
+    expect(meta?.getAttribute('content')).toBe('#f7f7f8')
   })
 
   it('uses dark surface for dark mode', () => {
     syncThemeColor('dark')
     const meta = document.head.querySelector('meta[name="theme-color"]')
-    expect(meta?.getAttribute('content')).toBe('#0e0e13')
+    expect(meta?.getAttribute('content')).toBe('#121218')
   })
 })
 
@@ -82,6 +82,6 @@ describe('initTheme', () => {
     initTheme()
     expect(document.documentElement.getAttribute('data-theme')).toBe('system')
     const meta = document.head.querySelector('meta[name="theme-color"]')
-    expect(meta?.getAttribute('content')).toBe('#0e0e13')
+    expect(meta?.getAttribute('content')).toBe('#121218')
   })
 })
