@@ -122,7 +122,7 @@ export const skillBlocks: SkillBlock[] = [
     skills: [
       'Python',
       'Pandas',
-      'Statistical Rigor',
+      'Statistical Analysis',
       'PyTorch',
       'LoRA',
       'PEFT',
@@ -178,7 +178,7 @@ export const timeline: TimelineItem[] = [
     title: 'Account Executive',
     company: 'INRY – Eden Prairie, MN',
     description:
-      'Managed a $400,000+ pipeline through the full sales cycle. Built relationships with HR and IT stakeholders to position ServiceNow solutions strategically.',
+      'Managed a $400,000+ pipeline through the full sales cycle. Built relationships with HR and IT stakeholders to evaluate and implement ServiceNow solutions.',
   },
   {
     year: '2019',

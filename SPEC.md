@@ -6,7 +6,7 @@ Plain checklist for what this site must do. Content lives in [`src/data/portfoli
 
 1. **Intro** — Name, role, short bio, resume download, link to contact (`#about`).
 2. **Experience** — Work history timeline (`#experience`).
-3. **Projects** — Featured cards first; button reveals the rest. Each card links to live demo, GitHub, and details popover (`#projects`).
+3. **Projects** — Featured cards show first, and a button reveals the rest. Each card links to live demo and GitHub repository (`#projects`).
 4. **Skills** — Engineering discipline blocks in collapsible rows with detailed popovers (`#skills`).
 5. **Contact** — Email form (EmailJS, loaded only on submit), map (click to load), social links (`#contact`).
 6. **Navigation** — Sticky header, scroll-spy highlights the current section, URL hash stays in sync.

@@ -110,7 +110,7 @@ export function Contact() {
       await sendContactForm(form)
       setStatus({
         kind: 'success',
-        message: 'Message sent! Thanks for reaching out — I will get back to you soon.',
+        message: 'Message sent! Thanks for reaching out. I will get back to you soon.',
       })
       setFormData({ name: '', message: '', email: '' })
       setErrors({})
@@ -142,7 +142,7 @@ export function Contact() {
                 Contact Details
               </h3>
               <p className="m-0 text-fluid-1 leading-relaxed text-text-muted">
-                Available for full-stack engineering roles, consulting, and contract work. Let&apos;s build something great together.
+                Available for full-stack engineering roles, consulting, and contract work. Reach out to discuss open positions or project inquiries.
               </p>
             </div>
 
