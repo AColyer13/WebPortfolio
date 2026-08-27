@@ -157,35 +157,35 @@ export const timeline: TimelineItem[] = [
     title: 'AI Search Quality Evaluator',
     company: 'Activus Connect – Remote',
     description:
-      'Evaluating user queries to identify severity and factuality issues in AI outputs, delivering feedback that improves model performance for Google Gemini.',
+      'Review real-world user queries against Google’s quality guidelines, rating Gemini outputs for severity and factual accuracy across a wide range of topics. Write a short rationale for every rating so engineering and research teams can trace mistakes back to the exact prompt that caused them.',
   },
   {
     year: '2022',
     title: 'Account Executive',
     company: 'Citizen Observer – St. Paul, MN',
     description:
-      'Led adoption of the tip411 platform across six municipalities through 100+ live product demonstrations, including travel to Dallas, TX and San Diego, CA.',
+      'Led adoption of the tip411 platform across six municipalities through 100+ live product demonstrations, including travel to Dallas, TX and San Diego, CA. Ran the full sales cycle from cold outreach to signed contract, working directly with police chiefs, city administrators, and IT staff to meet each municipality’s reporting requirements.',
   },
   {
     year: '2021',
     title: 'Sales Development Representative',
     company: 'Digital River – Minnetonka, MN',
     description:
-      'Secured a $500,000+ deal with gaming client Rec Room through targeted outreach and executive meetings.',
+      'Secured a $500,000+ deal with gaming client Rec Room through targeted outreach and executive meetings. Built a prioritized list of mid-market gaming and software publishers, ran discovery calls to understand their payment and fraud-prevention needs, and carried the deal from first contact to signature.',
   },
   {
     year: '2020',
     title: 'Account Executive',
     company: 'INRY – Eden Prairie, MN',
     description:
-      'Managed a $400,000+ pipeline through the full sales cycle. Built relationships with HR and IT stakeholders to evaluate and implement ServiceNow solutions.',
+      'Managed a $400,000+ pipeline through the full sales cycle, from prospecting through close. Built relationships with HR and IT stakeholders to scope, evaluate, and implement ServiceNow solutions that replaced manual ticketing and approval workflows.',
   },
   {
     year: '2019',
     title: 'Business Development Representative',
     company: 'Epicor Software – St. Louis Park, MN',
     description:
-      'Qualified $3.7M in opportunities and added $1.1M to pipeline for ERP solutions in manufacturing. Received Excellence Award for consistent performance.',
+      'Qualified $3.7M in opportunities and added $1.1M to pipeline for ERP solutions in manufacturing, running discovery calls with plant managers and finance leads to diagnose inventory and production bottlenecks. Received the company’s Excellence Award for consistent quarter-over-quarter performance.',
   },
 ]
 

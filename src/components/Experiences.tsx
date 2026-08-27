@@ -1,16 +1,9 @@
 import { timeline } from '../data/portfolio'
-import { sectionHeadingCenterClass } from '../utils/layoutClasses'
 import { Section } from './Section'
 
 export function Experiences() {
   return (
-    <Section
-      id="experience"
-      title="Experience"
-      variant="resume"
-      headingClassName={sectionHeadingCenterClass}
-      contentClassName="mx-auto max-w-[min(40rem,100%)]"
-    >
+    <Section id="experience" title="Experience" variant="resume">
       <ol className="m-0 flex list-none flex-col p-0">
         {timeline.map((item) => (
           <li

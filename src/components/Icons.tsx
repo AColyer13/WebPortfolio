@@ -142,6 +142,13 @@ const BRAND_PATHS: Partial<Record<IconKey, string>> = {
 }
 BRAND_PATHS['github-alt'] = BRAND_PATHS.github!
 
+/** Per-glyph re-centering — the `linkedin` "in" mark's drawn strokes sit off-center
+ * within the shared 24x24 viewBox (bbox x:6.8–21.6), so it reads left-shifted
+ * inside its circular button without this correction. */
+const BRAND_TRANSFORM: Partial<Record<IconKey, string>> = {
+  linkedin: 'translate(-2.2, -0.25)',
+}
+
 /* eslint-disable react-refresh/only-export-components */
 export function isRegisteredIcon(key: string): key is IconKey {
   return key in LUCIDE || key in BRAND_PATHS
@@ -164,6 +171,7 @@ export function Icon({ name, ...props }: { name: IconKey } & SVGProps<SVGSVGElem
   }
   const path = BRAND_PATHS[name]
   if (path) {
+    const transform = BRAND_TRANSFORM[name]
     return (
       <svg
         viewBox="0 0 24 24"
@@ -173,7 +181,7 @@ export function Icon({ name, ...props }: { name: IconKey } & SVGProps<SVGSVGElem
         height="1em"
         {...props}
       >
-        <path d={path} />
+        <path d={path} transform={transform} />
       </svg>
     )
   }
