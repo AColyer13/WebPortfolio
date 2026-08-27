@@ -1,4 +1,5 @@
 import { timeline } from '../data/portfolio'
+import { sectionHeadingCenterClass } from '../utils/layoutClasses'
 import { Section } from './Section'
 
 export function Experiences() {
@@ -7,7 +8,8 @@ export function Experiences() {
       id="experience"
       title="Experience"
       variant="resume"
-      contentClassName="max-w-[min(40rem,100%)]"
+      headingClassName={sectionHeadingCenterClass}
+      contentClassName="mx-auto max-w-[min(40rem,100%)]"
     >
       <ol className="m-0 flex list-none flex-col p-0">
         {timeline.map((item) => (

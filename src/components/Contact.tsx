@@ -5,7 +5,7 @@ import {
   type FocusEvent,
   type FormEvent,
 } from 'react'
-import { primaryBtnSubmitClass } from '../utils/layoutClasses'
+import { primaryBtnSubmitClass, sectionHeadingCenterClass } from '../utils/layoutClasses'
 import { sendContactForm } from '../utils/contact'
 import { Icon } from './Icons'
 import { Section } from './Section'
@@ -148,7 +148,12 @@ export function Contact() {
   }
 
   return (
-    <Section id="contact" title="Get in Touch" variant="contact">
+    <Section
+      id="contact"
+      title="Get in Touch"
+      variant="contact"
+      headingClassName={sectionHeadingCenterClass}
+    >
       <div className="mx-auto grid max-w-5xl grid-cols-1 items-start gap-10 lg:grid-cols-12 lg:gap-12">
         <div className="flex flex-col gap-8 lg:col-span-5">
           <div>

@@ -10,6 +10,11 @@ export const sectionContainerClass =
 export const sectionHeadingClass =
   'flow-root mb-(--section-padding-y) max-w-[40rem] text-start'
 
+/** Centered variant — for sections whose body content is itself centered
+ * (mx-auto grid), so the heading lines up with it instead of pinning left. */
+export const sectionHeadingCenterClass =
+  'flow-root mx-auto mb-(--section-padding-y) max-w-[40rem] text-center'
+
 /** Below-the-fold sections — defer layout/paint until near viewport */
 export const sectionDeferredClass =
   '[content-visibility:auto] [contain-intrinsic-size:auto_50rem]'

@@ -1,9 +1,15 @@
 import { skillBlocks } from '../data/portfolio'
+import { sectionHeadingCenterClass } from '../utils/layoutClasses'
 import { Section } from './Section'
 
 export function Skills() {
   return (
-    <Section id="skills" title="Skills" variant="skills">
+    <Section
+      id="skills"
+      title="Skills"
+      variant="skills"
+      headingClassName={sectionHeadingCenterClass}
+    >
       <div className="mx-auto grid max-w-5xl grid-cols-1 gap-x-10 gap-y-8 md:grid-cols-2">
         {skillBlocks.map((block) => (
           <div key={block.title} className="min-w-0 border-b border-border-default pb-6">

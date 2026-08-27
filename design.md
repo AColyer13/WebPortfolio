@@ -13,7 +13,7 @@ local rhythm.
 
 - Marketing / intro: Split Hero (name/copy paired with a framed portrait image; stacks on mobile)
 - Experience / contact: Long Document (start-aligned heads; hairline rules)
-- Projects: Catalogue (irregular spans; no equal three-card grid)
+- Projects: Catalogue, equal 3-up grid (no featured/double-span card)
 - Skills: dense definition lists — not chip clusters
 
 ## Theme

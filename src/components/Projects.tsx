@@ -23,19 +23,15 @@ function writeShowAllToUrl(showAll: boolean) {
 function ProjectCard({
   project,
   isPriority,
-  featured,
 }: {
   project: Project
   isPriority: boolean
-  featured: boolean
 }) {
   const base = projectPictureBase(project.imageUrl)
-  const sizes = featured
-    ? '(min-width: 1024px) 66vw, 100vw'
-    : '(min-width: 1024px) 33vw, 100vw'
+  const sizes = '(min-width: 1024px) 33vw, 100vw'
 
   return (
-    <article className={`${portfolioCardClass} ${featured ? 'lg:col-span-2' : ''}`}>
+    <article className={portfolioCardClass}>
       <div className="relative aspect-16/10 overflow-hidden bg-surface-100">
         <picture>
           <source
@@ -60,7 +56,7 @@ function ProjectCard({
         </picture>
       </div>
       <div className="flex grow flex-col gap-2 py-4">
-        <p className="m-0 text-copyright uppercase tracking-wide text-text-subtle">
+        <p className="m-0 font-mono text-copyright uppercase tracking-wide text-text-subtle">
           {project.tech}
         </p>
         <h3 className="m-0 text-fluid-3 font-bold leading-snug text-text-default">
@@ -117,12 +113,7 @@ export function Projects() {
     <Section id="projects" title="Projects" variant="project" className="pb-4">
       <div className="grid grid-cols-1 gap-x-6 gap-y-2 sm:grid-cols-2 lg:grid-cols-3">
         {visibleProjects.map((project, index) => (
-          <ProjectCard
-            key={project.id}
-            project={project}
-            isPriority={index < 3}
-            featured={Boolean(project.featured) && index === 0}
-          />
+          <ProjectCard key={project.id} project={project} isPriority={index < 3} />
         ))}
       </div>
 

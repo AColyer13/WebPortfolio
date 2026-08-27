@@ -27,13 +27,14 @@ export function About() {
             </h1>
 
             <p className="m-0 mb-4 text-fluid-3 font-medium text-text-muted">
-              Full-stack developer
+              Full-stack developer · Edina, MN
             </p>
 
             <p className="m-0 text-body leading-relaxed text-text-default">
               Former sales professional with hands-on experience managing $2M+ pipelines. Now
-              building full-stack applications and combining business insight with technical
-              problem solving.
+              building full-stack applications — TypeScript on the front, FastAPI and Node on the
+              back, Postgres in between — while combining business insight with technical problem
+              solving.
             </p>
 
             <div className="mt-5 flex flex-wrap items-center gap-2">
