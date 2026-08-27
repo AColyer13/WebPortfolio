@@ -156,8 +156,8 @@ export function Contact() {
               Contact Details
             </h3>
             <p className="m-0 text-fluid-1 leading-relaxed text-text-muted">
-              Available for full-stack engineering roles, consulting, and contract work. Reach
-              out to discuss open positions or project inquiries.
+              Available for full-stack engineering roles, consulting, and contract work. Send a
+              message about an open role or a project you're working on.
             </p>
           </div>
 

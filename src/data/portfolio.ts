@@ -157,14 +157,14 @@ export const timeline: TimelineItem[] = [
     title: 'AI Search Quality Evaluator',
     company: 'Activus Connect – Remote',
     description:
-      'Review real-world user queries against Google’s quality guidelines, rating Gemini outputs for severity and factual accuracy across a wide range of topics. Write a short rationale for every rating so engineering and research teams can trace mistakes back to the exact prompt that caused them.',
+      'Reviewed real-world user queries against Google’s quality guidelines, rating Gemini outputs for severity and factual accuracy across a wide range of topics. Wrote a short rationale for every rating so engineering and research teams can trace mistakes back to the exact prompt that caused them.',
   },
   {
     year: '2022',
     title: 'Account Executive',
     company: 'Citizen Observer – St. Paul, MN',
     description:
-      'Led adoption of the tip411 platform across six municipalities through 100+ live product demonstrations, including travel to Dallas, TX and San Diego, CA. Ran the full sales cycle from cold outreach to signed contract, working directly with police chiefs, city administrators, and IT staff to meet each municipality’s reporting requirements.',
+      'Led adoption of the tip411 platform across six municipalities through 100+ live product demonstrations, including travel to Dallas, TX, and San Diego, CA. Ran the full sales cycle from cold outreach to signed contract, working directly with police chiefs, city administrators, and IT staff to meet each municipality’s reporting requirements.',
   },
   {
     year: '2021',
@@ -185,7 +185,7 @@ export const timeline: TimelineItem[] = [
     title: 'Business Development Representative',
     company: 'Epicor Software – St. Louis Park, MN',
     description:
-      'Qualified $3.7M in opportunities and added $1.1M to pipeline for ERP solutions in manufacturing, running discovery calls with plant managers and finance leads to diagnose inventory and production bottlenecks. Received the company’s Excellence Award for consistent quarter-over-quarter performance.',
+      'Qualified $3.7M in opportunities and added $1.1M to the pipeline for ERP solutions in manufacturing, running discovery calls with plant managers and finance leads to diagnose inventory and production bottlenecks. Received the company’s Excellence Award for consistent quarter-over-quarter performance.',
   },
 ]
 
