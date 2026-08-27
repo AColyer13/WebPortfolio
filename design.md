@@ -11,7 +11,7 @@ editorial
 Single-route marketing portfolio. Sections share one system; they vary only in
 local rhythm.
 
-- Marketing / intro: Marquee Hero (full-bleed media plane; brand as hero signal)
+- Marketing / intro: Split Hero (name/copy paired with a framed portrait image; stacks on mobile)
 - Experience / contact: Long Document (start-aligned heads; hairline rules)
 - Projects: Catalogue (irregular spans; no equal three-card grid)
 - Skills: dense definition lists — not chip clusters
@@ -62,10 +62,11 @@ Pages must use tokens / Tailwind theme aliases — no raw one-off gaps.
 - No pills (`rounded-full` forbidden for CTAs)
 
 ## Per-page allowances
-- Intro MAY use full-bleed photography (Tier: real asset).
+- Intro MAY pair copy with a framed photo (Tier: real asset; bordered box,
+  `--radius-lg`, not full-bleed).
 - Other sections: typography + rules only; no decorative enrichment.
-- Cards forbidden in hero. Elsewhere only when the surface IS the interaction
-  (project row with links). Prefer hairlines over filled cards.
+- Elsewhere, cards only when the surface IS the interaction (project row with
+  links). Prefer hairlines over filled cards.
 
 ## What pages MUST share
 - Wordmark / name treatment (Newsreader on brand + section h2)

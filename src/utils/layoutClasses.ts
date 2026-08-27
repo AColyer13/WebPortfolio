@@ -29,7 +29,7 @@ export const cardClass =
 export const imgHeroClass = 'block h-auto w-full max-w-full'
 
 export const portfolioCardClass =
-  'portfolio-item-inner flex h-full w-full min-w-0 flex-col border-b border-border-default bg-transparent contain-[layout_style] transition-colors duration-150 ease-out pointer-fine:hover:border-text-muted'
+  'portfolio-item-inner flex w-full min-w-0 flex-col self-start border-b border-border-default bg-transparent contain-[layout_style] transition-colors duration-150 ease-out pointer-fine:hover:border-text-muted'
 
 /** Contact submit — primary button with full-width */
 export const primaryBtnSubmitClass = `${primaryBtnClass} w-full cursor-pointer disabled:cursor-not-allowed disabled:opacity-60`

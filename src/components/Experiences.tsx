@@ -7,7 +7,7 @@ export function Experiences() {
       id="experience"
       title="Experience"
       variant="resume"
-      contentClassName="mx-auto max-w-[min(40rem,100%)]"
+      contentClassName="max-w-[min(40rem,100%)]"
     >
       <ol className="m-0 flex list-none flex-col p-0">
         {timeline.map((item) => (

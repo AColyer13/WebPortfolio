@@ -136,8 +136,9 @@ const BRAND_PATHS: Partial<Record<IconKey, string>> = {
     // Same octocat glyph as `github` — keep parity with FA's two aliases.
     '', // populated below by reference
   linkedin:
-    // Rounded square with "in".
-    'M3 3h18a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2zM7 9.5h3v9.5H7V9.5zm1.5-4a1.7 1.7 0 1 0 0 3.4 1.7 1.7 0 0 0 0-3.4zM12 9.5h2.9v1.4h.1c.4-.7 1.4-1.6 2.9-1.6 3.1 0 3.7 2 3.7 4.7V19h-3v-4.4c0-1.1 0-2.4-1.5-2.4s-1.7 1.1-1.7 2.3V19h-3V9.5z',
+    // "in" glyph only — the surrounding badge is drawn by socialLinkClass, so a
+    // second filled square here just erased the letters (same fill, no cutout).
+    'M7 9.5h3v9.5H7V9.5zm1.5-4a1.7 1.7 0 1 0 0 3.4 1.7 1.7 0 0 0 0-3.4zM12 9.5h2.9v1.4h.1c.4-.7 1.4-1.6 2.9-1.6 3.1 0 3.7 2 3.7 4.7V19h-3v-4.4c0-1.1 0-2.4-1.5-2.4s-1.7 1.1-1.7 2.3V19h-3V9.5z',
 }
 BRAND_PATHS['github-alt'] = BRAND_PATHS.github!
 
