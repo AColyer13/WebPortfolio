@@ -4,7 +4,7 @@ import { Section } from './Section'
 export function Skills() {
   return (
     <Section id="skills" title="Skills" variant="skills">
-      <div className="grid grid-cols-1 gap-x-10 gap-y-8 md:grid-cols-2">
+      <div className="grid grid-cols-1 items-start gap-x-10 gap-y-8 md:grid-cols-2">
         {skillBlocks.map((block) => (
           <div key={block.title} className="min-w-0 border-b border-border-default pb-6">
             <h3 className="m-0 mb-3 text-fluid-3 font-bold text-text-default">
