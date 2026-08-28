@@ -154,38 +154,45 @@ export const skillBlocks: SkillBlock[] = [
 export const timeline: TimelineItem[] = [
   {
     year: 'Present',
-    title: 'AI Search Quality Evaluator',
-    company: 'Activus Connect – Remote',
+    title: 'AI Generalist Expert',
+    company: 'Mercor – Remote',
     description:
-      'Reviewed real-world user queries against Google’s quality guidelines, rating Gemini outputs for severity and factual accuracy across a wide range of topics. Wrote a short rationale for every rating so engineering and research teams can trace mistakes back to the exact prompt that caused them.',
+      'Helps a top AI lab improve its models.',
+  },
+  {
+    year: '2025',
+    title: 'AI Search Quality Evaluator',
+    company: 'Activus Connect (Tech Mahindra) – Remote',
+    description:
+      'Scored LLM search answers against Google quality rubrics. Flagged hallucinations, unsupported claims, and weak sourcing. Wrote structured error notes and pointed models to better sources when answers were wrong.',
   },
   {
     year: '2022',
     title: 'Account Executive',
     company: 'Citizen Observer – St. Paul, MN',
     description:
-      'Led adoption of the tip411 platform across six municipalities through 100+ live product demonstrations, including travel to Dallas, TX, and San Diego, CA. Ran the full sales cycle from cold outreach to signed contract, working directly with police chiefs, city administrators, and IT staff to meet each municipality’s reporting requirements.',
+      'Sold the tip411 public-safety platform to cities, counties, and law enforcement agencies. Ran 100+ live product demos, then followed up with police chiefs, mayors, and city councils, including trips to San Diego and Dallas.',
   },
   {
     year: '2021',
     title: 'Sales Development Representative',
     company: 'Digital River – Minnetonka, MN',
     description:
-      'Secured a $500,000+ deal with gaming client Rec Room through targeted outreach and executive meetings. Built a prioritized list of mid-market gaming and software publishers, ran discovery calls to understand their payment and fraud-prevention needs, and carried the deal from first contact to signature.',
+      'Built and qualified an e-commerce pipeline that helped source and close a $500K+ Rec Room contract.',
   },
   {
     year: '2020',
     title: 'Account Executive',
     company: 'INRY – Eden Prairie, MN',
     description:
-      'Managed a $400,000+ pipeline through the full sales cycle, from prospecting through close. Built relationships with HR and IT stakeholders to scope, evaluate, and implement ServiceNow solutions that replaced manual ticketing and approval workflows.',
+      'Ran a $500K+ ServiceNow pipeline with VP and director-level IT and HR buyers. Submitted RFPs and walked buyers through the responses.',
   },
   {
     year: '2019',
     title: 'Business Development Representative',
     company: 'Epicor Software – St. Louis Park, MN',
     description:
-      'Qualified $3.7M in opportunities and added $1.1M to the pipeline for ERP solutions in manufacturing, running discovery calls with plant managers and finance leads to diagnose inventory and production bottlenecks. Received the company’s Excellence Award for consistent quarter-over-quarter performance.',
+      'Built an ERP pipeline with $1.1M accepted by account executives as qualified. Received an Excellence Award from the CEO.',
   },
 ]
 
