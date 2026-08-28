@@ -161,7 +161,7 @@ export function Contact() {
             </p>
           </div>
 
-          <dl className="m-0 flex flex-col gap-5">
+          <dl className="m-0 flex flex-col gap-3">
             <div>
               <dt className="m-0 text-copyright font-medium uppercase tracking-wider text-text-subtle">
                 Location
