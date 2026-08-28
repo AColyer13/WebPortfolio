@@ -66,22 +66,6 @@ export const skillBlocks: SkillBlock[] = [
     ],
   },
   {
-    title: 'AI / ML Engineering',
-    skills: [
-      'Google Gemini',
-      'LangChain',
-      'LangGraph',
-      'RAG Pipelines',
-      'Prompt Engineering',
-      'AI Agent Development',
-      'Ollama',
-      'Local LLMs',
-      'MCP',
-      'Cursor',
-      'AI Rate Limiting',
-    ],
-  },
-  {
     title: 'Data, Auth & Security',
     skills: [
       'PostgreSQL',
@@ -99,6 +83,22 @@ export const skillBlocks: SkillBlock[] = [
       'Helmet & CSP',
       'OWASP / AppSec',
       'AI Redaction',
+    ],
+  },
+  {
+    title: 'AI / ML Engineering',
+    skills: [
+      'Google Gemini',
+      'LangChain',
+      'LangGraph',
+      'RAG Pipelines',
+      'Prompt Engineering',
+      'AI Agent Development',
+      'Ollama',
+      'Local LLMs',
+      'MCP',
+      'Cursor',
+      'AI Rate Limiting',
     ],
   },
   {
