@@ -38,3 +38,8 @@ coverage/
 .vite-pid
 *.pid
 
+# Lighthouse local runs
+.lighthouse-tmp/
+.unlighthouse/
+lighthouse-*.json
+

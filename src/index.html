@@ -30,7 +30,7 @@
     <meta name="twitter:image" content="https://acolyer13.github.io/WebPortfolio/images/IMG_4874.JPEG" />
     <link rel="canonical" href="https://acolyer13.github.io/WebPortfolio/" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <!-- Hero (LCP) preload — AVIF first, then WebP; JPEG fallback in <picture>. -->
+    <!-- Hero (LCP) preload — AVIF with responsive srcset; WebP/JPEG via <picture>. -->
     <link
       rel="preload"
       as="image"
@@ -39,15 +39,6 @@
       imagesrcset="/images/IMG_4874-960.avif 960w, /images/IMG_4874-1920.avif 1920w"
       imagesizes="(min-width: 64rem) 40vw, 100vw"
     />
-    <link
-      rel="preload"
-      as="image"
-      href="/images/IMG_4874-1920.webp"
-      type="image/webp"
-      imagesrcset="/images/IMG_4874-960.webp 960w, /images/IMG_4874-1920.webp 1920w"
-      imagesizes="(min-width: 64rem) 40vw, 100vw"
-    />
-    <link rel="preconnect" href="https://api.emailjs.com" crossorigin />
     <title>Adam Colyer — Full-stack Developer Portfolio</title>
     <link rel="stylesheet" href="/index.css" />
     <script>

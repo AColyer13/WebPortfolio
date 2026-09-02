@@ -45,15 +45,16 @@ describe('Projects', () => {
     )
   })
 
-  it('featured cards load eagerly and lazy-loads projects revealed after expand', () => {
+  it('lazy-loads all project thumbnails (section is below the fold)', () => {
     const { container } = render(<Projects />)
     const imgs = container.querySelectorAll<HTMLImageElement>('img')
-    expect(imgs[0].getAttribute('loading')).toBe('eager')
+    for (const img of imgs) {
+      expect(img.getAttribute('loading')).toBe('lazy')
+    }
 
     fireEvent.click(screen.getByRole('button', { name: /View all projects/i }))
     const expandedImgs = container.querySelectorAll<HTMLImageElement>('img')
     expect(expandedImgs.length).toBeGreaterThan(featuredProjects.length)
-    expect(expandedImgs[expandedImgs.length - 1].getAttribute('loading')).toBe('lazy')
   })
 
   it('renders live demo and source links for featured projects', () => {

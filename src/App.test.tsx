@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { act, render, screen } from '@testing-library/react'
+import { act, render, screen, waitFor } from '@testing-library/react'
 import App from './App'
 import { SECTION_IDS } from './utils/sections'
 
@@ -10,11 +10,13 @@ describe('App', () => {
     expect(skip).toHaveAttribute('href', '#main-content')
   })
 
-  it('renders sections in the required DOM order', () => {
+  it('renders sections in the required DOM order', async () => {
     const { container } = render(<App />)
-    const main = container.querySelector('#main-content')!
-    const ids = [...main.querySelectorAll('section')].map((el) => el.id)
-    expect(ids).toEqual([...SECTION_IDS])
+    await waitFor(() => {
+      const main = container.querySelector('#main-content')!
+      const ids = [...main.querySelectorAll('section')].map((el) => el.id)
+      expect(ids).toEqual([...SECTION_IDS])
+    })
   })
 
   it('locks document scroll when the mobile menu opens', async () => {

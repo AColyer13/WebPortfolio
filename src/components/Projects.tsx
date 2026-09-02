@@ -20,13 +20,7 @@ function writeShowAllToUrl(showAll: boolean) {
   window.history.replaceState(null, '', `${url.pathname}${url.search}${url.hash}`)
 }
 
-function ProjectCard({
-  project,
-  isPriority,
-}: {
-  project: Project
-  isPriority: boolean
-}) {
+function ProjectCard({ project }: { project: Project }) {
   const base = projectPictureBase(project.imageUrl)
   const sizes = '(min-width: 1024px) 33vw, 100vw'
 
@@ -47,7 +41,7 @@ function ProjectCard({
           <img
             src={withBase(project.imageUrl)}
             alt={project.title}
-            loading={isPriority ? 'eager' : 'lazy'}
+            loading="lazy"
             decoding="async"
             className={imgCardThumbClass}
             width={1280}
@@ -112,8 +106,8 @@ export function Projects() {
   return (
     <Section id="projects" title="Projects" variant="project">
       <div className="grid grid-cols-1 gap-x-6 gap-y-2 sm:grid-cols-2 lg:grid-cols-3">
-        {visibleProjects.map((project, index) => (
-          <ProjectCard key={project.id} project={project} isPriority={index < 3} />
+        {visibleProjects.map((project) => (
+          <ProjectCard key={project.id} project={project} />
         ))}
       </div>
 

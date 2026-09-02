@@ -1,12 +1,30 @@
-import { useEffect, useState } from 'react'
+import { lazy, Suspense, useEffect, useState } from 'react'
 import { About } from './components/About'
-import { Contact } from './components/Contact'
 import { Experiences } from './components/Experiences'
 import { Footer } from './components/Footer'
 import { Navbar } from './components/Navbar'
-import { Projects } from './components/Projects'
 import { Skills } from './components/Skills'
 import { useSectionNavigation } from './hooks/useSectionNavigation'
+import { sectionBlockClass } from './utils/layoutClasses'
+
+const Projects = lazy(() =>
+  import('./components/Projects').then((m) => ({ default: m.Projects })),
+)
+const Contact = lazy(() =>
+  import('./components/Contact').then((m) => ({ default: m.Contact })),
+)
+
+/** Preserves section anchors for nav/scroll-spy while async chunks load. */
+function SectionPlaceholder({ id }: { id: string }) {
+  return (
+    <section
+      id={id}
+      className={`${sectionBlockClass} min-h-[30rem]`}
+      aria-busy="true"
+      aria-label="Loading section"
+    />
+  )
+}
 
 function App() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
@@ -35,9 +53,13 @@ function App() {
       <main id="main-content">
         <About />
         <Experiences />
-        <Projects />
+        <Suspense fallback={<SectionPlaceholder id="projects" />}>
+          <Projects />
+        </Suspense>
         <Skills />
-        <Contact />
+        <Suspense fallback={<SectionPlaceholder id="contact" />}>
+          <Contact />
+        </Suspense>
       </main>
       <Footer />
     </div>
