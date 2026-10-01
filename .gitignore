@@ -43,3 +43,6 @@ coverage/
 .unlighthouse/
 lighthouse-*.json
 
+
+# Claude Code local config
+.claude/
