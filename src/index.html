@@ -53,10 +53,12 @@
       ;(function () {
         try {
           var k = 'portfolio-theme-session-override'
-          var o = sessionStorage.getItem(k)
+          var match = sessionStorage.getItem(k) === 'match'
           var dark = window.matchMedia('(prefers-color-scheme: dark)').matches
-          var t = o === 'light' || o === 'dark' ? o : dark ? 'light' : 'dark'
-          document.documentElement.setAttribute('data-theme', t)
+          document.documentElement.setAttribute(
+            'data-theme',
+            match ? 'system' : dark ? 'light' : 'dark',
+          )
         } catch (e) {
           document.documentElement.setAttribute('data-theme', 'dark')
         }

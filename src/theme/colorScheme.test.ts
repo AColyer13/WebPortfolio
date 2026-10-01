@@ -1,14 +1,14 @@
 import { describe, expect, it, beforeEach } from 'vitest'
 import {
   applyTheme,
-  cycleSessionOverride,
   initTheme,
   migrateLegacyThemeStorage,
   resolveTheme,
   SESSION_THEME_OVERRIDE_KEY,
   syncThemeColor,
   themePreferenceForDom,
-  writeSessionOverride,
+  toggleThemeMode,
+  writeThemeMode,
 } from './colorScheme'
 
 beforeEach(() => {
@@ -71,25 +71,31 @@ describe('migrateLegacyThemeStorage', () => {
 })
 
 describe('resolveTheme', () => {
-  it('inverts the OS when there is no session override', () => {
-    expect(resolveTheme(null, false)).toBe('dark')
-    expect(resolveTheme(null, true)).toBe('light')
+  it('inverts the OS in inverted mode', () => {
+    expect(resolveTheme('inverted', false)).toBe('dark')
+    expect(resolveTheme('inverted', true)).toBe('light')
   })
 
-  it('honors explicit session overrides', () => {
-    expect(resolveTheme('light', true)).toBe('light')
-    expect(resolveTheme('dark', false)).toBe('dark')
+  it('follows the OS in match mode', () => {
+    expect(resolveTheme('match', false)).toBe('light')
+    expect(resolveTheme('match', true)).toBe('dark')
   })
 })
 
-describe('cycleSessionOverride', () => {
-  it('returns to inverted system from an explicit dark override', () => {
-    expect(cycleSessionOverride('dark', false)).toBeNull()
+describe('toggleThemeMode', () => {
+  it('switches between the only two modes', () => {
+    expect(toggleThemeMode('inverted')).toBe('match')
+    expect(toggleThemeMode('match')).toBe('inverted')
+  })
+})
+
+describe('themePreferenceForDom', () => {
+  it('uses system CSS when matching the OS', () => {
+    expect(themePreferenceForDom('match', false)).toBe('system')
   })
 
-  it('steps from inverted default to matching the OS', () => {
-    expect(cycleSessionOverride(null, false)).toBe('light')
-    expect(cycleSessionOverride(null, true)).toBe('dark')
+  it('uses explicit light/dark when inverted', () => {
+    expect(themePreferenceForDom('inverted', false)).toBe('dark')
   })
 })
 
@@ -114,7 +120,7 @@ describe('initTheme', () => {
     expect(meta?.getAttribute('content')).toBe('#f7f7f8')
   })
 
-  it('restores a session override from sessionStorage', () => {
+  it('restores match mode from sessionStorage', () => {
     Object.defineProperty(window, 'matchMedia', {
       writable: true,
       value: (query: string) => ({
@@ -127,10 +133,9 @@ describe('initTheme', () => {
         dispatchEvent: () => false,
       }),
     })
-    writeSessionOverride('dark')
+    writeThemeMode('match')
     initTheme()
-    expect(document.documentElement.getAttribute('data-theme')).toBe('dark')
-    expect(themePreferenceForDom('dark', false)).toBe('dark')
-    expect(sessionStorage.getItem(SESSION_THEME_OVERRIDE_KEY)).toBe('dark')
+    expect(document.documentElement.getAttribute('data-theme')).toBe('system')
+    expect(sessionStorage.getItem(SESSION_THEME_OVERRIDE_KEY)).toBe('match')
   })
 })

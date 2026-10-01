@@ -28,6 +28,7 @@ import {
   ShieldUser,
   SlidersHorizontal,
   Sun,
+  SunMoon,
   Table,
   WandSparkles,
 } from 'lucide-react'
@@ -66,6 +67,7 @@ export type IconKey =
   // Theme toggle (mobile + desktop).
   | 'moon'
   | 'sun'
+  | 'sun-moon'
   // Brand logos — custom paths below.
   | 'aws'
   | 'github'
@@ -110,6 +112,7 @@ const LUCIDE: Partial<Record<IconKey, Lucide>> = {
   'git-alt': GitMerge,
   'moon': Moon,
   'sun': Sun,
+  'sun-moon': SunMoon,
 }
 
 /** Custom paths for brand logos (lucide omits brand glyphs). 24x24 viewBox. */

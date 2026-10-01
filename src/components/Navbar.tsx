@@ -1,16 +1,17 @@
 import { useEffect, useState } from 'react'
 import {
   applyTheme,
-  cycleSessionOverride,
-  readSessionOverride,
+  readThemeMode,
   resolveTheme,
   syncThemeColor,
   themePreferenceForDom,
-  writeSessionOverride,
+  toggleThemeMode,
+  writeThemeMode,
   type ResolvedTheme,
+  type ThemeMode,
 } from '../theme/colorScheme'
 import { containerClass } from '../utils/layoutClasses'
-import { Icon } from './Icons'
+import { Icon, type IconKey } from './Icons'
 
 interface NavbarProps {
   activeSection: string
@@ -48,9 +49,22 @@ function useOsDark(): boolean {
   return osDark
 }
 
-/** Sun → match system appearance for this session. Moon → return to inverted system. */
 const THEME_ICON_CLASS =
   'h-[1.125rem] w-[1.125rem] shrink-0 text-[1.125rem]'
+
+function themeToggleIcon(mode: ThemeMode, effectiveTheme: ResolvedTheme): IconKey {
+  if (mode === 'inverted') return 'sun-moon'
+  return effectiveTheme === 'light' ? 'moon' : 'sun'
+}
+
+function themeToggleLabel(mode: ThemeMode, effectiveTheme: ResolvedTheme): string {
+  const appearance =
+    effectiveTheme === 'light' ? 'light appearance' : 'dark appearance'
+  if (mode === 'inverted') {
+    return `Theme: opposite of system (${appearance}). Switch to match system.`
+  }
+  return `Theme: matches system (${appearance}). Switch to opposite of system.`
+}
 
 const navItems = [
   { id: 'about', label: 'About' },
@@ -97,37 +111,16 @@ function NavLinks({
   )
 }
 
-function themeToggleCopy(
-  sessionOverride: ReturnType<typeof readSessionOverride>,
-  effectiveTheme: ResolvedTheme,
-  nextOverride: ReturnType<typeof cycleSessionOverride>,
-) {
-  const currentThemeLabel =
-    sessionOverride === null
-      ? `Inverted system (${effectiveTheme})`
-      : sessionOverride === 'light'
-        ? 'Light, matches system'
-        : 'Dark, matches system'
-  const nextThemeLabel =
-    nextOverride === null
-      ? 'invert system appearance'
-      : nextOverride === 'light'
-        ? 'light, match system'
-        : 'dark, match system'
-  const themeToggleLabel = `Theme: ${currentThemeLabel}. Next: ${nextThemeLabel}.`
-  return { currentThemeLabel, nextThemeLabel, themeToggleLabel }
-}
-
 export function Navbar({
   activeSection,
   onNavigate,
   headerScrollHidden = false,
   onMenuOpenChange,
 }: NavbarProps) {
-  const [sessionOverride, setSessionOverride] = useState(readSessionOverride)
+  const [themeMode, setThemeMode] = useState(readThemeMode)
   const osDark = useOsDark()
-  const effectiveTheme = resolveTheme(sessionOverride, osDark)
-  const appliedTheme = themePreferenceForDom(sessionOverride, osDark)
+  const effectiveTheme = resolveTheme(themeMode, osDark)
+  const appliedTheme = themePreferenceForDom(themeMode, osDark)
 
   useEffect(() => {
     applyTheme(appliedTheme)
@@ -135,8 +128,8 @@ export function Navbar({
   }, [appliedTheme, effectiveTheme])
 
   useEffect(() => {
-    writeSessionOverride(sessionOverride)
-  }, [sessionOverride])
+    writeThemeMode(themeMode)
+  }, [themeMode])
 
   // Sync the popover open state up to App.tsx so body scroll-lock + header
   // auto-hide can react. The Popover API fires a `toggle` event on the popover
@@ -152,15 +145,11 @@ export function Navbar({
     return () => popover.removeEventListener('toggle', onToggle)
   }, [onMenuOpenChange])
 
-  const nextOverride = cycleSessionOverride(sessionOverride, osDark)
-  const { themeToggleLabel } = themeToggleCopy(
-    sessionOverride,
-    effectiveTheme,
-    nextOverride,
-  )
+  const themeToggleLabelText = themeToggleLabel(themeMode, effectiveTheme)
+  const themeIcon = themeToggleIcon(themeMode, effectiveTheme)
 
   const cycleTheme = () => {
-    setSessionOverride((o) => cycleSessionOverride(o, osDark))
+    setThemeMode((mode) => toggleThemeMode(mode))
   }
 
   // Programmatic close on link click (popover=auto would only close on
@@ -192,13 +181,10 @@ export function Navbar({
               type="button"
               className={iconBtnClass}
               onClick={cycleTheme}
-              aria-label={themeToggleLabel}
-              data-tooltip={themeToggleLabel}
+              aria-label={themeToggleLabelText}
+              data-tooltip={themeToggleLabelText}
             >
-              <Icon
-                name={effectiveTheme === 'light' ? 'moon' : 'sun'}
-                className={THEME_ICON_CLASS}
-              />
+              <Icon name={themeIcon} className={THEME_ICON_CLASS} />
             </button>
             <button
               type="button"
@@ -242,14 +228,11 @@ export function Navbar({
               type="button"
               className={iconBtnClass}
               onClick={cycleTheme}
-              aria-label={themeToggleLabel}
-              title={themeToggleLabel}
-              data-tooltip={themeToggleLabel}
+              aria-label={themeToggleLabelText}
+              title={themeToggleLabelText}
+              data-tooltip={themeToggleLabelText}
             >
-              <Icon
-                name={effectiveTheme === 'light' ? 'moon' : 'sun'}
-                className={THEME_ICON_CLASS}
-              />
+              <Icon name={themeIcon} className={THEME_ICON_CLASS} />
             </button>
           </div>
         </div>

@@ -4,8 +4,8 @@ export type ThemePreference = 'light' | 'dark' | 'system'
 /** Resolved light/dark for icons / labels only */
 export type ResolvedTheme = 'light' | 'dark'
 
-/** Session-only explicit override; `null` = inverted system (opposite of OS). */
-export type SessionOverride = 'light' | 'dark' | null
+/** Inverted = opposite of OS (default). Match = follow `prefers-color-scheme`. */
+export type ThemeMode = 'inverted' | 'match'
 
 /** Browser chrome — matches the page background (`--color-bg` in index.css) */
 /** Approximate sRGB of `--color-bg` for browser chrome (meta theme-color). */
@@ -45,64 +45,55 @@ export function migrateLegacyThemeStorage() {
   }
 }
 
-export function readSessionOverride(): SessionOverride {
+export function readThemeMode(): ThemeMode {
   try {
     const v = sessionStorage.getItem(SESSION_THEME_OVERRIDE_KEY)
-    if (v === 'light' || v === 'dark') return v
+    if (v === 'match') return 'match'
   } catch {
     /* ignore */
   }
-  return null
+  return 'inverted'
 }
 
-export function writeSessionOverride(override: SessionOverride) {
+export function writeThemeMode(mode: ThemeMode) {
   try {
-    if (override == null) {
+    if (mode === 'inverted') {
       sessionStorage.removeItem(SESSION_THEME_OVERRIDE_KEY)
     } else {
-      sessionStorage.setItem(SESSION_THEME_OVERRIDE_KEY, override)
+      sessionStorage.setItem(SESSION_THEME_OVERRIDE_KEY, mode)
     }
   } catch {
     /* ignore */
   }
 }
 
-/** Default inverts OS: light system → dark UI, dark system → light UI. */
-export function resolveTheme(
-  override: SessionOverride,
-  osDark: boolean,
-): ResolvedTheme {
-  if (override === 'light') return 'light'
-  if (override === 'dark') return 'dark'
+/** Inverted: light OS → dark UI. Match: follows OS. */
+export function resolveTheme(mode: ThemeMode, osDark: boolean): ResolvedTheme {
+  if (mode === 'match') return osDark ? 'dark' : 'light'
   return osDark ? 'light' : 'dark'
 }
 
-/** DOM attribute is always explicit light/dark so CSS never tracks OS when inverted. */
 export function themePreferenceForDom(
-  override: SessionOverride,
+  mode: ThemeMode,
   osDark: boolean,
-): Exclude<ThemePreference, 'system'> {
-  return resolveTheme(override, osDark)
+): ThemePreference {
+  if (mode === 'match') return 'system'
+  return resolveTheme(mode, osDark)
 }
 
-export function cycleSessionOverride(
-  override: SessionOverride,
-  osDark: boolean,
-): SessionOverride {
-  if (override === 'light') return 'dark'
-  if (override === 'dark') return null
-  return osDark ? 'dark' : 'light'
+export function toggleThemeMode(mode: ThemeMode): ThemeMode {
+  return mode === 'inverted' ? 'match' : 'inverted'
 }
 
 export function osPrefersDark(): boolean {
   return window.matchMedia('(prefers-color-scheme: dark)').matches
 }
 
-/** First paint + hydration: inverted system unless a session override is stored. */
+/** First paint + hydration: inverted by default unless match mode is stored. */
 export function initTheme() {
   migrateLegacyThemeStorage()
   const osDark = osPrefersDark()
-  const override = readSessionOverride()
-  applyTheme(themePreferenceForDom(override, osDark))
-  syncThemeColor(resolveTheme(override, osDark))
+  const mode = readThemeMode()
+  applyTheme(themePreferenceForDom(mode, osDark))
+  syncThemeColor(resolveTheme(mode, osDark))
 }
