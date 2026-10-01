@@ -167,7 +167,7 @@ export function Contact() {
                 Location
               </dt>
               <dd className="m-0 mt-1 text-fluid-1 font-semibold text-text-default">
-                Edina, MN
+                Twin Cities, MN
               </dd>
             </div>
             <div>

@@ -21,42 +21,16 @@ export function About() {
     <section id="about" className="hero-about [contain:layout]">
       <div className={`${containerClass} ${sectionContainerClass}`}>
         <div className="grid grid-cols-1 items-center gap-10 lg:grid-cols-2 lg:gap-16">
-          <div className="hero-about__copy max-w-[34rem]">
-            <h1 className="m-0 mb-3 text-h1 font-bold leading-tight text-text-default">
+          <div className="hero-about__copy mx-auto max-w-[40rem] text-center lg:mx-0 lg:text-start">
+            <h1 className="m-0 text-h1 font-bold leading-tight text-text-default">
               Adam Colyer
+              <span className="mt-1 block text-fluid-3 font-medium text-text-muted sm:mt-0 sm:inline">
+                <span className="hidden sm:inline"> · </span>
+                Twin Cities, MN
+              </span>
             </h1>
 
-            <p className="m-0 mb-6 text-fluid-3 font-medium text-text-muted">
-              Full-stack engineer · Edina, MN
-            </p>
-
-            <p className="hero-statement m-0 mb-4 font-display text-fluid-5 font-medium leading-tight text-text-default">
-              I spent five years selling software. Now I can{' '}
-              <span className="hero-mark">
-                build it.
-                <svg
-                  className="hero-mark__stroke"
-                  viewBox="0 0 200 20"
-                  preserveAspectRatio="none"
-                  aria-hidden
-                  focusable="false"
-                >
-                  <path
-                    d="M3 13.5C38 7.5 92 5 197 9.5M30 16.5C70 12.5 120 11.5 168 14"
-                    pathLength={1}
-                  />
-                </svg>
-              </span>
-            </p>
-
-            <p className="m-0 text-body leading-relaxed text-text-muted">
-              I build TypeScript, React, and Python apps with secure auth, AI that answers from
-              your own data without leaking it, and interfaces that hold up on any screen. Selling
-              to IT buyers and city councils taught me to turn a messy conversation into clear
-              requirements.
-            </p>
-
-            <div className="mt-5 flex flex-wrap items-center gap-2">
+            <div className="mt-5 flex flex-wrap items-center justify-center gap-2 lg:justify-start">
               <a href={resumeUrl} className={primaryBtnClass} download={RESUME_FILENAME}>
                 <Icon name="file-alt" aria-hidden />
                 Download resume

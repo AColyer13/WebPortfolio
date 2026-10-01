@@ -42,7 +42,7 @@ describe('Contact form', () => {
 
   it('renders direct location and contact details', () => {
     render(<Contact />)
-    expect(screen.getByText(/Edina, MN/i)).toBeInTheDocument()
+    expect(screen.getByText(/Twin Cities, MN/i)).toBeInTheDocument()
     // Phone stays on the résumé only — keep it off the public page.
     expect(screen.queryByText(/612/)).toBeNull()
     expect(screen.getByRole('link', { name: /adamcolyer@gmail\.com/i })).toBeInTheDocument()
