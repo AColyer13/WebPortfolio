@@ -53,14 +53,14 @@
       ;(function () {
         try {
           var k = 'portfolio-theme-session-override'
-          var match = sessionStorage.getItem(k) === 'match'
+          var opposite = sessionStorage.getItem(k) === 'opposite'
           var dark = window.matchMedia('(prefers-color-scheme: dark)').matches
           document.documentElement.setAttribute(
             'data-theme',
-            match ? 'system' : dark ? 'light' : 'dark',
+            opposite ? (dark ? 'light' : 'dark') : 'system',
           )
         } catch (e) {
-          document.documentElement.setAttribute('data-theme', 'dark')
+          document.documentElement.setAttribute('data-theme', 'system')
         }
       })()
       window.addEventListener('pageshow', function (e) {

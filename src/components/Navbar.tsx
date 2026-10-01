@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import {
   applyTheme,
+  oppositeTheme,
   readThemeMode,
   resolveTheme,
   syncThemeColor,
@@ -53,17 +54,23 @@ const THEME_ICON_CLASS =
   'h-[1.125rem] w-[1.125rem] shrink-0 text-[1.125rem]'
 
 function themeToggleIcon(mode: ThemeMode, effectiveTheme: ResolvedTheme): IconKey {
-  if (mode === 'inverted') return 'sun-moon'
-  return effectiveTheme === 'light' ? 'moon' : 'sun'
+  if (mode === 'system') return 'sun-moon'
+  return effectiveTheme === 'light' ? 'sun' : 'moon'
 }
 
-function themeToggleLabel(mode: ThemeMode, effectiveTheme: ResolvedTheme): string {
-  const appearance =
-    effectiveTheme === 'light' ? 'light appearance' : 'dark appearance'
-  if (mode === 'inverted') {
-    return `Theme: opposite of system (${appearance}). Switch to match system.`
+function themeToggleLabel(
+  mode: ThemeMode,
+  effectiveTheme: ResolvedTheme,
+  osDark: boolean,
+): string {
+  const fixed = oppositeTheme(osDark)
+  const fixedLabel = fixed === 'light' ? 'light' : 'dark'
+  if (mode === 'system') {
+    const systemLabel = effectiveTheme === 'light' ? 'light' : 'dark'
+    return `Theme: System (${systemLabel}). Switch to ${fixedLabel}.`
   }
-  return `Theme: matches system (${appearance}). Switch to opposite of system.`
+  const currentLabel = effectiveTheme === 'light' ? 'Light' : 'Dark'
+  return `Theme: ${currentLabel}. Switch to system.`
 }
 
 const navItems = [
@@ -145,7 +152,7 @@ export function Navbar({
     return () => popover.removeEventListener('toggle', onToggle)
   }, [onMenuOpenChange])
 
-  const themeToggleLabelText = themeToggleLabel(themeMode, effectiveTheme)
+  const themeToggleLabelText = themeToggleLabel(themeMode, effectiveTheme, osDark)
   const themeIcon = themeToggleIcon(themeMode, effectiveTheme)
 
   const cycleTheme = () => {

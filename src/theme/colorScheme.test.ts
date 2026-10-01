@@ -3,6 +3,7 @@ import {
   applyTheme,
   initTheme,
   migrateLegacyThemeStorage,
+  oppositeTheme,
   resolveTheme,
   SESSION_THEME_OVERRIDE_KEY,
   syncThemeColor,
@@ -70,37 +71,45 @@ describe('migrateLegacyThemeStorage', () => {
   })
 })
 
+describe('oppositeTheme', () => {
+  it('is light when the OS is dark and dark when the OS is light', () => {
+    expect(oppositeTheme(true)).toBe('light')
+    expect(oppositeTheme(false)).toBe('dark')
+  })
+})
+
 describe('resolveTheme', () => {
-  it('inverts the OS in inverted mode', () => {
-    expect(resolveTheme('inverted', false)).toBe('dark')
-    expect(resolveTheme('inverted', true)).toBe('light')
+  it('follows the OS in system mode', () => {
+    expect(resolveTheme('system', false)).toBe('light')
+    expect(resolveTheme('system', true)).toBe('dark')
   })
 
-  it('follows the OS in match mode', () => {
-    expect(resolveTheme('match', false)).toBe('light')
-    expect(resolveTheme('match', true)).toBe('dark')
+  it('uses the paired opposite in opposite mode', () => {
+    expect(resolveTheme('opposite', false)).toBe('dark')
+    expect(resolveTheme('opposite', true)).toBe('light')
   })
 })
 
 describe('toggleThemeMode', () => {
   it('switches between the only two modes', () => {
-    expect(toggleThemeMode('inverted')).toBe('match')
-    expect(toggleThemeMode('match')).toBe('inverted')
+    expect(toggleThemeMode('system')).toBe('opposite')
+    expect(toggleThemeMode('opposite')).toBe('system')
   })
 })
 
 describe('themePreferenceForDom', () => {
-  it('uses system CSS when matching the OS', () => {
-    expect(themePreferenceForDom('match', false)).toBe('system')
+  it('uses system CSS in system mode', () => {
+    expect(themePreferenceForDom('system', false)).toBe('system')
   })
 
-  it('uses explicit light/dark when inverted', () => {
-    expect(themePreferenceForDom('inverted', false)).toBe('dark')
+  it('uses explicit light/dark in opposite mode', () => {
+    expect(themePreferenceForDom('opposite', false)).toBe('dark')
+    expect(themePreferenceForDom('opposite', true)).toBe('light')
   })
 })
 
 describe('initTheme', () => {
-  it('applies inverted system and syncs theme-color when OS is dark', () => {
+  it('applies system by default when the OS is dark', () => {
     Object.defineProperty(window, 'matchMedia', {
       writable: true,
       value: (query: string) => ({
@@ -115,12 +124,12 @@ describe('initTheme', () => {
     })
 
     initTheme()
-    expect(document.documentElement.getAttribute('data-theme')).toBe('light')
+    expect(document.documentElement.getAttribute('data-theme')).toBe('system')
     const meta = document.head.querySelector('meta[name="theme-color"]')
-    expect(meta?.getAttribute('content')).toBe('#f7f7f8')
+    expect(meta?.getAttribute('content')).toBe('#121218')
   })
 
-  it('restores match mode from sessionStorage', () => {
+  it('restores opposite mode from sessionStorage', () => {
     Object.defineProperty(window, 'matchMedia', {
       writable: true,
       value: (query: string) => ({
@@ -133,9 +142,9 @@ describe('initTheme', () => {
         dispatchEvent: () => false,
       }),
     })
-    writeThemeMode('match')
+    writeThemeMode('opposite')
     initTheme()
-    expect(document.documentElement.getAttribute('data-theme')).toBe('system')
-    expect(sessionStorage.getItem(SESSION_THEME_OVERRIDE_KEY)).toBe('match')
+    expect(document.documentElement.getAttribute('data-theme')).toBe('dark')
+    expect(sessionStorage.getItem(SESSION_THEME_OVERRIDE_KEY)).toBe('opposite')
   })
 })

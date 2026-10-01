@@ -4,8 +4,8 @@ export type ThemePreference = 'light' | 'dark' | 'system'
 /** Resolved light/dark for icons / labels only */
 export type ResolvedTheme = 'light' | 'dark'
 
-/** Inverted = opposite of OS (default). Match = follow `prefers-color-scheme`. */
-export type ThemeMode = 'inverted' | 'match'
+/** System = follow OS. Opposite = light when OS is dark, dark when OS is light. */
+export type ThemeMode = 'system' | 'opposite'
 
 /** Browser chrome — matches the page background (`--color-bg` in index.css) */
 /** Approximate sRGB of `--color-bg` for browser chrome (meta theme-color). */
@@ -45,19 +45,24 @@ export function migrateLegacyThemeStorage() {
   }
 }
 
+/** Fixed light/dark option paired with system for the current OS appearance. */
+export function oppositeTheme(osDark: boolean): ResolvedTheme {
+  return osDark ? 'light' : 'dark'
+}
+
 export function readThemeMode(): ThemeMode {
   try {
     const v = sessionStorage.getItem(SESSION_THEME_OVERRIDE_KEY)
-    if (v === 'match') return 'match'
+    if (v === 'opposite') return 'opposite'
   } catch {
     /* ignore */
   }
-  return 'inverted'
+  return 'system'
 }
 
 export function writeThemeMode(mode: ThemeMode) {
   try {
-    if (mode === 'inverted') {
+    if (mode === 'system') {
       sessionStorage.removeItem(SESSION_THEME_OVERRIDE_KEY)
     } else {
       sessionStorage.setItem(SESSION_THEME_OVERRIDE_KEY, mode)
@@ -67,29 +72,28 @@ export function writeThemeMode(mode: ThemeMode) {
   }
 }
 
-/** Inverted: light OS → dark UI. Match: follows OS. */
 export function resolveTheme(mode: ThemeMode, osDark: boolean): ResolvedTheme {
-  if (mode === 'match') return osDark ? 'dark' : 'light'
-  return osDark ? 'light' : 'dark'
+  if (mode === 'system') return osDark ? 'dark' : 'light'
+  return oppositeTheme(osDark)
 }
 
 export function themePreferenceForDom(
   mode: ThemeMode,
   osDark: boolean,
 ): ThemePreference {
-  if (mode === 'match') return 'system'
-  return resolveTheme(mode, osDark)
+  if (mode === 'system') return 'system'
+  return oppositeTheme(osDark)
 }
 
 export function toggleThemeMode(mode: ThemeMode): ThemeMode {
-  return mode === 'inverted' ? 'match' : 'inverted'
+  return mode === 'system' ? 'opposite' : 'system'
 }
 
 export function osPrefersDark(): boolean {
   return window.matchMedia('(prefers-color-scheme: dark)').matches
 }
 
-/** First paint + hydration: inverted by default unless match mode is stored. */
+/** First paint + hydration: system unless opposite is stored for this session. */
 export function initTheme() {
   migrateLegacyThemeStorage()
   const osDark = osPrefersDark()
