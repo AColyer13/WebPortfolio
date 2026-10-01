@@ -22,8 +22,8 @@ export function About() {
       <div className={`${containerClass} ${sectionContainerClass}`}>
         <div className="grid grid-cols-1 items-center gap-[calc(var(--section-hero-padding-top)+var(--spacing-3))] lg:grid-cols-2 lg:gap-16">
           <div className="hero-about__copy mx-auto max-w-[40rem] text-center lg:mx-0 lg:text-start">
-            <h1 className="m-0 text-h1 font-bold leading-tight text-text-default">
-              <span className="block whitespace-nowrap leading-tight sm:inline lg:block">Adam Colyer</span><span className="mt-0.5 block text-fluid-3 font-medium leading-snug text-text-muted sm:ms-2 sm:mt-0 sm:inline lg:ms-0 lg:mt-1 lg:block"><span className="sr-only"> </span>Twin Cities, MN</span>
+            <h1 className="m-0 text-h1 font-bold leading-tight text-text-default lg:inline-flex lg:flex-col lg:items-center lg:gap-1">
+              <span className="block whitespace-nowrap leading-tight sm:inline lg:block">Adam Colyer</span><span className="mt-0.5 block text-fluid-3 font-medium leading-snug text-text-muted sm:ms-2 sm:mt-0 sm:inline lg:ms-0 lg:mt-0 lg:block"><span className="sr-only"> </span>Twin Cities, MN</span>
             </h1>
 
             <div className="mt-5 flex flex-wrap items-center justify-center gap-2 lg:justify-start">
