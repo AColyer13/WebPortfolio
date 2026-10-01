@@ -416,7 +416,11 @@
 
 /* Split hero — copy paired with a framed portrait image */
 .hero-about {
-  padding-block: var(--section-hero-padding-top) var(--section-padding-y);
+  padding-block: var(--section-hero-padding-top) var(--spacing-2);
+}
+
+.hero-about + #projects {
+  padding-block-start: var(--spacing-2);
 }
 
 .hero-media {

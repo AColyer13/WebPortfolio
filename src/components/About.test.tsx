@@ -6,7 +6,7 @@ describe('About', () => {
   it('renders the hero heading and intro copy', () => {
     render(<About />)
     expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(
-      'Adam Colyer · Twin Cities, MN',
+      'Adam Colyer Twin Cities, MN',
     )
     expect(screen.queryByText(/selling software/i)).not.toBeInTheDocument()
   })

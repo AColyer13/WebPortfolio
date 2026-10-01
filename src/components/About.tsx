@@ -23,11 +23,7 @@ export function About() {
         <div className="grid grid-cols-1 items-center gap-10 lg:grid-cols-2 lg:gap-16">
           <div className="hero-about__copy mx-auto max-w-[40rem] text-center lg:mx-0 lg:text-start">
             <h1 className="m-0 text-h1 font-bold leading-tight text-text-default">
-              Adam Colyer
-              <span className="mt-1 block text-fluid-3 font-medium text-text-muted sm:mt-0 sm:inline">
-                <span className="hidden sm:inline"> · </span>
-                Twin Cities, MN
-              </span>
+              <span className="block leading-tight sm:inline">Adam Colyer</span><span className="mt-0.5 block text-fluid-3 font-medium leading-snug text-text-muted sm:mt-0 sm:ms-2 sm:inline"><span className="sr-only"> </span>Twin Cities, MN</span>
             </h1>
 
             <div className="mt-5 flex flex-wrap items-center justify-center gap-2 lg:justify-start">
