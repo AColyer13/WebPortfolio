@@ -21,8 +21,11 @@ function writeShowAllToUrl(showAll: boolean) {
 }
 
 function ProjectCard({ project }: { project: Project }) {
+  const [infoOpen, setInfoOpen] = useState(false)
   const base = projectPictureBase(project.imageUrl)
   const sizes = '(min-width: 1024px) 33vw, 100vw'
+  const descriptionId = `project-${project.id}-about`
+  const techItems = project.tech.split(', ')
 
   return (
     <article className={portfolioCardClass}>
@@ -50,12 +53,48 @@ function ProjectCard({ project }: { project: Project }) {
         </picture>
       </div>
       <div className="flex grow flex-col gap-2 py-4">
-        <p className="m-0 font-mono text-copyright uppercase tracking-wide text-text-subtle">
-          {project.tech}
+        {/* Every item carries a leading "·" inside a negative inline margin; the
+            wrapper clips it, so a separator that starts a wrapped line is hidden. */}
+        <div className="overflow-hidden">
+          <ul
+            className="m-0 -ms-[1.5em] flex list-none flex-wrap p-0 font-mono text-copyright uppercase tracking-wide text-text-subtle"
+            aria-label="Built with"
+          >
+            {techItems.map((tech) => (
+              <li key={tech} className="whitespace-nowrap">
+                <span className="inline-block w-[1.5em] text-center" aria-hidden>
+                  ·
+                </span>
+                {tech}
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div className="flex items-start justify-between gap-2">
+          <h3 className="m-0 text-fluid-3 font-bold leading-snug text-text-default">
+            {project.title}
+          </h3>
+          <button
+            type="button"
+            className={`project-info-btn -me-2.5 -mt-1.5 inline-flex size-11 shrink-0 cursor-pointer items-center justify-center rounded-md border-none bg-transparent p-0 text-xl transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-offset-[-4px] focus-visible:outline-primary-600 ${
+              infoOpen ? 'text-accent' : 'text-text-subtle hover:text-text-default'
+            }`}
+            aria-expanded={infoOpen}
+            aria-controls={descriptionId}
+            aria-label={`About ${project.title}`}
+            title={`About ${project.title}`}
+            onClick={() => setInfoOpen((open) => !open)}
+          >
+            <Icon name="info" aria-hidden />
+          </button>
+        </div>
+        <p
+          id={descriptionId}
+          hidden={!infoOpen}
+          className="project-info m-0 border-s-2 border-accent ps-3 text-fluid-1 leading-relaxed text-text-muted"
+        >
+          {project.description}
         </p>
-        <h3 className="m-0 text-fluid-3 font-bold leading-snug text-text-default">
-          {project.title}
-        </h3>
         <div className="mt-auto flex flex-wrap items-center gap-3 pt-2">
           {project.liveUrl ? (
             <a

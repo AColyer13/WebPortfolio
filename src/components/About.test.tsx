@@ -6,7 +6,8 @@ describe('About', () => {
   it('renders the hero heading and intro copy', () => {
     render(<About />)
     expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('Adam Colyer')
-    expect(screen.getByText(/Full-stack developer/i)).toBeInTheDocument()
+    expect(screen.getByText(/Full-stack engineer/i)).toBeInTheDocument()
+    expect(screen.getByText(/selling software/i)).toBeInTheDocument()
   })
 
   it('does not depend on any FontAwesome class (replaced by Icon)', () => {

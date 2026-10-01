@@ -1,3 +1,0 @@
-<svg aria-hidden="true" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><!-- Monochrome "G" — kept as a single closed path so it reads cleanly when
-     used as a CSS mask (mask-mode: alpha). The ring + horizontal arm draws
-     the letter; the even-odd fill rule produces the central counter. --><path fill-rule="evenodd" clip-rule="evenodd" d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20Zm0 3a7 7 0 1 1 0 14 7 7 0 0 1 0-14Zm-1 6v4h6v-2h-4v-2h-2Z"/></svg>

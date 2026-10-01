@@ -12,6 +12,7 @@ import {
   GitBranch,
   GitMerge,
   HardHat,
+  Info,
   Key,
   KeyRound,
   Lightbulb,
@@ -42,6 +43,7 @@ export type IconKey =
   | 'flask-vial'
   | 'gauge-high'
   | 'hard-hat'
+  | 'info'
   | 'key'
   | 'key-round'
   | 'lightbulb'
@@ -87,6 +89,7 @@ const LUCIDE: Partial<Record<IconKey, Lucide>> = {
   'flask-vial': FlaskConical,
   'gauge-high': Gauge,
   'hard-hat': HardHat,
+  'info': Info,
   'key': Key,
   'key-round': KeyRound,
   'lightbulb': Lightbulb,

@@ -24,7 +24,7 @@ npm run dev          # http://localhost:5173
 | Command               | What it does                                    |
 | --------------------- | ----------------------------------------------- |
 | `npm run dev`         | Vite dev server                                 |
-| `npm run build`       | Build image variants + sprite → `tsc` → `vite build` |
+| `npm run build`       | Build image variants → `tsc` → `vite build`     |
 | `npm run preview`     | Serve `dist/` locally (http://localhost:4173)   |
 | `npm run lint`        | ESLint (zero warnings tolerated)                |
 | `npm test`            | Vitest one-shot                                 |
@@ -36,9 +36,10 @@ npm run dev          # http://localhost:5173
 - `src/data/portfolio.ts` — projects, skills, timeline
 - `src/components/`      — section components (`About`, `Skills`, …)
 - `src/hooks/`           — `useSectionNavigation` (scroll-spy + header hide)
-- `src/utils/`           — `baseUrl`, `layoutClasses`, `pictureSources`, `retryWithBackoff`, `sections`, `contact`
+- `src/utils/`           — `baseUrl`, `contact`, `images`, `layoutClasses`, `sections`
 - `src/theme/`           — `colorScheme` (light / dark / system)
-- `scripts/`             — `generate-image-variants.mjs`, `generate-svg-sprite.mjs`, `axe-preview.mjs`
+- `scripts/`             — `generate-image-variants.mjs`, `axe-preview.mjs`
+- `public/`              — images, résumé PDF, favicon, `og-card.jpg` link preview
 
 ## Deploy (GitHub Pages)
 

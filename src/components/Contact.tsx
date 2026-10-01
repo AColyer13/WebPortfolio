@@ -172,19 +172,6 @@ export function Contact() {
             </div>
             <div>
               <dt className="m-0 text-copyright font-medium uppercase tracking-wider text-text-subtle">
-                Phone
-              </dt>
-              <dd className="m-0 mt-1">
-                <a
-                  href="tel:6127107700"
-                  className="text-fluid-1 font-semibold text-text-default underline-offset-4 hover:underline"
-                >
-                  612.710.7700
-                </a>
-              </dd>
-            </div>
-            <div>
-              <dt className="m-0 text-copyright font-medium uppercase tracking-wider text-text-subtle">
                 Email
               </dt>
               <dd className="m-0 mt-1">

@@ -26,12 +26,34 @@ export function About() {
               Adam Colyer
             </h1>
 
-            <p className="m-0 mb-4 text-fluid-3 font-medium text-text-muted">
-              Full-stack developer · Edina, MN
+            <p className="m-0 mb-6 text-fluid-3 font-medium text-text-muted">
+              Full-stack engineer · Edina, MN
             </p>
 
-            <p className="m-0 text-body leading-relaxed text-text-default">
-              Building full-stack web and AI applications with React, Next.js, and Python.
+            <p className="hero-statement m-0 mb-4 font-display text-fluid-5 font-medium leading-tight text-text-default">
+              I spent five years selling software. Now I can{' '}
+              <span className="hero-mark">
+                build it.
+                <svg
+                  className="hero-mark__stroke"
+                  viewBox="0 0 200 20"
+                  preserveAspectRatio="none"
+                  aria-hidden
+                  focusable="false"
+                >
+                  <path
+                    d="M3 13.5C38 7.5 92 5 197 9.5M30 16.5C70 12.5 120 11.5 168 14"
+                    pathLength={1}
+                  />
+                </svg>
+              </span>
+            </p>
+
+            <p className="m-0 text-body leading-relaxed text-text-muted">
+              I build TypeScript, React, and Python apps with secure auth, AI that answers from
+              your own data without leaking it, and interfaces that hold up on any screen. Selling
+              to IT buyers and city councils taught me to turn a messy conversation into clear
+              requirements.
             </p>
 
             <div className="mt-5 flex flex-wrap items-center gap-2">

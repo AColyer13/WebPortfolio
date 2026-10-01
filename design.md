@@ -11,6 +11,9 @@ editorial
 Single-route marketing portfolio. Sections share one system; they vary only in
 local rhythm.
 
+Section order: Intro → Projects → Experience → Skills → Contact. Projects lead
+because the work is the evidence; the sales history backs it up.
+
 - Marketing / intro: Split Hero (name/copy paired with a framed portrait image; stacks on mobile)
 - Experience / contact: Long Document (start-aligned heads; hairline rules)
 - Projects: Catalogue, equal 3-up grid (no featured/double-span card)
@@ -24,13 +27,22 @@ Custom charcoal paper (cool neutral). No purple, no cream-serif cliché, no glow
 - `--color-ink`     oklch(28% 0.03 260)
 - `--color-ink-2`   oklch(48% 0.02 260)
 - `--color-rule`    oklch(90% 0.01 260)
-- `--color-accent`  oklch(28% 0.02 260)
+- `--color-primary` oklch(28% 0.02 260)  (ink buttons)
 - `--color-focus`   oklch(28% 0.02 260)
+- `--color-accent`  oklch(58% 0.17 40) light / oklch(74% 0.14 50) dark — signature only, see below
 
 Dark scheme uses the same OKLCH hue family (no hex drift).
 
 Mapped project tokens: `--color-bg` ← paper, `--color-text-default` ← ink,
-`--color-border-default` ← rule, `--color-primary-600` ← accent.
+`--color-border-default` ← rule, `--color-primary-600` ← primary.
+
+## Signature
+One memorable thing, used once: a hand-drawn double stroke in `--color-accent`
+under "build it." in the hero line. It draws in once on load (skipped under
+reduced motion) and is echoed in the favicon and `og-card.jpg`. The accent
+appears in exactly one other place — the open state of a project's (i) button
+and its description rule. Do not add more accent uses; that is what keeps it
+memorable.
 
 ## Typography
 - Display: Newsreader Variable, weight 500–600, style normal (headings only)
@@ -47,7 +59,8 @@ Pages must use tokens / Tailwind theme aliases — no raw one-off gaps.
 
 ## Motion
 - Easings: `--ease-out: cubic-bezier(0.16, 1, 0.3, 1)`
-- Reveal: none by default (typography carries presence)
+- Reveal: none by default (typography carries presence). Sole exception: the
+  hero signature stroke draws once (900ms, `--ease-out`)
 - Reduced-motion: opacity-only collapses; durations ≤ 0.01ms via existing gate
 - Respect `prefers-reduced-transparency`, `prefers-contrast`, `prefers-reduced-data`
 
@@ -70,7 +83,7 @@ Pages must use tokens / Tailwind theme aliases — no raw one-off gaps.
 
 ## What pages MUST share
 - Wordmark / name treatment (Newsreader on brand + section h2)
-- Accent colour ≤ 5% of viewport (mostly ink buttons + focus)
+- Accent colour ≤ 5% of viewport (signature stroke + open (i) state only)
 - Display + body pairing
 - CTA voice
 - Start-aligned section headings (not centered)

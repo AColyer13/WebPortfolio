@@ -7,12 +7,19 @@ export function Experiences() {
       <ol className="m-0 flex list-none flex-col p-0">
         {timeline.map((item) => (
           <li
-            key={`${item.year}-${item.title}`}
-            className="grid grid-cols-[5.5rem_minmax(0,1fr)] gap-x-4 gap-y-1 border-b border-border-default py-5 first:pt-0 last:border-b-0 @max-[40rem]:grid-cols-[4rem_minmax(0,1fr)] @max-[40rem]:gap-x-3"
+            key={`${item.end}-${item.title}`}
+            className="grid grid-cols-[5.5rem_minmax(0,1fr)] gap-x-4 gap-y-1 border-b border-border-default py-5 first:pt-0 last:border-b-0 @max-[40rem]:grid-cols-[4.5rem_minmax(0,1fr)] @max-[40rem]:gap-x-3"
           >
-            <time className="pt-1 text-copyright font-medium leading-snug text-text-subtle">
-              {item.year}
-            </time>
+            <p className="m-0 pt-1 text-copyright font-medium leading-snug text-text-subtle tabular-nums">
+              {item.start ? (
+                <>
+                  <span className="whitespace-nowrap">{item.start} –</span>{' '}
+                  <span className="whitespace-nowrap">{item.end}</span>
+                </>
+              ) : (
+                item.end
+              )}
+            </p>
             <div className="min-w-0">
               <h3 className="m-0 text-pretty text-fluid-3 font-bold leading-snug text-text-default">
                 {item.title}

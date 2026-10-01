@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <style>
+    .tile { fill: #202938; }
+    .mark { fill: #f6f9fc; }
+    .stroke { stroke: #f08e54; }
+    @media (prefers-color-scheme: dark) {
+      .tile { fill: #e3e5e8; }
+      .mark { fill: #202938; }
+      .stroke { stroke: #c94c18; }
+    }
+  </style>
+  <rect class="tile" width="64" height="64" rx="14" />
+  <text class="mark" x="32" y="40" text-anchor="middle" font-family="Newsreader, Georgia, 'Times New Roman', serif" font-size="28" font-weight="600" letter-spacing="-1">AC</text>
+  <path class="stroke" d="M15 49c10-2.5 22-3.2 34-1.5" fill="none" stroke-width="3.5" stroke-linecap="round" />
+</svg>

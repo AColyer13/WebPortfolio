@@ -52,10 +52,10 @@ function App() {
       />
       <main id="main-content">
         <About />
-        <Experiences />
         <Suspense fallback={<SectionPlaceholder id="projects" />}>
           <Projects />
         </Suspense>
+        <Experiences />
         <Skills />
         <Suspense fallback={<SectionPlaceholder id="contact" />}>
           <Contact />

@@ -1,6 +1,0 @@
-<svg aria-hidden="true" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-  <!-- Matplotlib: stylised histogram/bar-chart mark. Three vertical bars
-       of varying heights on a baseline, single-fill silhouette at
-       viewBox 24x24. -->
-  <path d="M3 20h18v1.5H3V20zm2-1V8h2.5v11H5zm4 0V4h2.5v15H9zm4 0v-7h2.5v11H13zm4 0v-3h2.5v11H17z"/>
-</svg>

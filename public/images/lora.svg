@@ -1,7 +1,0 @@
-<svg aria-hidden="true" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="currentColor">
-  <!-- LoRA: two narrow rank-r factor bars (A, B) sit above a wide frozen-base
-       bar (W0). Visually hints at the low-rank update W = W0 + BA, where A
-       and B are the skinny factor matrices that get trained alongside a
-       frozen base. -->
-  <path d="M5 3v14h2V3zm12 0v14h2V3zM2 18v3h20v-3z"/>
-</svg>

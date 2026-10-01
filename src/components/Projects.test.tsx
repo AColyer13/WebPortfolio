@@ -74,6 +74,21 @@ describe('Projects', () => {
     expect(ufoLive).toHaveAttribute('href', 'https://acolyer13.github.io/moovellous/')
   })
 
+  it('reveals each project description from its (i) button', () => {
+    render(<Projects />)
+    const project = featuredProjects[0]
+    const info = screen.getByRole('button', { name: `About ${project.title}` })
+    const description = screen.getByText(project.description)
+
+    expect(info).toHaveAttribute('aria-expanded', 'false')
+    expect(description).not.toBeVisible()
+
+    fireEvent.click(info)
+    expect(info).toHaveAttribute('aria-expanded', 'true')
+    expect(info).toHaveAttribute('aria-controls', description.id)
+    expect(description).toBeVisible()
+  })
+
   it('no longer renders any FontAwesome classes (font icons migrated to SVG Icon)', () => {
     const { container } = render(<Projects />)
     expect(container.querySelector('[class*="fa-"]')).toBeNull()
