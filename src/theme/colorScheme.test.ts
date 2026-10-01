@@ -1,9 +1,14 @@
 import { describe, expect, it, beforeEach } from 'vitest'
 import {
   applyTheme,
+  cycleSessionOverride,
   initTheme,
   migrateLegacyThemeStorage,
+  resolveTheme,
+  SESSION_THEME_OVERRIDE_KEY,
   syncThemeColor,
+  themePreferenceForDom,
+  writeSessionOverride,
 } from './colorScheme'
 
 beforeEach(() => {
@@ -12,6 +17,7 @@ beforeEach(() => {
   document.head.querySelectorAll('meta[name="theme-color"]').forEach((m) => m.remove())
   try {
     localStorage.clear()
+    sessionStorage.clear()
   } catch {
     /* SSR / no-storage envs */
   }
@@ -64,8 +70,31 @@ describe('migrateLegacyThemeStorage', () => {
   })
 })
 
+describe('resolveTheme', () => {
+  it('inverts the OS when there is no session override', () => {
+    expect(resolveTheme(null, false)).toBe('dark')
+    expect(resolveTheme(null, true)).toBe('light')
+  })
+
+  it('honors explicit session overrides', () => {
+    expect(resolveTheme('light', true)).toBe('light')
+    expect(resolveTheme('dark', false)).toBe('dark')
+  })
+})
+
+describe('cycleSessionOverride', () => {
+  it('returns to inverted system from an explicit dark override', () => {
+    expect(cycleSessionOverride('dark', false)).toBeNull()
+  })
+
+  it('steps from inverted default to matching the OS', () => {
+    expect(cycleSessionOverride(null, false)).toBe('light')
+    expect(cycleSessionOverride(null, true)).toBe('dark')
+  })
+})
+
 describe('initTheme', () => {
-  it('applies system and syncs theme-color to whatever the OS reports', () => {
+  it('applies inverted system and syncs theme-color when OS is dark', () => {
     Object.defineProperty(window, 'matchMedia', {
       writable: true,
       value: (query: string) => ({
@@ -80,8 +109,28 @@ describe('initTheme', () => {
     })
 
     initTheme()
-    expect(document.documentElement.getAttribute('data-theme')).toBe('system')
+    expect(document.documentElement.getAttribute('data-theme')).toBe('light')
     const meta = document.head.querySelector('meta[name="theme-color"]')
-    expect(meta?.getAttribute('content')).toBe('#121218')
+    expect(meta?.getAttribute('content')).toBe('#f7f7f8')
+  })
+
+  it('restores a session override from sessionStorage', () => {
+    Object.defineProperty(window, 'matchMedia', {
+      writable: true,
+      value: (query: string) => ({
+        matches: false,
+        media: query,
+        addEventListener: () => {},
+        removeEventListener: () => {},
+        addListener: () => {},
+        removeListener: () => {},
+        dispatchEvent: () => false,
+      }),
+    })
+    writeSessionOverride('dark')
+    initTheme()
+    expect(document.documentElement.getAttribute('data-theme')).toBe('dark')
+    expect(themePreferenceForDom('dark', false)).toBe('dark')
+    expect(sessionStorage.getItem(SESSION_THEME_OVERRIDE_KEY)).toBe('dark')
   })
 })

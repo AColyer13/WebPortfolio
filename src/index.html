@@ -50,7 +50,17 @@
     <title>Adam Colyer — Full-stack Engineer Portfolio</title>
     <link rel="stylesheet" href="/index.css" />
     <script>
-      document.documentElement.setAttribute('data-theme', 'system')
+      ;(function () {
+        try {
+          var k = 'portfolio-theme-session-override'
+          var o = sessionStorage.getItem(k)
+          var dark = window.matchMedia('(prefers-color-scheme: dark)').matches
+          var t = o === 'light' || o === 'dark' ? o : dark ? 'light' : 'dark'
+          document.documentElement.setAttribute('data-theme', t)
+        } catch (e) {
+          document.documentElement.setAttribute('data-theme', 'dark')
+        }
+      })()
       window.addEventListener('pageshow', function (e) {
         if (!e.persisted) return
         var sheets = document.querySelectorAll('link[rel="stylesheet"]')

@@ -1,15 +1,16 @@
 import { useEffect, useState } from 'react'
 import {
   applyTheme,
+  cycleSessionOverride,
+  readSessionOverride,
+  resolveTheme,
   syncThemeColor,
+  themePreferenceForDom,
+  writeSessionOverride,
   type ResolvedTheme,
-  type ThemePreference,
 } from '../theme/colorScheme'
 import { containerClass } from '../utils/layoutClasses'
 import { Icon } from './Icons'
-
-/** Session-only; reload returns to system / prefers-color-scheme (sunset scheduling, etc.). */
-type SessionOverride = 'light' | 'dark' | null
 
 interface NavbarProps {
   activeSection: string
@@ -30,15 +31,6 @@ const navLinkClass =
 
 const navLinkMobileClass = `${navLinkClass} min-h-11 justify-center px-4 py-2`
 
-function cycleSessionOverride(
-  override: SessionOverride,
-  osDark: boolean,
-): SessionOverride {
-  if (override === 'light') return 'dark'
-  if (override === 'dark') return osDark ? 'light' : null
-  return osDark ? 'light' : 'dark'
-}
-
 function useOsDark(): boolean {
   const [osDark, setOsDark] = useState(
     () =>
@@ -56,20 +48,7 @@ function useOsDark(): boolean {
   return osDark
 }
 
-function resolveTheme(
-  override: SessionOverride,
-  osDark: boolean,
-): ResolvedTheme {
-  if (override === 'light') return 'light'
-  if (override === 'dark') return 'dark'
-  return osDark ? 'dark' : 'light'
-}
-
-function domTheme(override: SessionOverride): ThemePreference {
-  return override ?? 'system'
-}
-
-/** Sun → click activates "force dark" for this session. Moon → click returns to system. */
+/** Sun → match system appearance for this session. Moon → return to inverted system. */
 const THEME_ICON_CLASS =
   'h-[1.125rem] w-[1.125rem] shrink-0 text-[1.125rem]'
 
@@ -118,21 +97,46 @@ function NavLinks({
   )
 }
 
+function themeToggleCopy(
+  sessionOverride: ReturnType<typeof readSessionOverride>,
+  effectiveTheme: ResolvedTheme,
+  nextOverride: ReturnType<typeof cycleSessionOverride>,
+) {
+  const currentThemeLabel =
+    sessionOverride === null
+      ? `Inverted system (${effectiveTheme})`
+      : sessionOverride === 'light'
+        ? 'Light, matches system'
+        : 'Dark, matches system'
+  const nextThemeLabel =
+    nextOverride === null
+      ? 'invert system appearance'
+      : nextOverride === 'light'
+        ? 'light, match system'
+        : 'dark, match system'
+  const themeToggleLabel = `Theme: ${currentThemeLabel}. Next: ${nextThemeLabel}.`
+  return { currentThemeLabel, nextThemeLabel, themeToggleLabel }
+}
+
 export function Navbar({
   activeSection,
   onNavigate,
   headerScrollHidden = false,
   onMenuOpenChange,
 }: NavbarProps) {
-  const [sessionOverride, setSessionOverride] = useState<SessionOverride>(null)
+  const [sessionOverride, setSessionOverride] = useState(readSessionOverride)
   const osDark = useOsDark()
   const effectiveTheme = resolveTheme(sessionOverride, osDark)
-  const appliedTheme = domTheme(sessionOverride)
+  const appliedTheme = themePreferenceForDom(sessionOverride, osDark)
 
   useEffect(() => {
     applyTheme(appliedTheme)
     syncThemeColor(effectiveTheme)
   }, [appliedTheme, effectiveTheme])
+
+  useEffect(() => {
+    writeSessionOverride(sessionOverride)
+  }, [sessionOverride])
 
   // Sync the popover open state up to App.tsx so body scroll-lock + header
   // auto-hide can react. The Popover API fires a `toggle` event on the popover
@@ -149,19 +153,15 @@ export function Navbar({
   }, [onMenuOpenChange])
 
   const nextOverride = cycleSessionOverride(sessionOverride, osDark)
-  const nextThemeLabel =
-    nextOverride === 'light'
-      ? 'light only for this visit'
-      : nextOverride === 'dark'
-        ? 'dark only for this visit'
-        : 'match system appearance'
-  const currentThemeLabel =
-    sessionOverride === null
-      ? `System (${effectiveTheme})`
-      : sessionOverride === 'light'
-        ? 'Light override, this visit only'
-        : 'Dark override, this visit only'
-  const themeToggleLabel = `Theme: ${currentThemeLabel}. Next: ${nextThemeLabel}.`
+  const { themeToggleLabel } = themeToggleCopy(
+    sessionOverride,
+    effectiveTheme,
+    nextOverride,
+  )
+
+  const cycleTheme = () => {
+    setSessionOverride((o) => cycleSessionOverride(o, osDark))
+  }
 
   // Programmatic close on link click (popover=auto would only close on
   // outside-click/Escape; clicking a link inside the popover still navigates
@@ -191,9 +191,7 @@ export function Navbar({
             <button
               type="button"
               className={iconBtnClass}
-              onClick={() =>
-                setSessionOverride((o) => cycleSessionOverride(o, osDark))
-              }
+              onClick={cycleTheme}
               aria-label={themeToggleLabel}
               data-tooltip={themeToggleLabel}
             >
@@ -243,9 +241,7 @@ export function Navbar({
             <button
               type="button"
               className={iconBtnClass}
-              onClick={() =>
-                setSessionOverride((o) => cycleSessionOverride(o, osDark))
-              }
+              onClick={cycleTheme}
               aria-label={themeToggleLabel}
               title={themeToggleLabel}
               data-tooltip={themeToggleLabel}
