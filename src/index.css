@@ -419,6 +419,13 @@
   padding-block: var(--section-hero-padding-top) var(--spacing-2);
 }
 
+/* Stacked hero: a little more air under the nav, matched below the buttons. */
+@media (width < 64rem) {
+  .hero-about {
+    padding-block-start: calc(var(--section-hero-padding-top) + var(--spacing-2));
+  }
+}
+
 .hero-about + #projects {
   padding-block-start: var(--spacing-2);
 }
