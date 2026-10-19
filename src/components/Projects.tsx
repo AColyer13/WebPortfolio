@@ -107,16 +107,18 @@ function ProjectCard({ project }: { project: Project }) {
               Live demo
             </a>
           ) : null}
-          <a
-            href={project.githubUrl}
-            className="inline-flex min-h-11 items-center gap-1 text-fluid-1 font-medium text-text-muted underline-offset-4 hover:text-text-default hover:underline"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label={`${project.title} source on GitHub`}
-          >
-            <Icon name="github-alt" className="text-fluid-1" aria-hidden />
-            Source
-          </a>
+          {project.githubUrl ? (
+            <a
+              href={project.githubUrl}
+              className="inline-flex min-h-11 items-center gap-1 text-fluid-1 font-medium text-text-muted underline-offset-4 hover:text-text-default hover:underline"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={`${project.title} source on GitHub`}
+            >
+              <Icon name="github-alt" className="text-fluid-1" aria-hidden />
+              Source
+            </a>
+          ) : null}
         </div>
       </div>
     </article>

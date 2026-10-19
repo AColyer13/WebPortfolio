@@ -15,9 +15,9 @@ describe('Projects', () => {
     // card titles and avoid duplicate matches.
     const cardTitles = screen.getAllByRole('heading', { level: 3 })
     const titles = cardTitles.map((h) => h.textContent ?? '')
-    expect(titles).toContain('Valley Forge Automotive')
-    expect(titles).toContain('MissionCtrl')
     expect(titles).toContain('Legal Eagle Project')
+    expect(titles).toContain('MissionCtrl')
+    expect(titles).toContain('Pure Strike Golf')
   })
 
   it('hides non-featured projects until expanded', () => {
@@ -41,7 +41,7 @@ describe('Projects', () => {
     const imgs = container.querySelectorAll('img')
     expect(imgs.length).toBe(featuredProjects.length)
     expect(imgs[0].getAttribute('src')).toContain(
-      'images/missionctrl-tr41-groundctrl',
+      'images/legaleagleproject',
     )
   })
 
@@ -57,10 +57,15 @@ describe('Projects', () => {
     expect(expandedImgs.length).toBeGreaterThan(featuredProjects.length)
   })
 
-  it('renders live demo and source links for featured projects', () => {
+  it('shows a source link only for projects with a public repo', () => {
     render(<Projects />)
-    expect(screen.getAllByRole('link', { name: /Live demo/i }).length).toBeGreaterThan(0)
-    expect(screen.getAllByRole('link', { name: /source on GitHub/i }).length).toBe(3)
+    expect(screen.getAllByRole('link', { name: /Live demo/i }).length).toBe(3)
+    const sources = screen.getAllByRole('link', { name: /source on GitHub/i })
+    expect(sources).toHaveLength(1)
+    expect(sources[0]).toHaveAttribute(
+      'href',
+      'https://github.com/AColyer13/pure-strike-golf',
+    )
   })
 
   it('links expanded live demos to verified URLs', () => {
@@ -68,10 +73,13 @@ describe('Projects', () => {
     fireEvent.click(screen.getByRole('button', { name: /View all projects/i }))
 
     const liveLinks = screen.getAllByRole('link', { name: /Live demo/i })
-    const ufoLive = liveLinks.find((link) =>
-      link.getAttribute('href')?.includes('moovellous'),
+    const snowmobileLive = liveLinks.find((link) =>
+      link.getAttribute('href')?.includes('minnesota-snowmobile'),
     )
-    expect(ufoLive).toHaveAttribute('href', 'https://acolyer13.github.io/moovellous/')
+    expect(snowmobileLive).toHaveAttribute(
+      'href',
+      'https://acolyer13.github.io/minnesota-snowmobile/',
+    )
   })
 
   it('reveals each project description from its (i) button', () => {
