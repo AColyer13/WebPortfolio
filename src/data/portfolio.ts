@@ -283,6 +283,42 @@ export const projects: Project[] = [
     liveUrl: 'https://acolyer13.github.io/c8-arcade-racer/',
   },
   {
+    id: 17,
+    title: 'Sports Research',
+    tech: 'Python, React, GitHub Actions',
+    description:
+      'Paper-trading research desk for six US sports. Every candidate strategy runs in a shadow ledger, and one earns a stake only after 100 verified closes beat the closing line. Backtests nominate but never grant, and nothing places a real wager.',
+    imageUrl: 'images/sports-research.png',
+    liveUrl: 'https://acolyer13.github.io/sports-research/',
+  },
+  {
+    id: 18,
+    title: 'Hardened Trading Agent',
+    tech: 'Python, MCP, Render, GitHub Actions',
+    description:
+      'Trading agent built in strict phases: a tested risk engine first, then walk-forward backtests and an eight-week paper test. Live orders come last, and each one waits for human review.',
+    imageUrl: 'images/hardened-trading-agent.png',
+    liveUrl: 'https://acolyer13.github.io/hardened-trading-agent/docs/',
+  },
+  {
+    id: 19,
+    title: 'The Long Record',
+    tech: 'HTML, CSS, JavaScript',
+    description:
+      'One-page history of the world from the Big Bang to 2026 that sets what sacred texts say beside what strata, isotopes and ancient DNA show. Twelve claims each get a verdict, and the whole page is a single file.',
+    imageUrl: 'images/the-long-record.png',
+    liveUrl: 'https://acolyer13.github.io/the-long-record/',
+  },
+  {
+    id: 20,
+    title: 'Bible Book by Book',
+    tech: 'HTML, CSS, JavaScript',
+    description:
+      'All 81 books of the Bible explained in plain words, with a chapter guide behind each. A to-scale strip of the whole library, search and read tracking are built in, and there is no build step.',
+    imageUrl: 'images/bible-book-by-book.png',
+    liveUrl: 'https://acolyer13.github.io/bible-book-by-book/',
+  },
+  {
     id: 4,
     title: 'Writing Consultant',
     tech: 'Python, Flask',
