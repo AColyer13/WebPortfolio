@@ -45,16 +45,23 @@ describe('Projects', () => {
     )
   })
 
-  it('lazy-loads all project thumbnails (section is below the fold)', () => {
+  it('loads the first row of thumbnails eagerly and lazy-loads the rest', () => {
     const { container } = render(<Projects />)
     const imgs = container.querySelectorAll<HTMLImageElement>('img')
     for (const img of imgs) {
-      expect(img.getAttribute('loading')).toBe('lazy')
+      expect(img.getAttribute('loading')).toBe('eager')
     }
+    expect(imgs[0].getAttribute('fetchpriority')).toBe('high')
 
     fireEvent.click(screen.getByRole('button', { name: /View all projects/i }))
-    const expandedImgs = container.querySelectorAll<HTMLImageElement>('img')
+    const expandedImgs = [...container.querySelectorAll<HTMLImageElement>('img')]
     expect(expandedImgs.length).toBeGreaterThan(featuredProjects.length)
+    expect(expandedImgs.slice(3).every((img) => img.getAttribute('loading') === 'lazy')).toBe(true)
+  })
+
+  it('warns that the Legal Eagle demo needs a sign-up', () => {
+    render(<Projects />)
+    expect(screen.getByText(/free sign-up required/i)).toBeInTheDocument()
   })
 
   it('shows a source link only for projects with a public repo', () => {
@@ -82,19 +89,20 @@ describe('Projects', () => {
     )
   })
 
-  it('reveals each project description from its (i) button', () => {
+  it('shows a clamped description by default and expands it from the (i) button', () => {
     render(<Projects />)
     const project = featuredProjects[0]
     const info = screen.getByRole('button', { name: `About ${project.title}` })
     const description = screen.getByText(project.description)
 
     expect(info).toHaveAttribute('aria-expanded', 'false')
-    expect(description).not.toBeVisible()
+    expect(description).toBeVisible()
+    expect(description).toHaveClass('line-clamp-2')
 
     fireEvent.click(info)
     expect(info).toHaveAttribute('aria-expanded', 'true')
     expect(info).toHaveAttribute('aria-controls', description.id)
-    expect(description).toBeVisible()
+    expect(description).not.toHaveClass('line-clamp-2')
   })
 
   it('no longer renders any FontAwesome classes (font icons migrated to SVG Icon)', () => {

@@ -12,6 +12,7 @@ const base = import.meta.env.BASE_URL
 const RESUME_PATH = 'files/Adam_Colyer_Resume.pdf'
 const RESUME_FILENAME = 'Adam_Colyer_Resume.pdf'
 const resumeUrl = withBase(RESUME_PATH)
+const HERO_LINE = 'Full-stack engineer building AI-powered web apps, after five years selling software.'
 
 export function About() {
   const w960 = HERO_IMAGE.widths[0]
@@ -22,9 +23,13 @@ export function About() {
       <div className={`${containerClass} ${sectionContainerClass}`}>
         <div className="grid grid-cols-1 items-center gap-[calc(var(--section-hero-padding-top)+var(--spacing-3)+var(--spacing-2))] lg:grid-cols-2 lg:gap-16">
           <div className="hero-about__copy mx-auto max-w-[40rem] text-center lg:mx-0 lg:text-start">
-            <h1 className="m-0 text-h1 font-bold leading-tight text-text-default lg:inline-flex lg:flex-col lg:items-center lg:gap-1">
+            <h1 className="m-0 text-h1 font-bold leading-tight text-text-default lg:inline-flex lg:flex-col lg:items-start lg:gap-1">
               <span className="block whitespace-nowrap leading-tight sm:inline lg:block">Adam Colyer</span><span className="mt-0.5 block text-fluid-3 font-medium leading-snug text-text-muted sm:ms-2 sm:mt-0 sm:inline lg:ms-0 lg:mt-0 lg:block"><span className="sr-only"> </span>Twin Cities, MN</span>
             </h1>
+
+            <p className="m-0 mt-4 text-pretty text-fluid-2 leading-snug text-text-default">
+              {HERO_LINE}
+            </p>
 
             <div className="mt-5 flex flex-wrap items-center justify-center gap-2 lg:justify-start">
               <a href={resumeUrl} className={primaryBtnClass} download={RESUME_FILENAME}>

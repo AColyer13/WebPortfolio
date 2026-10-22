@@ -1,4 +1,4 @@
-import { timeline } from '../data/portfolio'
+import { education, timeline } from '../data/portfolio'
 import { Section } from './Section'
 
 export function Experiences() {
@@ -34,6 +34,29 @@ export function Experiences() {
           </li>
         ))}
       </ol>
+      <h3 className="m-0 mt-8 border-t border-border-default pt-8 text-fluid-3 font-bold leading-snug text-text-default">
+        Education
+      </h3>
+      <ul className="m-0 mt-4 flex list-none flex-col gap-4 p-0">
+        {education.map((item) => (
+          <li
+            key={item.title}
+            className="grid grid-cols-[5.5rem_minmax(0,1fr)] gap-x-4 @max-[40rem]:grid-cols-[4.5rem_minmax(0,1fr)] @max-[40rem]:gap-x-3"
+          >
+            <p className="m-0 pt-0.5 text-copyright font-medium leading-snug text-text-subtle tabular-nums">
+              {item.date}
+            </p>
+            <div className="min-w-0">
+              <p className="m-0 text-fluid-1 font-semibold leading-snug text-text-default">
+                {item.title}
+              </p>
+              <p className="m-0 mt-0.5 text-body leading-snug text-text-muted">
+                {item.institution}
+              </p>
+            </div>
+          </li>
+        ))}
+      </ul>
     </Section>
   )
 }

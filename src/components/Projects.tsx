@@ -20,7 +20,11 @@ function writeShowAllToUrl(showAll: boolean) {
   window.history.replaceState(null, '', `${url.pathname}${url.search}${url.hash}`)
 }
 
-function ProjectCard({ project }: { project: Project }) {
+/** Cards that sit in the first viewport load eagerly so no gray box shows. */
+const EAGER_IMAGE_COUNT = 3
+
+function ProjectCard({ project, index }: { project: Project; index: number }) {
+  const eager = index < EAGER_IMAGE_COUNT
   const [infoOpen, setInfoOpen] = useState(false)
   const base = projectPictureBase(project.imageUrl)
   const sizes = '(min-width: 1024px) 33vw, 100vw'
@@ -44,7 +48,8 @@ function ProjectCard({ project }: { project: Project }) {
           <img
             src={withBase(project.imageUrl)}
             alt={project.title}
-            loading="lazy"
+            loading={eager ? 'eager' : 'lazy'}
+            fetchPriority={index === 0 ? 'high' : undefined}
             decoding="async"
             className={imgCardThumbClass}
             width={1280}
@@ -90,8 +95,10 @@ function ProjectCard({ project }: { project: Project }) {
         </div>
         <p
           id={descriptionId}
-          hidden={!infoOpen}
-          className="project-info m-0 border-s-2 border-accent ps-3 text-fluid-1 leading-relaxed text-text-muted"
+          data-expanded={infoOpen}
+          className={`project-info m-0 border-s-2 ps-3 text-fluid-1 leading-relaxed text-text-muted ${
+            infoOpen ? 'border-accent' : 'line-clamp-2 border-border-default'
+          }`}
         >
           {project.description}
         </p>
@@ -106,6 +113,9 @@ function ProjectCard({ project }: { project: Project }) {
               <Icon name="external-link-alt" className="text-fluid-1" aria-hidden />
               Live demo
             </a>
+          ) : null}
+          {project.liveUrl && project.demoNote ? (
+            <span className="text-copyright text-text-subtle">{project.demoNote}</span>
           ) : null}
           {project.githubUrl ? (
             <a
@@ -146,9 +156,10 @@ export function Projects() {
 
   return (
     <Section id="projects" title="Projects" variant="project">
-      <div className="grid grid-cols-1 gap-x-6 gap-y-2 sm:grid-cols-2 lg:grid-cols-3">
-        {visibleProjects.map((project) => (
-          <ProjectCard key={project.id} project={project} />
+      {/* At two columns an odd last card would leave a hole, so center it. */}
+      <div className="grid grid-cols-1 gap-x-6 gap-y-2 sm:grid-cols-2 lg:grid-cols-3 sm:max-lg:[&>article:last-child:nth-child(odd)]:col-span-2 sm:max-lg:[&>article:last-child:nth-child(odd)]:w-[calc(50%-1.5rem)] sm:max-lg:[&>article:last-child:nth-child(odd)]:justify-self-center">
+        {visibleProjects.map((project, index) => (
+          <ProjectCard key={project.id} project={project} index={index} />
         ))}
       </div>
 

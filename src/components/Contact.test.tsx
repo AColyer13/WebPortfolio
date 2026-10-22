@@ -35,6 +35,32 @@ describe('Contact form', () => {
     expect(sendContactForm).not.toHaveBeenCalled()
   })
 
+  function fillForm(message: string) {
+    fireEvent.change(screen.getByLabelText(/^Name$/i), { target: { value: 'QA Tester' } })
+    fireEvent.change(screen.getByLabelText(/^Email$/i), { target: { value: 'qa@example.com' } })
+    fireEvent.change(screen.getByLabelText(/^Message$/i), { target: { value: message } })
+  }
+
+  it('rejects a message shorter than 10 characters', async () => {
+    const { container } = render(<Contact />)
+    fillForm('Hi')
+    fireEvent.click(container.querySelector<HTMLInputElement>('input[type="submit"]')!)
+    expect(await screen.findByText(/at least 10 characters/i)).toBeInTheDocument()
+    expect(sendContactForm).not.toHaveBeenCalled()
+  })
+
+  it('keeps the input and offers a mailto link when sending fails', async () => {
+    vi.mocked(sendContactForm).mockRejectedValueOnce(new Error('offline'))
+    vi.spyOn(console, 'error').mockImplementation(() => {})
+    const { container } = render(<Contact />)
+    fillForm('Hello, I would like to talk about a role.')
+    fireEvent.click(container.querySelector<HTMLInputElement>('input[type="submit"]')!)
+    const banner = await screen.findByRole('status')
+    expect(banner).toHaveTextContent(/something went wrong/i)
+    expect(banner.querySelector('a[href="mailto:adamcolyer@gmail.com"]')).not.toBeNull()
+    expect(screen.getByLabelText(/^Name$/i)).toHaveValue('QA Tester')
+  })
+
   it('does not depend on any FontAwesome class (replaced by Icon)', () => {
     const { container } = render(<Contact />)
     expect(container.querySelector('[class*="fa-"]')).toBeNull()

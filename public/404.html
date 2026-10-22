@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="robots" content="noindex" />
+    <title>Page not found — Adam Colyer</title>
+    <style>
+      :root {
+        --bg: #f7f7f8;
+        --fg: #15151b;
+        --muted: #55555f;
+        --btn-bg: #15151b;
+        --btn-fg: #f7f7f8;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --bg: #121218;
+          --fg: #f1f1f4;
+          --muted: #a4a4b0;
+          --btn-bg: #f1f1f4;
+          --btn-fg: #121218;
+        }
+      }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+        padding: 1rem;
+        box-sizing: border-box;
+        background: var(--bg);
+        color: var(--fg);
+        font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+        text-align: center;
+      }
+      h1 {
+        margin: 0 0 0.5rem;
+        font-size: clamp(2rem, 6vw, 3rem);
+      }
+      p {
+        margin: 0 0 1.5rem;
+        color: var(--muted);
+      }
+      a {
+        display: inline-flex;
+        align-items: center;
+        min-height: 2.75rem;
+        padding: 0 1.25rem;
+        border-radius: 0.375rem;
+        background: var(--btn-bg);
+        color: var(--btn-fg);
+        font-weight: 500;
+        text-decoration: none;
+      }
+      a:focus-visible {
+        outline: 2px solid var(--fg);
+        outline-offset: 2px;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>Page not found</h1>
+      <p>That page doesn’t exist, but the portfolio does.</p>
+      <a href="https://acolyer13.github.io/WebPortfolio/">Back to Adam Colyer’s portfolio</a>
+    </main>
+  </body>
+</html>

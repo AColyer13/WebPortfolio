@@ -10,7 +10,9 @@ import { sendContactForm } from '../utils/contact'
 import { Icon } from './Icons'
 import { Section } from './Section'
 
-type FieldName = 'name' | 'email' | 'message'
+const CONTACT_EMAIL = 'adamcolyer@gmail.com'
+
+type FieldName ='name' | 'email' | 'message'
 
 type FormStatus =
   | { kind: 'idle' }
@@ -24,6 +26,17 @@ const socialLinkClass =
 
 function requiredField(value: string, label: string): string {
   if (!value.trim()) return `${label} is required.`
+  return ''
+}
+
+const MESSAGE_MIN_LENGTH = 10
+
+function validateMessage(value: string): string {
+  const required = requiredField(value, 'Message')
+  if (required) return required
+  if (value.trim().length < MESSAGE_MIN_LENGTH) {
+    return `Message must be at least ${MESSAGE_MIN_LENGTH} characters.`
+  }
   return ''
 }
 
@@ -59,7 +72,7 @@ export function Contact() {
     else if (name === 'email') {
       const el = emailInputRef.current
       msg = el ? validateEmailField(el) : requiredField(value, 'Email')
-    } else msg = requiredField(value, 'Message')
+    } else msg = validateMessage(value)
     setErrors((prev) => ({ ...prev, [name]: msg }))
     return msg
   }
@@ -108,7 +121,7 @@ export function Contact() {
     const eEmail = emailInputRef.current
       ? validateEmailField(emailInputRef.current)
       : 'Email is required.'
-    const eMessage = requiredField(formData.message, 'Message')
+    const eMessage = validateMessage(formData.message)
     const nextErrors = {
       name: eName,
       email: eEmail,
@@ -139,7 +152,7 @@ export function Contact() {
     } catch (error) {
       setStatus({
         kind: 'error',
-        message: 'Something went wrong. Please try again or email directly.',
+        message: 'Something went wrong. Please try again or email directly:',
       })
       console.error('Error sending email:', error)
     } finally {
@@ -176,10 +189,10 @@ export function Contact() {
               </dt>
               <dd className="m-0 mt-1">
                 <a
-                  href="mailto:adamcolyer@gmail.com"
-                  className="text-fluid-1 font-semibold text-text-default underline-offset-4 hover:underline"
+                  href={`mailto:${CONTACT_EMAIL}`}
+                  className="text-fluid-1 font-semibold text-text-default underline underline-offset-4"
                 >
-                  adamcolyer@gmail.com
+                  {CONTACT_EMAIL}
                 </a>
               </dd>
             </div>
@@ -238,6 +251,14 @@ export function Contact() {
               }`}
             >
               {status.message}
+              {status.kind === 'error' ? (
+                <>
+                  {' '}
+                  <a href={`mailto:${CONTACT_EMAIL}`} className="underline underline-offset-4">
+                    {CONTACT_EMAIL}
+                  </a>
+                </>
+              ) : null}
             </div>
           ) : null}
 

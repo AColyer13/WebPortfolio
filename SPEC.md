@@ -4,11 +4,11 @@ Plain checklist for what this site must do. Content lives in [`src/data/portfoli
 
 ## Must-haves
 
-1. **Intro** — Name, role, the sales-to-engineering line (with the accent underline), short bio, resume download, link to contact (`#about`).
-2. **Projects** — Featured cards show first, and a button reveals the rest. Each card has an (i) button that reveals a one- or two-sentence description, a live demo link when there is one, and a GitHub link (`#projects`).
-3. **Experience** — Work history timeline with month ranges (`#experience`).
+1. **Intro** — Name, location, and one hero sentence that says who the site is for ("Full-stack engineer building AI-powered web apps, after five years selling software."), resume download, link to contact (`#about`).
+2. **Projects** — Featured cards show first, and a button reveals the rest. Each card shows a two-line description by default; the (i) button expands it. Live demo link when there is one (with a heads-up when the demo needs a sign-up), and a GitHub link only for public repos (`#projects`).
+3. **Experience** — Work history timeline with month ranges, then an Education list (`#experience`).
 4. **Skills** — Engineering discipline blocks as plain lists in two balanced columns (`#skills`).
-5. **Contact** — Email form (EmailJS, loaded only on submit), location, email, social links. No phone number on the public page (`#contact`).
+5. **Contact** — Email form (EmailJS, loaded only on submit; message needs 10+ characters; a failed send keeps the input and shows a mailto fallback), location, email, social links. No phone number on the public page (`#contact`).
 6. **Footer** — GitHub, LinkedIn, email, and a link to this site's source.
 7. **Navigation** — Sticky header, scroll-spy highlights the current section, URL hash stays in sync.
 8. **Every device** — Light / dark / system theme. Works on phone and desktop. Respects reduced motion, high contrast, and forced-colors. Browser details: [`docs/COMPAT.md`](docs/COMPAT.md).
@@ -21,13 +21,14 @@ Plain checklist for what this site must do. Content lives in [`src/data/portfoli
 | ------------ | ------------- | -------------------------------------- |
 | `#about`     | `About`       | Intro, resume, contact CTA             |
 | `#projects`  | `Projects`    | Project cards                          |
-| `#experience`| `Experiences` | Timeline                               |
+| `#experience`| `Experiences` | Timeline, education                    |
 | `#skills`    | `Skills`      | Skill discipline groups                |
 | `#contact`   | `Contact`     | Form, map, socials                     |
 
 ## Share assets
 
 - `public/favicon.svg` (AC monogram, follows light/dark) and `public/apple-touch-icon.png`.
+- `public/404.html` — standalone not-found page (GitHub Pages serves it for unknown paths) with a link back to the site.
 - `public/og-card.jpg` — 1200×630 link-preview card used by `og:image` / `twitter:image`. Regenerate it if the hero line or name changes.
 
 ## Stack

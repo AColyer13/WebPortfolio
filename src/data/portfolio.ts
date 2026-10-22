@@ -12,6 +12,13 @@ export interface TimelineItem {
   description: string
 }
 
+export interface EducationItem {
+  /** Year or month the credential was earned, or a status such as "In progress". */
+  date: string
+  title: string
+  institution: string
+}
+
 export interface Project {
   id: number
   title: string
@@ -20,6 +27,8 @@ export interface Project {
   description: string
   imageUrl: string
   liveUrl?: string
+  /** Short heads-up shown beside the live link, e.g. when the demo needs an account. */
+  demoNote?: string
   /** Only set for public repos; omit it to hide the Source link. */
   githubUrl?: string
   featured?: boolean
@@ -49,9 +58,6 @@ export const skillBlocks: SkillBlock[] = [
     skills: [
       'React Native',
       'Expo & EAS',
-      'Flutter',
-      'Native iOS',
-      'Native Android',
       'React Native Reanimated & Skia',
       'Mobile Architecture',
       'Mobile Release Engineering',
@@ -78,8 +84,6 @@ export const skillBlocks: SkillBlock[] = [
       'PostgreSQL',
       'Prisma ORM',
       'SQLModel',
-      'DynamoDB',
-      'Amazon RDS',
       'Supabase',
       'Firebase / Firestore',
       'Redis',
@@ -155,8 +159,6 @@ export const skillBlocks: SkillBlock[] = [
       'Lighthouse CI',
       'axe Accessibility',
       'Supertest',
-      'Mutation Testing',
-      'Property-Based Testing',
       'Sentry',
       'OpenTelemetry',
       'Pino Logging',
@@ -214,6 +216,29 @@ export const timeline: TimelineItem[] = [
   },
 ]
 
+export const education: EducationItem[] = [
+  {
+    date: 'In progress',
+    title: 'Microsoft Azure certification',
+    institution: 'Microsoft',
+  },
+  {
+    date: 'Feb 2026',
+    title: 'Full Stack Certificate',
+    institution: 'Coding Temple',
+  },
+  {
+    date: '2021',
+    title: 'Business Analytics',
+    institution: 'Harvard Business School Online',
+  },
+  {
+    date: '2019',
+    title: 'B.A. Marketing',
+    institution: 'University of St. Thomas',
+  },
+]
+
 export const projects: Project[] = [
   {
     id: 3,
@@ -223,6 +248,7 @@ export const projects: Project[] = [
       'Practice tools for estate attorneys: client files, filing deadlines, and a per-case change log. The built-in assistant answers only from app data, after names and other sensitive details are stripped.',
     imageUrl: 'images/legaleagleproject-new.png',
     liveUrl: 'https://legaleagleproject-mu.vercel.app',
+    demoNote: 'Free sign-up required',
     featured: true,
   },
   {

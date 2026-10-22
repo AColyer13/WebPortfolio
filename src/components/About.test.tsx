@@ -8,7 +8,9 @@ describe('About', () => {
     expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(
       'Adam Colyer Twin Cities, MN',
     )
-    expect(screen.queryByText(/selling software/i)).not.toBeInTheDocument()
+    expect(
+      screen.getByText(/full-stack engineer building ai-powered web apps/i),
+    ).toBeInTheDocument()
   })
 
   it('does not depend on any FontAwesome class (replaced by Icon)', () => {
