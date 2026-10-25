@@ -97,12 +97,12 @@ describe('Projects', () => {
 
     expect(info).toHaveAttribute('aria-expanded', 'false')
     expect(description).toBeVisible()
-    expect(description).toHaveClass('line-clamp-2')
+    expect(description).toHaveClass('line-clamp-4')
 
     fireEvent.click(info)
     expect(info).toHaveAttribute('aria-expanded', 'true')
     expect(info).toHaveAttribute('aria-controls', description.id)
-    expect(description).not.toHaveClass('line-clamp-2')
+    expect(description).not.toHaveClass('line-clamp-4')
   })
 
   it('no longer renders any FontAwesome classes (font icons migrated to SVG Icon)', () => {

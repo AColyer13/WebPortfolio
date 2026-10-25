@@ -12,6 +12,8 @@ const base = import.meta.env.BASE_URL
 const RESUME_PATH = 'files/Adam_Colyer_Resume.pdf'
 const RESUME_FILENAME = 'Adam_Colyer_Resume.pdf'
 const resumeUrl = withBase(RESUME_PATH)
+/** Equal-width stacked CTAs on phones; natural width side by side from sm up. */
+const ctaWidthClass = 'w-full max-w-xs sm:w-auto sm:max-w-none'
 const HERO_LINE = 'Full-stack engineer building AI-powered web apps, after five years selling software.'
 
 export function About() {
@@ -32,11 +34,11 @@ export function About() {
             </p>
 
             <div className="mt-5 flex flex-wrap items-center justify-center gap-2 lg:justify-start">
-              <a href={resumeUrl} className={primaryBtnClass} download={RESUME_FILENAME}>
+              <a href={resumeUrl} className={`${primaryBtnClass} ${ctaWidthClass}`} download={RESUME_FILENAME}>
                 <Icon name="file-alt" aria-hidden />
                 Download resume
               </a>
-              <a href={`${base}#contact`} className={secondaryBtnClass}>
+              <a href={`${base}#contact`} className={`${secondaryBtnClass} ${ctaWidthClass}`}>
                 Get in touch
               </a>
             </div>

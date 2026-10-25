@@ -15,10 +15,6 @@ export const sectionHeadingClass =
 export const sectionHeadingCenterClass =
   'flow-root mx-auto mb-(--section-padding-y) max-w-[40rem] text-center'
 
-/** Below-the-fold sections — defer layout/paint until near viewport */
-export const sectionDeferredClass =
-  '[content-visibility:auto] [contain-intrinsic-size:auto_50rem]'
-
 export const primaryBtnClass =
   'inline-flex min-h-11 items-center justify-center gap-1 whitespace-nowrap rounded-md border-none bg-btn-bg px-4 py-2 text-btn font-medium text-btn-fg transition-colors duration-150 ease-out hover:bg-btn-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600'
 

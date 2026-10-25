@@ -60,7 +60,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
       <div className="flex grow flex-col gap-2 py-4">
         {/* Every item carries a leading "·" inside a negative inline margin; the
             wrapper clips it, so a separator that starts a wrapped line is hidden. */}
-        <div className="overflow-hidden">
+        <div className="overflow-hidden sm:min-h-[2.75em]">
           <ul
             className="m-0 -ms-[1.5em] flex list-none flex-wrap p-0 font-mono text-copyright uppercase tracking-wide text-text-subtle"
             aria-label="Built with"
@@ -81,7 +81,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
           </h3>
           <button
             type="button"
-            className={`project-info-btn -me-2.5 -mt-1.5 inline-flex size-11 shrink-0 cursor-pointer items-center justify-center rounded-md border-none bg-transparent p-0 text-xl transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-offset-[-4px] focus-visible:outline-primary-600 ${
+            className={`project-info-btn -me-2 -mt-1.5 inline-flex h-11 min-w-11 shrink-0 cursor-pointer items-center justify-center gap-1 rounded-md border-none bg-transparent px-2 text-xl transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-offset-[-4px] focus-visible:outline-primary-600 ${
               infoOpen ? 'text-accent' : 'text-text-subtle hover:text-text-default'
             }`}
             aria-expanded={infoOpen}
@@ -90,6 +90,9 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
             title={`About ${project.title}`}
             onClick={() => setInfoOpen((open) => !open)}
           >
+            <span className="text-copyright font-medium" aria-hidden>
+              {infoOpen ? 'Less' : 'More'}
+            </span>
             <Icon name="info" aria-hidden />
           </button>
         </div>
@@ -97,7 +100,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
           id={descriptionId}
           data-expanded={infoOpen}
           className={`project-info m-0 border-s-2 ps-3 text-fluid-1 leading-relaxed text-text-muted ${
-            infoOpen ? 'border-accent' : 'line-clamp-2 border-border-default'
+            infoOpen ? 'border-accent' : 'line-clamp-4 border-border-default'
           }`}
         >
           {project.description}
@@ -116,6 +119,11 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
           ) : null}
           {project.liveUrl && project.demoNote ? (
             <span className="text-copyright text-text-subtle">{project.demoNote}</span>
+          ) : null}
+          {!project.liveUrl && !project.githubUrl ? (
+            <span className="inline-flex min-h-11 items-center text-copyright text-text-subtle">
+              {project.demoNote ?? 'Not publicly hosted. Demo on request.'}
+            </span>
           ) : null}
           {project.githubUrl ? (
             <a

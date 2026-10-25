@@ -3,16 +3,16 @@ import {
   containerClass,
   sectionBlockClass,
   sectionContainerClass,
-  sectionDeferredClass,
   sectionHeadingClass,
 } from '../utils/layoutClasses'
 
 const variantClass = {
-  skills: `${sectionDeferredClass} bg-bg @container/skills`,
-  resume: `${sectionDeferredClass} bg-bg @container/resume`,
-  // No content-visibility here — it can leave project links unclickable after tab/BFCache restore.
+  // No content-visibility on any section: estimated heights shifted the page after load,
+  // so nav jumps landed short and project links could go unclickable after BFCache restore.
+  skills: 'bg-bg @container/skills',
+  resume: 'bg-bg @container/resume',
   project: 'bg-bg @container/portfolio',
-  contact: `${sectionDeferredClass} bg-bg @container/contact`,
+  contact: 'bg-bg @container/contact',
 } as const
 
 export type SectionVariant = keyof typeof variantClass

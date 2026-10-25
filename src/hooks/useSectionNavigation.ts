@@ -71,7 +71,8 @@ export function useSectionNavigation(
 
     void document.fonts?.ready?.then(() => {
       syncOffset()
-      if (!window.location.hash) window.scrollTo(0, 0)
+      // Only correct a near-top offset; never yank a user who already scrolled.
+      if (!window.location.hash && window.scrollY < 40) window.scrollTo(0, 0)
     })
 
     return () => {
