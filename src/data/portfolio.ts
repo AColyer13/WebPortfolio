@@ -50,6 +50,7 @@ export const skillBlocks: SkillBlock[] = [
       'TanStack Query',
       'Axios',
       'Three.js',
+      'WebGPU',
       'HTML5 / CSS3',
     ],
   },
@@ -256,7 +257,7 @@ export const projects: Project[] = [
     title: 'MissionCtrl',
     tech: 'React, Firebase, Firestore, Gemini AI',
     description:
-      'Satellite mission simulator. Plots satellite positions and orbital paths on a 3D globe from TLE data as the mission clock advances, and a Gemini flight assistant answers questions about the current orbit and upcoming burns.',
+      'Satellite mission simulator that plots positions and orbital paths on a 3D globe from TLE data, with a Gemini flight assistant for the current orbit and upcoming burns. Sat bench, on this page, grades the corrective call: a fixed fault, a deadline, and whether the trajectory stays in the corridor.',
     imageUrl: 'images/missionctrl-tr41-groundctrl-new.png',
     liveUrl: 'https://missionctrl.org',
     featured: true,

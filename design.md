@@ -11,8 +11,11 @@ editorial
 Single-route marketing portfolio. Sections share one system; they vary only in
 local rhythm.
 
-Section order: Intro → Projects → Experience → Skills → Contact. Projects lead
-because the work is the evidence; the sales history backs it up.
+Section order: Intro → Projects → Fly brain → Sat bench → Experience → Skills → Contact.
+Projects lead because the work is the evidence. The fly-brain section is the
+live connectome demo, and sat bench is the satellite exam. Each canvas is the
+interaction, so either may hold a plot and buttons. No extra accent color
+there. The sales history follows.
 
 - Marketing / intro: Split Hero (name/copy paired with a framed portrait image; stacks on mobile)
 - Experience / contact: Long Document (start-aligned heads; hairline rules)
@@ -78,6 +81,7 @@ Pages must use tokens / Tailwind theme aliases — no raw one-off gaps.
 - Intro MAY pair copy with a framed photo (Tier: real asset; bordered box,
   `--radius-lg`, not full-bleed).
 - Other sections: typography + rules only; no decorative enrichment.
+  The fly-brain plot and the sat-bench trace are the simulations, not decoration.
 - Elsewhere, cards only when the surface IS the interaction (project row with
   links). Prefer hairlines over filled cards.
 

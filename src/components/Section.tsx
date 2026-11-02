@@ -12,6 +12,8 @@ const variantClass = {
   skills: 'bg-bg @container/skills',
   resume: 'bg-bg @container/resume',
   project: 'bg-bg @container/portfolio',
+  brain: 'bg-bg @container/brain',
+  bench: 'bg-bg @container/bench',
   contact: 'bg-bg @container/contact',
 } as const
 

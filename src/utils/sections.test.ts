@@ -88,6 +88,8 @@ describe('SECTION_IDS + isSectionId', () => {
     expect(SECTION_IDS).toEqual([
       'about',
       'projects',
+      'fly-brain',
+      'sat-bench',
       'experience',
       'skills',
       'contact',

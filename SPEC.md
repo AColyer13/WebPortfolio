@@ -13,7 +13,7 @@ Plain checklist for what this site must do. Content lives in [`src/data/portfoli
 7. **Navigation** — Sticky header, scroll-spy highlights the current section, URL hash stays in sync.
 8. **Every device** — Light / dark / system theme. Works on phone and desktop. Respects reduced motion, high contrast, and forced-colors. Browser details: [`docs/COMPAT.md`](docs/COMPAT.md).
 9. **Accessible** — Skip link, semantic HTML, passes axe scan after build.
-10. **Fast** — Small CSS bundle, AVIF/WebP images with correct `<picture>` sources, lazy-load images below the fold, EmailJS in its own chunk.
+10. **Fast** — Small CSS bundle, AVIF/WebP images with correct `<picture>` sources, lazy-load images below the fold, EmailJS in its own chunk. The fly-brain simulation and its connectome file load only when that section is near the screen. Sat bench is a small in-page model with nothing extra to download.
 
 ## Page sections (top to bottom)
 
@@ -21,6 +21,8 @@ Plain checklist for what this site must do. Content lives in [`src/data/portfoli
 | ------------ | ------------- | -------------------------------------- |
 | `#about`     | `About`       | Intro, resume, contact CTA             |
 | `#projects`  | `Projects`    | Project cards                          |
+| `#fly-brain` | `FlyBrain`    | Live FlyWire connectome simulation     |
+| `#sat-bench` | `SatBench`    | Deterministic satellite fault exams    |
 | `#experience`| `Experiences` | Timeline, education                    |
 | `#skills`    | `Skills`      | Skill discipline groups                |
 | `#contact`   | `Contact`     | Form, map, socials                     |
