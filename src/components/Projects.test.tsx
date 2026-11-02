@@ -1,5 +1,5 @@
 import { beforeEach, describe, it, expect } from 'vitest'
-import { fireEvent, render, screen } from '@testing-library/react'
+import { fireEvent, render, screen, within } from '@testing-library/react'
 import { featuredProjects } from '../data/portfolio'
 import { Projects } from './Projects'
 
@@ -15,6 +15,7 @@ describe('Projects', () => {
     // card titles and avoid duplicate matches.
     const cardTitles = screen.getAllByRole('heading', { level: 3 })
     const titles = cardTitles.map((h) => h.textContent ?? '')
+    expect(titles).toContain('Fly brain')
     expect(titles).toContain('Legal Eagle Project')
     expect(titles).toContain('MissionCtrl')
     expect(titles).toContain('Pure Strike Golf')
@@ -40,23 +41,33 @@ describe('Projects', () => {
     const { container } = render(<Projects />)
     const imgs = container.querySelectorAll('img')
     expect(imgs.length).toBe(featuredProjects.length)
-    expect(imgs[0].getAttribute('src')).toContain(
-      'images/legaleagleproject',
-    )
+    expect(imgs[0].getAttribute('src')).toContain('images/fly-brain')
   })
 
   it('loads the first row of thumbnails eagerly and lazy-loads the rest', () => {
     const { container } = render(<Projects />)
     const imgs = container.querySelectorAll<HTMLImageElement>('img')
-    for (const img of imgs) {
-      expect(img.getAttribute('loading')).toBe('eager')
-    }
+    expect([...imgs].slice(0, 3).every((img) => img.getAttribute('loading') === 'eager')).toBe(true)
+    expect(imgs[3]?.getAttribute('loading')).toBe('lazy')
     expect(imgs[0].getAttribute('fetchpriority')).toBe('high')
 
     fireEvent.click(screen.getByRole('button', { name: /View all projects/i }))
     const expandedImgs = [...container.querySelectorAll<HTMLImageElement>('img')]
     expect(expandedImgs.length).toBeGreaterThan(featuredProjects.length)
     expect(expandedImgs.slice(3).every((img) => img.getAttribute('loading') === 'lazy')).toBe(true)
+  })
+
+  it('opens the fly brain and sat bench demos in a scrollable popup', async () => {
+    render(<Projects />)
+    fireEvent.click(screen.getByRole('button', { name: 'Live demo' }))
+    const dialog = await screen.findByRole('dialog', { name: 'Live demo' })
+    expect(dialog).toHaveClass('demo-dialog')
+    const popup = within(dialog)
+    expect(await popup.findByRole('heading', { name: 'Fly brain', level: 2 }, { timeout: 4000 })).toBeInTheDocument()
+    expect(popup.getByRole('heading', { name: 'Sat bench', level: 2 })).toBeInTheDocument()
+
+    fireEvent.click(screen.getByRole('button', { name: 'Close' }))
+    expect(screen.queryByRole('dialog', { name: 'Live demo' })).not.toBeInTheDocument()
   })
 
   it('warns that the Legal Eagle demo needs a sign-up', () => {

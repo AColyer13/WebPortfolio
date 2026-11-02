@@ -10,12 +10,6 @@ import { sectionBlockClass } from './utils/layoutClasses'
 const Projects = lazy(() =>
   import('./components/Projects').then((m) => ({ default: m.Projects })),
 )
-const FlyBrain = lazy(() =>
-  import('./components/FlyBrain').then((m) => ({ default: m.FlyBrain })),
-)
-const SatBench = lazy(() =>
-  import('./components/SatBench').then((m) => ({ default: m.SatBench })),
-)
 const Contact = lazy(() =>
   import('./components/Contact').then((m) => ({ default: m.Contact })),
 )
@@ -60,12 +54,6 @@ function App() {
         <About />
         <Suspense fallback={<SectionPlaceholder id="projects" />}>
           <Projects />
-        </Suspense>
-        <Suspense fallback={<SectionPlaceholder id="fly-brain" />}>
-          <FlyBrain />
-        </Suspense>
-        <Suspense fallback={<SectionPlaceholder id="sat-bench" />}>
-          <SatBench />
         </Suspense>
         <Experiences />
         <Skills />

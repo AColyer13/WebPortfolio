@@ -76,8 +76,6 @@ function themeToggleLabel(
 const navItems = [
   { id: 'about', label: 'About' },
   { id: 'projects', label: 'Projects' },
-  { id: 'fly-brain', label: 'Fly brain' },
-  { id: 'sat-bench', label: 'Sat bench' },
   { id: 'experience', label: 'Experience' },
   { id: 'skills', label: 'Skills' },
   { id: 'contact', label: 'Contact' },

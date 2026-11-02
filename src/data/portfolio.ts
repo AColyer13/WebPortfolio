@@ -31,6 +31,8 @@ export interface Project {
   demoNote?: string
   /** Only set for public repos; omit it to hide the Source link. */
   githubUrl?: string
+  /** Opens the in-page live demo instead of an external site. */
+  demo?: 'benches'
   featured?: boolean
 }
 
@@ -242,6 +244,16 @@ export const education: EducationItem[] = [
 
 export const projects: Project[] = [
   {
+    id: 21,
+    title: 'Fly brain',
+    tech: 'TypeScript, WebGPU, React',
+    description:
+      'A browser simulation of a real FlyWire connectome cut. The same live demo scrolls on to Sat bench, which grades a satellite fault on how fast the correction comes and whether the trajectory stays in the corridor. Nothing is sent to a server.',
+    imageUrl: 'images/fly-brain.png',
+    demo: 'benches',
+    featured: true,
+  },
+  {
     id: 3,
     title: 'Legal Eagle Project',
     tech: 'Next.js, Prisma, AI SDK, NextAuth',
@@ -257,7 +269,7 @@ export const projects: Project[] = [
     title: 'MissionCtrl',
     tech: 'React, Firebase, Firestore, Gemini AI',
     description:
-      'Satellite mission simulator that plots positions and orbital paths on a 3D globe from TLE data, with a Gemini flight assistant for the current orbit and upcoming burns. Sat bench, on this page, grades the corrective call: a fixed fault, a deadline, and whether the trajectory stays in the corridor.',
+      'Satellite mission simulator that plots positions and orbital paths on a 3D globe from TLE data, with a Gemini flight assistant for the current orbit and upcoming burns.',
     imageUrl: 'images/missionctrl-tr41-groundctrl-new.png',
     liveUrl: 'https://missionctrl.org',
     featured: true,

@@ -18,8 +18,6 @@
 export const SECTION_IDS = [
   'about',
   'projects',
-  'fly-brain',
-  'sat-bench',
   'experience',
   'skills',
   'contact',

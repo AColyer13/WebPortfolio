@@ -1,8 +1,9 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { featuredProjects, projects, type Project } from '../data/portfolio'
 import { withBase } from '../utils/baseUrl'
 import { projectPictureBase } from '../utils/images'
 import { imgCardThumbClass, portfolioCardClass } from '../utils/layoutClasses'
+import { DemoDialog } from './DemoDialog'
 import { Section } from './Section'
 import { Icon } from './Icons'
 
@@ -23,7 +24,15 @@ function writeShowAllToUrl(showAll: boolean) {
 /** Cards that sit in the first viewport load eagerly so no gray box shows. */
 const EAGER_IMAGE_COUNT = 3
 
-function ProjectCard({ project, index }: { project: Project; index: number }) {
+function ProjectCard({
+  project,
+  index,
+  onOpenDemo,
+}: {
+  project: Project
+  index: number
+  onOpenDemo?: () => void
+}) {
   const eager = index < EAGER_IMAGE_COUNT
   const [infoOpen, setInfoOpen] = useState(false)
   const base = projectPictureBase(project.imageUrl)
@@ -106,6 +115,16 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
           {project.description}
         </p>
         <div className="mt-auto flex flex-wrap items-center gap-3 pt-2">
+          {project.demo ? (
+            <button
+              type="button"
+              className="inline-flex min-h-11 cursor-pointer items-center gap-1 border-none bg-transparent p-0 text-fluid-1 font-medium text-text-default underline-offset-4 hover:underline"
+              aria-haspopup="dialog"
+              onClick={onOpenDemo}
+            >
+              Live demo
+            </button>
+          ) : null}
           {project.liveUrl ? (
             <a
               href={project.liveUrl}
@@ -120,7 +139,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
           {project.liveUrl && project.demoNote ? (
             <span className="text-copyright text-text-subtle">{project.demoNote}</span>
           ) : null}
-          {!project.liveUrl && !project.githubUrl ? (
+          {!project.liveUrl && !project.githubUrl && !project.demo ? (
             <span className="inline-flex min-h-11 items-center text-copyright text-text-subtle">
               {project.demoNote ?? 'Not publicly hosted. Demo on request.'}
             </span>
@@ -145,6 +164,8 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
 
 export function Projects() {
   const [showAll, setShowAll] = useState(readShowAllFromUrl)
+  const [demoOpen, setDemoOpen] = useState(false)
+  const closeDemo = useCallback(() => setDemoOpen(false), [])
   const visibleProjects = showAll ? projects : featuredProjects
   const hiddenCount = projects.length - featuredProjects.length
 
@@ -167,9 +188,15 @@ export function Projects() {
       {/* At two columns an odd last card would leave a hole, so center it. */}
       <div className="grid grid-cols-1 gap-x-6 gap-y-2 sm:grid-cols-2 lg:grid-cols-3 sm:max-lg:[&>article:last-child:nth-child(odd)]:col-span-2 sm:max-lg:[&>article:last-child:nth-child(odd)]:w-[calc(50%-1.5rem)] sm:max-lg:[&>article:last-child:nth-child(odd)]:justify-self-center">
         {visibleProjects.map((project, index) => (
-          <ProjectCard key={project.id} project={project} index={index} />
+          <ProjectCard
+            key={project.id}
+            project={project}
+            index={index}
+            onOpenDemo={project.demo ? () => setDemoOpen(true) : undefined}
+          />
         ))}
       </div>
+      {demoOpen ? <DemoDialog onClose={closeDemo} /> : null}
 
       {hiddenCount > 0 ? (
         <div className="mt-6">
