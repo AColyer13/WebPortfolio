@@ -114,7 +114,7 @@ function draw(
   ctx.restore()
 
   ctx.fillStyle = ink
-  ctx.font = '12px ui-monospace, monospace'
+  ctx.font = '12px "JetBrains Mono", "Geist Mono", monospace'
   ctx.textBaseline = 'bottom'
   const caption = examId === 'thermal' ? 'Temperature' : 'Attitude'
   ctx.fillText(caption, pad, height - 6)
@@ -221,14 +221,14 @@ export function SatBench() {
 
   return (
     <Section id="sat-bench" title="Sat bench" variant="bench">
-      <p className="m-0 max-w-[46rem] text-pretty text-body leading-snug text-text-default">
+      <p className="m-0 text-pretty text-body">
         Sat bench grades the corrective call, not a loss curve. Each fault is injected the same
         way every time: attitude drift, a thermal spike, or a comms drop. The grade is how soon
         the command arrives, and whether the trajectory stays inside a fixed corridor. Issue the
         same command at the same latency and the grade does not change. The dynamics run in this
         page. Nothing is sent to a server.
       </p>
-      <p className="m-0 mt-3 max-w-[46rem] text-fluid-1 leading-snug text-text-muted">
+      <p className="m-0 mt-(--space-3) text-fluid-1">
         One axis, a temperature, and a link, stepped at 50 ms. This is a teaching stand-in for
         the console, not a flight propagator.{' '}
         <a
@@ -242,7 +242,7 @@ export function SatBench() {
         is the mission simulator this exam belongs beside.
       </p>
 
-      <div className="mt-6 flex flex-wrap gap-2" role="group" aria-label="Fault">
+      <div className="mt-(--space-6) flex flex-wrap gap-(--space-2)" role="group" aria-label="Fault">
         {EXAMS.map((item) => {
           const pressed = run?.examId === item.id
           return (
@@ -263,16 +263,16 @@ export function SatBench() {
         </button>
       </div>
 
-      <p className="m-0 mt-3 min-h-11 text-fluid-1 leading-snug text-text-muted">
+      <p className={`m-0 mt-(--space-3) text-fluid-1 ${exam ? '' : 'state-empty'}`}>
         {exam
           ? `${exam.fault} ${exam.tutor}`
           : 'Choose a fault. The injection is the same every time.'}
       </p>
 
-      <div className="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1.5fr)_minmax(16rem,22rem)] lg:gap-10">
+      <div className="grid grid-cols-1 gap-(--space-6) lg:grid-cols-[minmax(0,1.5fr)_minmax(16rem,22rem)] lg:gap-(--space-12)">
         <div>
           {exam && (
-            <div className="flex flex-wrap gap-2" role="group" aria-label="Corrective command">
+            <div className="flex flex-wrap gap-(--space-2)" role="group" aria-label="Corrective command">
               {exam.commands.map((item) => (
                 <button
                   key={item.id}
@@ -288,12 +288,11 @@ export function SatBench() {
             </div>
           )}
           <div
-            className="relative mt-4 h-56 border border-border-default text-text-default lg:h-72"
-            style={{ borderColor: 'var(--color-border-default)', color: 'var(--color-text-default)' }}
+            className="plot-stage mt-(--space-4) h-56 lg:h-72"
           >
             <canvas ref={canvasRef} className="block h-full w-full" aria-hidden="true" />
             {!traceExam && (
-              <p className="pointer-events-none absolute inset-0 m-0 flex items-center px-4 text-fluid-1 text-text-muted">
+              <p className="state-empty pointer-events-none absolute inset-(--space-4) m-0">
                 The trace appears when a fault starts.
               </p>
             )}
@@ -304,68 +303,71 @@ export function SatBench() {
         </div>
 
         <div>
-          <h3 className="m-0 text-fluid-3 font-bold text-text-default">Grade</h3>
-          <p className="m-0 mt-2 text-fluid-1 leading-snug text-text-muted">
+          <h3 className="m-0">Grade</h3>
+          <p className="m-0 mt-(--space-2) text-fluid-1">
             Latency against the deadline, then the peak and the settled value against the corridor.
           </p>
-          <ul className="m-0 mt-4 list-none p-0">
-            <li className="border-b border-border-default py-3">
-              <div className="flex items-baseline justify-between gap-3">
+          <ul className="m-0 mt-(--space-4) flex list-none flex-col gap-(--space-4) p-0">
+            <li>
+              <div className="flex items-baseline justify-between gap-(--space-3)">
                 <span className="text-body text-text-default">Attitude</span>
-                <span className="shrink-0 tabular-nums text-body text-text-default">
+                <span className="metric shrink-0 text-body text-text-default">
                   {telemetry ? `${telemetry.theta.toFixed(1)}°` : '–'}
                 </span>
               </div>
             </li>
-            <li className="border-b border-border-default py-3">
-              <div className="flex items-baseline justify-between gap-3">
+            <li>
+              <div className="flex items-baseline justify-between gap-(--space-3)">
                 <span className="text-body text-text-default">Rate</span>
-                <span className="shrink-0 tabular-nums text-body text-text-default">
+                <span className="metric shrink-0 text-body text-text-default">
                   {telemetry ? `${telemetry.rate.toFixed(2)}°/s` : '–'}
                 </span>
               </div>
             </li>
-            <li className="border-b border-border-default py-3">
-              <div className="flex items-baseline justify-between gap-3">
+            <li>
+              <div className="flex items-baseline justify-between gap-(--space-3)">
                 <span className="text-body text-text-default">Temperature</span>
-                <span className="shrink-0 tabular-nums text-body text-text-default">
+                <span className="metric shrink-0 text-body text-text-default">
                   {telemetry ? `${telemetry.temp.toFixed(1)}°C` : '–'}
                 </span>
               </div>
             </li>
-            <li className="border-b border-border-default py-3">
-              <div className="flex items-baseline justify-between gap-3">
+            <li>
+              <div className="flex items-baseline justify-between gap-(--space-3)">
                 <span className="text-body text-text-default">Link</span>
-                <span className="shrink-0 tabular-nums text-body text-text-default">
+                <span className="metric shrink-0 text-body text-text-default">
                   {telemetry ? `${Math.round(telemetry.link * 100)}%` : '–'}
                 </span>
               </div>
             </li>
           </ul>
           {grade && (
-            <div className="mt-4 border-t border-border-default pt-4" role="status">
-              <p className="m-0 text-body text-text-default">{grade.note}</p>
-              <dl className="m-0 mt-3 grid grid-cols-[auto_1fr] gap-x-4 gap-y-1 text-fluid-1 text-text-muted">
+            <div
+              className={`status-banner mt-(--space-4) flex-col ${grade.pass ? 'status-banner--success' : 'status-banner--danger'}`}
+              role="status"
+            >
+              <p className="m-0 max-w-none text-body text-text-default">{grade.note}</p>
+              <dl className="m-0 grid grid-cols-[auto_1fr] gap-x-(--space-4) gap-y-(--space-1) text-fluid-1 text-text-muted">
                 <dt>Latency</dt>
-                <dd className="m-0 tabular-nums text-text-default">
+                <dd className="metric m-0 text-text-default">
                   {formatSeconds(grade.latencyMs)} / {formatSeconds(grade.latencyLimitMs)}
                 </dd>
                 <dt>Peak</dt>
-                <dd className="m-0 tabular-nums text-text-default">
+                <dd className="metric m-0 text-text-default">
                   {formatMeasure(grade.peak, grade.peakUnit)} / {formatMeasure(grade.peakLimit, grade.peakUnit)}
                 </dd>
                 <dt>Settled</dt>
-                <dd className="m-0 tabular-nums text-text-default">
+                <dd className="metric m-0 text-text-default">
                   {formatMeasure(grade.settled, grade.settleUnit)} / {formatMeasure(grade.settleLimit, grade.settleUnit)}
                 </dd>
                 {grade.link !== null && (
                   <>
                     <dt>Link</dt>
-                    <dd className="m-0 tabular-nums text-text-default">{Math.round(grade.link * 100)}% / 95%</dd>
+                    <dd className="metric m-0 text-text-default">{Math.round(grade.link * 100)}% / 95%</dd>
                   </>
                 )}
               </dl>
-              <p className="m-0 mt-3 text-fluid-1 text-text-muted">
+              <p className="metric m-0 text-fluid-1 text-text-muted">
                 Key {grade.examId} / {grade.commandLabel} / {grade.latencyMs} ms.
               </p>
             </div>

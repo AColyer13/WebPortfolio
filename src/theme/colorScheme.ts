@@ -10,8 +10,8 @@ export type ThemeMode = 'system' | 'opposite'
 /** Browser chrome — matches the page background (`--color-bg` in index.css) */
 /** Approximate sRGB of `--color-bg` for browser chrome (meta theme-color). */
 const THEME_COLOR: Record<ResolvedTheme, string> = {
-  light: '#f7f7f8',
-  dark: '#121218',
+  light: '#F4F4F6',
+  dark: '#08080A',
 }
 
 /** Legacy storage key — dropped on first paint so scheduled OS themes always apply. */

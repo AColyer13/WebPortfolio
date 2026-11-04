@@ -1,37 +1,52 @@
-/* Hallmark · genre: editorial · macrostructure: Marquee Hero + Long Document + Catalogue
- * theme: custom charcoal · design-system: design.md · designed-as-app
- * display: Newsreader Variable · body: Source Sans 3 Variable
- * Hallmark · pre-emit critique: P5 H5 E5 S4 R5 V4
- */
+/* Portable tokens for the portfolio material system.
+   Runtime sheet: src/index.css. Faces already in the project are preserved. */
 
 :root {
-  --color-paper: oklch(98% 0.005 260);
-  --color-paper-2: oklch(96% 0.01 260);
-  --color-ink: oklch(28% 0.03 260);
-  --color-ink-2: oklch(48% 0.02 260);
-  --color-rule: oklch(90% 0.01 260);
-  --color-accent: oklch(28% 0.02 260);
-  --color-focus: oklch(28% 0.02 260);
+  --project-font-display: 'Newsreader Variable', 'Newsreader', Georgia, serif;
+  --project-font-sans: 'Source Sans 3 Variable', 'Source Sans 3', 'Plus Jakarta Sans', sans-serif;
+  --project-font-mono: 'JetBrains Mono', 'Geist Mono', monospace;
 
-  --font-display: 'Newsreader Variable', 'Newsreader', Georgia, serif;
-  --font-body: 'Source Sans 3 Variable', 'Source Sans 3', system-ui, sans-serif;
+  --font-display: var(--project-font-display, var(--project-font-sans, 'Geist', 'Plus Jakarta Sans', sans-serif));
+  --font-sans: var(--project-font-sans, 'Geist', 'Plus Jakarta Sans', sans-serif);
+  --font-mono: var(--project-font-mono, 'Geist Mono', 'JetBrains Mono', monospace);
 
-  --space-3xs: 0.25rem;
-  --space-2xs: 0.5rem;
-  --space-xs: 0.75rem;
-  --space-sm: 1rem;
-  --space-md: 1.5rem;
-  --space-lg: 2rem;
-  --space-xl: 3rem;
-  --space-2xl: 4.5rem;
-  --space-3xl: 7rem;
+  --font-features-ui: 'cv02' 1, 'cv03' 1, 'cv04' 1, 'cv11' 1, 'ss01' 1;
+  --font-features-telemetry: 'tnum' 1, 'zero' 1, 'cv02' 1, 'ss01' 1;
 
-  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
-  --ease-in: cubic-bezier(0.7, 0, 0.84, 0);
-  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
-  --dur-short: 220ms;
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-12: 3rem;
 
-  --radius-card: 0.3125rem;
-  --radius-input: 0.625rem;
-  --radius-pill: 0.625rem;
+  --radius-xs: 4px;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  --radius-pill: 9999px;
+
+  --ease-spring: cubic-bezier(0.2, 0.9, 0.2, 1);
+  --ease-out-expo: cubic-bezier(0.05, 0.7, 0.1, 1);
+  --duration-fast: 130ms;
+  --duration-normal: 200ms;
+
+  --bg-canvas: #f4f4f6;
+  --bg-surface: #ffffff;
+  --bg-elevated: #ffffff;
+  --bg-glass: rgba(255, 255, 255, 0.8);
+  --text-primary: #111113;
+  --text-secondary: #52525b;
+  --text-tertiary: #71717a;
+  --border-hairline: rgba(0, 0, 0, 0.09);
+  --specular-top: rgba(255, 255, 255, 0.9);
+  --accent: #2563eb;
+  --accent-hover: #1d4ed8;
+  --signal-orange: #ff5500;
+  --status-success: #10b981;
+  --status-warning: #f59e0b;
+  --status-danger: #ef4444;
 }

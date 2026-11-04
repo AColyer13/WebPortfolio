@@ -23,13 +23,13 @@ export function About() {
   return (
     <section id="about" className="hero-about [contain:layout]">
       <div className={`${containerClass} ${sectionContainerClass}`}>
-        <div className="grid grid-cols-1 items-center gap-[calc(var(--section-hero-padding-top)+var(--spacing-3)+var(--spacing-2))] lg:grid-cols-2 lg:gap-16">
+        <div className="grid grid-cols-1 items-center gap-(--space-8) lg:grid-cols-2 lg:gap-(--space-12)">
           <div className="hero-about__copy mx-auto max-w-[40rem] text-center lg:mx-0 lg:text-start">
-            <h1 className="m-0 text-h1 font-bold leading-tight text-text-default lg:inline-flex lg:flex-col lg:items-start lg:gap-1">
-              <span className="block whitespace-nowrap leading-tight sm:inline lg:block">Adam Colyer</span><span className="mt-0.5 block text-fluid-3 font-medium leading-snug text-text-muted sm:ms-2 sm:mt-0 sm:inline lg:ms-0 lg:mt-0 lg:block"><span className="sr-only"> </span>Twin Cities, MN</span>
+            <h1 className="m-0 lg:inline-flex lg:flex-col lg:items-start lg:gap-(--space-1)">
+              <span className="block whitespace-nowrap sm:inline lg:block">Adam Colyer</span><span className="mt-(--space-1) block text-fluid-2 font-medium text-text-muted sm:ms-(--space-2) sm:mt-0 sm:inline lg:ms-0 lg:mt-0 lg:block"><span className="sr-only"> </span>Twin Cities, MN</span>
             </h1>
 
-            <p className="m-0 mt-4 text-pretty text-fluid-2 leading-snug text-text-default">
+            <p className="m-0 mt-(--space-4) text-pretty text-fluid-2">
               {HERO_LINE}
             </p>
 

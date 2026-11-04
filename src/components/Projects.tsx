@@ -3,6 +3,7 @@ import { featuredProjects, projects, type Project } from '../data/portfolio'
 import { withBase } from '../utils/baseUrl'
 import { projectPictureBase } from '../utils/images'
 import { imgCardThumbClass, portfolioCardClass } from '../utils/layoutClasses'
+import { intentHandlers, prefetchDemo } from '../utils/prefetch'
 import { DemoDialog } from './DemoDialog'
 import { Section } from './Section'
 import { Icon } from './Icons'
@@ -42,7 +43,7 @@ function ProjectCard({
 
   return (
     <article className={portfolioCardClass}>
-      <div className="relative aspect-16/10 overflow-hidden bg-surface-100">
+      <div className="card-media relative aspect-16/10">
         <picture>
           <source
             type="image/avif"
@@ -66,12 +67,12 @@ function ProjectCard({
           />
         </picture>
       </div>
-      <div className="flex grow flex-col gap-2 py-4">
+      <div className="card-body grow">
         {/* Every item carries a leading "·" inside a negative inline margin; the
             wrapper clips it, so a separator that starts a wrapped line is hidden. */}
         <div className="overflow-hidden sm:min-h-[2.75em]">
           <ul
-            className="m-0 -ms-[1.5em] flex list-none flex-wrap p-0 font-mono text-copyright uppercase tracking-wide text-text-subtle"
+            className="m-0 -ms-[1.5em] flex list-none flex-wrap p-0 text-copyright uppercase tracking-[0.04em] text-text-subtle"
             aria-label="Built with"
           >
             {techItems.map((tech) => (
@@ -84,15 +85,11 @@ function ProjectCard({
             ))}
           </ul>
         </div>
-        <div className="flex items-start justify-between gap-2">
-          <h3 className="m-0 text-fluid-3 font-bold leading-snug text-text-default">
-            {project.title}
-          </h3>
+        <div className="flex items-start justify-between gap-(--space-2)">
+          <h3 className="m-0">{project.title}</h3>
           <button
             type="button"
-            className={`project-info-btn -me-2 -mt-1.5 inline-flex h-11 min-w-11 shrink-0 cursor-pointer items-center justify-center gap-1 rounded-md border-none bg-transparent px-2 text-xl transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-offset-[-4px] focus-visible:outline-primary-600 ${
-              infoOpen ? 'text-accent' : 'text-text-subtle hover:text-text-default'
-            }`}
+            className={`btn btn-quiet project-info-btn${infoOpen ? ' is-signal' : ''}`}
             aria-expanded={infoOpen}
             aria-controls={descriptionId}
             aria-label={`About ${project.title}`}
@@ -108,18 +105,17 @@ function ProjectCard({
         <p
           id={descriptionId}
           data-expanded={infoOpen}
-          className={`project-info m-0 border-s-2 ps-3 text-fluid-1 leading-relaxed text-text-muted ${
-            infoOpen ? 'border-accent' : 'line-clamp-4 border-border-default'
-          }`}
+          className={`project-info text-fluid-1 text-text-muted ${infoOpen ? '' : 'line-clamp-4'}`}
         >
           {project.description}
         </p>
-        <div className="mt-auto flex flex-wrap items-center gap-3 pt-2">
+        <div className="mt-auto flex flex-wrap items-center gap-(--space-3) pt-(--space-2)">
           {project.demo ? (
             <button
               type="button"
-              className="inline-flex min-h-11 cursor-pointer items-center gap-1 border-none bg-transparent p-0 text-fluid-1 font-medium text-text-default underline-offset-4 hover:underline"
+              className="btn"
               aria-haspopup="dialog"
+              {...intentHandlers(prefetchDemo)}
               onClick={onOpenDemo}
             >
               Live demo
@@ -128,7 +124,7 @@ function ProjectCard({
           {project.liveUrl ? (
             <a
               href={project.liveUrl}
-              className="inline-flex min-h-11 items-center gap-1 text-fluid-1 font-medium text-text-default underline-offset-4 hover:underline"
+              className="btn"
               target="_blank"
               rel="noopener noreferrer"
             >
@@ -140,14 +136,14 @@ function ProjectCard({
             <span className="text-copyright text-text-subtle">{project.demoNote}</span>
           ) : null}
           {!project.liveUrl && !project.githubUrl && !project.demo ? (
-            <span className="inline-flex min-h-11 items-center text-copyright text-text-subtle">
+            <span className="hit-target text-copyright text-text-subtle">
               {project.demoNote ?? 'Not publicly hosted. Demo on request.'}
             </span>
           ) : null}
           {project.githubUrl ? (
             <a
               href={project.githubUrl}
-              className="inline-flex min-h-11 items-center gap-1 text-fluid-1 font-medium text-text-muted underline-offset-4 hover:text-text-default hover:underline"
+              className="hit-target text-fluid-1 font-medium text-text-muted underline-offset-4 hover:text-text-default hover:underline"
               target="_blank"
               rel="noopener noreferrer"
               aria-label={`${project.title} source on GitHub`}
@@ -186,23 +182,32 @@ export function Projects() {
   return (
     <Section id="projects" title="Projects" variant="project">
       {/* At two columns an odd last card would leave a hole, so center it. */}
-      <div className="grid grid-cols-1 gap-x-6 gap-y-2 sm:grid-cols-2 lg:grid-cols-3 sm:max-lg:[&>article:last-child:nth-child(odd)]:col-span-2 sm:max-lg:[&>article:last-child:nth-child(odd)]:w-[calc(50%-1.5rem)] sm:max-lg:[&>article:last-child:nth-child(odd)]:justify-self-center">
-        {visibleProjects.map((project, index) => (
-          <ProjectCard
-            key={project.id}
-            project={project}
-            index={index}
-            onOpenDemo={project.demo ? () => setDemoOpen(true) : undefined}
-          />
-        ))}
-      </div>
+      {visibleProjects.length === 0 ? (
+        <div className="state-empty" role="status">
+          <p className="m-0">No projects in this view.</p>
+          <button type="button" className="btn btn-primary" onClick={toggleShowAll}>
+            View all projects
+          </button>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 gap-(--space-6) sm:grid-cols-2 lg:grid-cols-3 sm:max-lg:[&>article:last-child:nth-child(odd)]:col-span-2 sm:max-lg:[&>article:last-child:nth-child(odd)]:w-[calc(50%-(var(--space-6)/2))] sm:max-lg:[&>article:last-child:nth-child(odd)]:justify-self-center">
+          {visibleProjects.map((project, index) => (
+            <ProjectCard
+              key={project.id}
+              project={project}
+              index={index}
+              onOpenDemo={project.demo ? () => setDemoOpen(true) : undefined}
+            />
+          ))}
+        </div>
+      )}
       {demoOpen ? <DemoDialog onClose={closeDemo} /> : null}
 
       {hiddenCount > 0 ? (
-        <div className="mt-6">
+        <div className="mt-(--space-6)">
           <button
             type="button"
-            className="inline-flex min-h-11 cursor-pointer items-center justify-center rounded-md border border-border-default bg-transparent px-4 py-2 text-btn font-medium text-text-default transition-colors duration-150 ease-out hover:border-text-muted hover:bg-surface-0 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600"
+            className="btn"
             onClick={toggleShowAll}
             aria-expanded={showAll}
           >

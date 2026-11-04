@@ -47,13 +47,13 @@ describe('syncThemeColor', () => {
   it('uses light surface for light mode', () => {
     syncThemeColor('light')
     const meta = document.head.querySelector('meta[name="theme-color"]')
-    expect(meta?.getAttribute('content')).toBe('#f7f7f8')
+    expect(meta?.getAttribute('content')).toBe('#F4F4F6')
   })
 
   it('uses dark surface for dark mode', () => {
     syncThemeColor('dark')
     const meta = document.head.querySelector('meta[name="theme-color"]')
-    expect(meta?.getAttribute('content')).toBe('#121218')
+    expect(meta?.getAttribute('content')).toBe('#08080A')
   })
 })
 
@@ -126,7 +126,7 @@ describe('initTheme', () => {
     initTheme()
     expect(document.documentElement.getAttribute('data-theme')).toBe('system')
     const meta = document.head.querySelector('meta[name="theme-color"]')
-    expect(meta?.getAttribute('content')).toBe('#121218')
+    expect(meta?.getAttribute('content')).toBe('#08080A')
   })
 
   it('restores opposite mode from sessionStorage', () => {

@@ -18,11 +18,9 @@ type FormStatus =
   | { kind: 'idle' }
   | { kind: 'success' | 'error'; message: string }
 
-const inputClass =
-  'contact-form-input w-full rounded-md border border-border-default bg-surface-0 px-3.5 py-2.5 text-base text-text-default transition-colors duration-150 placeholder:text-text-muted focus:border-primary-600 focus:outline-none focus:ring-2 focus:ring-primary-500/20 aria-invalid:border-danger-600'
+const inputClass = 'input contact-form-input'
 
-const socialLinkClass =
-  'social-link inline-flex h-11 w-11 items-center justify-center rounded-md border border-border-default bg-transparent text-text-default no-underline transition-colors duration-150 ease-out hover:border-text-muted hover:bg-surface-50'
+const socialLinkClass = 'btn btn-icon social-link'
 
 function requiredField(value: string, label: string): string {
   if (!value.trim()) return `${label} is required.`
@@ -162,19 +160,17 @@ export function Contact() {
 
   return (
     <Section id="contact" title="Get in Touch" variant="contact">
-      <div className="grid grid-cols-1 items-start gap-10 lg:grid-cols-12 lg:gap-12">
-        <div className="flex flex-col gap-8 lg:col-span-5">
+      <div className="grid grid-cols-1 items-start gap-(--space-12) lg:grid-cols-12">
+        <div className="flex flex-col gap-(--space-8) lg:col-span-5">
           <div>
-            <h3 className="mb-2 text-fluid-3 font-bold text-text-default">
-              Contact Details
-            </h3>
-            <p className="m-0 text-fluid-1 leading-relaxed text-text-muted">
+            <h3 className="mb-(--space-2)">Contact Details</h3>
+            <p className="m-0 text-fluid-1">
               Available for full-stack engineering roles, consulting, and contract work. Send a
               message about an open role or a project you're working on.
             </p>
           </div>
 
-          <dl className="m-0 flex flex-col gap-3">
+          <dl className="m-0 flex flex-col gap-(--space-4)">
             <div>
               <dt className="m-0 text-copyright font-medium uppercase tracking-wider text-text-subtle">
                 Location
@@ -198,11 +194,11 @@ export function Contact() {
             </div>
           </dl>
 
-          <div className="border-t border-border-default pt-6">
+          <div className="border-t border-border-default pt-(--space-6)">
             <p className="mb-3 text-copyright font-semibold uppercase tracking-wider text-text-subtle">
               Social Profiles
             </p>
-            <ul className="m-0 flex list-none items-center gap-3 p-0">
+            <ul className="m-0 flex list-none items-center gap-(--space-3) p-0">
               <li>
                 <a
                   href="https://github.com/acolyer13"
@@ -234,8 +230,8 @@ export function Contact() {
         </div>
 
         <div className="flex flex-col lg:col-span-7">
-          <h3 className="mb-2 text-fluid-3 font-bold text-text-default">Send a Message</h3>
-          <p className="m-0 mb-6 text-fluid-1 leading-relaxed text-text-muted">
+          <h3 className="mb-(--space-2)">Send a Message</h3>
+          <p className="m-0 mb-(--space-6) text-fluid-1">
             Have a project or opportunity? Send a message and I will reply promptly.
           </p>
 
@@ -244,10 +240,8 @@ export function Contact() {
               role="status"
               aria-live="polite"
               aria-atomic="true"
-              className={`mb-6 rounded-md p-4 text-fluid-1 font-medium ${
-                status.kind === 'success'
-                  ? 'border border-border-default bg-surface-50 text-text-default'
-                  : 'bg-danger-bg text-danger-700'
+              className={`status-banner mb-(--space-6) text-fluid-1 font-medium ${
+                status.kind === 'success' ? 'status-banner--success' : 'status-banner--danger'
               }`}
             >
               {status.message}
@@ -262,10 +256,10 @@ export function Contact() {
             </div>
           ) : null}
 
-          <form id="form" ref={formRef} onSubmit={handleSubmit} noValidate>
-            <div className="flex flex-col gap-5">
-              <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
-                <div className="flex flex-col gap-1.5">
+          <form id="form" ref={formRef} onSubmit={handleSubmit} noValidate aria-busy={isSubmitting}>
+            <div className="flex flex-col gap-(--space-6)">
+              <div className="grid grid-cols-1 gap-(--space-6) sm:grid-cols-2">
+                <div className="flex flex-col gap-(--space-2)">
                   <label
                     htmlFor="contact-name"
                     className="text-fluid-1 font-medium text-text-default"
@@ -299,7 +293,7 @@ export function Contact() {
                     </p>
                   ) : null}
                 </div>
-                <div className="flex flex-col gap-1.5">
+                <div className="flex flex-col gap-(--space-2)">
                   <label
                     htmlFor="contact-email"
                     className="text-fluid-1 font-medium text-text-default"
@@ -335,7 +329,7 @@ export function Contact() {
                 </div>
               </div>
 
-              <div className="flex flex-col gap-1.5">
+              <div className="flex flex-col gap-(--space-2)">
                 <label
                   htmlFor="contact-message"
                   className="text-fluid-1 font-medium text-text-default"
@@ -346,7 +340,7 @@ export function Contact() {
                   id="contact-message"
                   name="message"
                   rows={5}
-                  className={`${inputClass} min-h-[8rem] resize-y`}
+                  className={`${inputClass} min-h-32 resize-y`}
                   placeholder="How can I help you?"
                   value={formData.message}
                   onChange={handleChange}
@@ -375,11 +369,13 @@ export function Contact() {
               <input type="hidden" name="reply_to" value={formData.email} />
               <input type="hidden" name="time" ref={timestampRef} />
 
-              <div className="pt-2">
+              <div className="pt-(--space-2)">
                 <input
                   type="submit"
-                  className={`submit-btn ${primaryBtnSubmitClass}`}
-                  value={isSubmitting ? 'Sending...' : 'Send Message'}
+                  className={primaryBtnSubmitClass}
+                  value={
+                    isSubmitting ? 'Sending...' : status.kind === 'error' ? 'Try again' : 'Send Message'
+                  }
                   disabled={isSubmitting}
                 />
               </div>

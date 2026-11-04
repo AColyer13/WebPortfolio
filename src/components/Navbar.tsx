@@ -12,6 +12,7 @@ import {
   type ThemeMode,
 } from '../theme/colorScheme'
 import { containerClass } from '../utils/layoutClasses'
+import { intentHandlers, prefetchSection } from '../utils/prefetch'
 import { Icon, type IconKey } from './Icons'
 
 interface NavbarProps {
@@ -25,13 +26,11 @@ const base = import.meta.env.BASE_URL
 const POPOVER_ID = 'site-nav-menu'
 
 /** 44×44 pt minimum — fine and coarse pointers. */
-const iconBtnClass =
-  'inline-flex size-11 shrink-0 cursor-pointer items-center justify-center rounded-md border border-border-default bg-surface-0 p-0 text-text-default focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600'
+const iconBtnClass = 'btn btn-icon'
 
-const navLinkClass =
-  'flex h-9 items-center rounded-sm border-b-2 border-transparent px-2 py-1 text-menu text-text-muted transition-colors duration-150 ease-in-out hover:text-text-default focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600'
+const navLinkClass = 'nav-link'
 
-const navLinkMobileClass = `${navLinkClass} min-h-11 justify-center px-4 py-2`
+const navLinkMobileClass = 'nav-link nav-link--menu'
 
 function useOsDark(): boolean {
   const [osDark, setOsDark] = useState(
@@ -100,10 +99,9 @@ function NavLinks({
           <a
             href={`${base}#${item.id}`}
             className={`${linkClass} ${
-              activeSection === item.id
-                ? 'active border-text-default font-medium text-text-default'
-                : ''
+              activeSection === item.id ? 'active' : ''
             }`}
+            {...intentHandlers(() => prefetchSection(item.id))}
             onClick={(e) => {
               e.preventDefault()
               onNavigate(item.id)
@@ -176,7 +174,7 @@ export function Navbar({
       }`}
     >
       <nav
-        className="site-nav bg-bg py-2 shadow-nav @max-[47.99rem]/site-header:pt-[calc(env(safe-area-inset-top,0px)+var(--spacing-1))] @max-[47.99rem]/site-header:pb-2"
+        className="site-nav glass-bar"
         aria-label="Primary"
       >
         <div
@@ -219,7 +217,7 @@ export function Navbar({
           <div
             id={POPOVER_ID}
             popover="auto"
-            className="site-nav-popover fixed inset-x-0 top-[var(--header-offset)] z-(--z-overlay) m-0 border-b border-border-default bg-surface-0 p-2 shadow-nav @supports([transition-behavior:allow-discrete]):opacity-0"
+            className="site-nav-popover fixed z-(--z-overlay) @supports([transition-behavior:allow-discrete]):opacity-0"
           >
             <NavLinks
               activeSection={activeSection}

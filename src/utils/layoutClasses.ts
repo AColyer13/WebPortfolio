@@ -15,25 +15,22 @@ export const sectionHeadingClass =
 export const sectionHeadingCenterClass =
   'flow-root mx-auto mb-(--section-padding-y) max-w-[40rem] text-center'
 
-export const primaryBtnClass =
-  'inline-flex min-h-11 items-center justify-center gap-1 whitespace-nowrap rounded-md border-none bg-btn-bg px-4 py-2 text-btn font-medium text-btn-fg transition-colors duration-150 ease-out hover:bg-btn-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600'
+export const primaryBtnClass = 'btn btn-primary'
 
-/** Secondary (outline) CTA — for hero pairing, keeps one clear primary action. */
-export const secondaryBtnClass =
-  'inline-flex min-h-11 items-center justify-center gap-1 whitespace-nowrap rounded-md border border-border-default bg-transparent px-4 py-2 text-btn font-medium text-text-default transition-colors duration-150 ease-out hover:border-text-muted hover:bg-surface-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600'
+/** Secondary control — hairline surface, one accent primary per view. */
+export const secondaryBtnClass = 'btn'
 
-/** Timeline / list rows — hairline, not card chrome */
-export const cardClass =
-  'border-b border-border-default bg-transparent contain-[layout_style] transition-colors duration-150 ease-out'
+/** Timeline rows — separated by whitespace, not rules. */
+export const cardClass = 'contain-[layout_style]'
 
 /** Above-the-fold LCP (hero) — chrome-free; sizing owned by `.hero-media` */
 export const imgHeroClass = 'block h-auto w-full max-w-full'
 
 export const portfolioCardClass =
-  'portfolio-item-inner flex w-full min-w-0 flex-col self-start border-b border-border-default bg-transparent contain-[layout_style] transition-colors duration-150 ease-out pointer-fine:hover:border-text-muted'
+  'card portfolio-item-inner flex w-full min-w-0 flex-col self-start contain-[layout_style]'
 
 /** Contact submit — primary button with full-width */
-export const primaryBtnSubmitClass = `${primaryBtnClass} w-full cursor-pointer disabled:cursor-not-allowed disabled:opacity-60`
+export const primaryBtnSubmitClass = `${primaryBtnClass} submit-btn w-full`
 
 /** Below-the-fold card thumbs — fixed crop box in Projects */
 export const imgCardThumbClass =

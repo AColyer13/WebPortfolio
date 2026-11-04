@@ -7,8 +7,8 @@
       name="viewport"
       content="width=device-width, initial-scale=1.0, viewport-fit=cover, interactive-widget=resizes-content"
     />
-    <meta name="theme-color" content="#f7f7f8" media="(prefers-color-scheme: light)" />
-    <meta name="theme-color" content="#121218" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#F4F4F6" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#08080A" media="(prefers-color-scheme: dark)" />
     <meta
       name="description"
       content="Portfolio of Adam Colyer, a full-stack engineer building React, Next.js, Python, and AI applications with live project demos and a downloadable resume."
@@ -50,6 +50,19 @@
     />
     <title>Adam Colyer — Full-stack Engineer Portfolio</title>
     <link rel="stylesheet" href="/index.css" />
+    <style>
+      /* First-frame shell: painted from HTML alone, replaced when React mounts. */
+      .boot-shell { min-height: 100svh; background: var(--bg-canvas, #f4f4f6); }
+      .boot-bar {
+        height: 3.5rem;
+        background: var(--bg-glass, rgba(255, 255, 255, 0.8));
+        border-bottom: 1px solid var(--bg-fill-hover, rgba(24, 24, 27, 0.1));
+      }
+      .boot-body { max-width: 72rem; margin: 0 auto; padding: 6rem 1rem 0; display: grid; gap: 1rem; }
+      .boot-line { height: 1rem; border-radius: 0.5rem; background: var(--bg-fill-tertiary, rgba(24, 24, 27, 0.06)); }
+      .boot-line--title { height: 2.5rem; width: min(28rem, 80%); }
+      .boot-line--short { width: min(20rem, 60%); }
+    </style>
     <script>
       ;(function () {
         try {
@@ -75,7 +88,16 @@
     </script>
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root">
+      <div class="boot-shell" aria-hidden="true">
+        <div class="boot-bar"></div>
+        <div class="boot-body">
+          <div class="boot-line boot-line--title"></div>
+          <div class="boot-line"></div>
+          <div class="boot-line boot-line--short"></div>
+        </div>
+      </div>
+    </div>
     <script type="module" src="/main.tsx"></script>
   </body>
 </html>

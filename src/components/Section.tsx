@@ -55,7 +55,7 @@ export function Section({
     >
       <div className={`${containerClass} ${sectionContainerClass}`}>
         <div className={headingClassName}>
-          <h2 className="m-0 text-h2 font-bold leading-tight text-text-default">{title}</h2>
+          <h2 className="m-0">{title}</h2>
         </div>
         {body}
       </div>

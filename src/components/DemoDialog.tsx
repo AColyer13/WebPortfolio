@@ -1,8 +1,9 @@
 import { lazy, Suspense, useEffect, useRef } from 'react'
 import { secondaryBtnClass } from '../utils/layoutClasses'
+import { loadFlyBrain, loadSatBench } from '../utils/prefetch'
 
-const FlyBrain = lazy(() => import('./FlyBrain').then((m) => ({ default: m.FlyBrain })))
-const SatBench = lazy(() => import('./SatBench').then((m) => ({ default: m.SatBench })))
+const FlyBrain = lazy(() => loadFlyBrain().then((m) => ({ default: m.FlyBrain })))
+const SatBench = lazy(() => loadSatBench().then((m) => ({ default: m.SatBench })))
 
 function closeDialog(dialog: HTMLDialogElement | null) {
   if (!dialog) return
@@ -48,9 +49,11 @@ export function DemoDialog({ onClose }: { onClose: () => void }) {
       </div>
       <Suspense
         fallback={
-          <p className="m-0 px-4 py-8 text-body text-text-muted" role="status">
-            Loading the demo…
-          </p>
+          <div className="state-loading px-(--space-4)" role="status">
+            <div className="skeleton skeleton-title" />
+            <div className="skeleton skeleton-panel" />
+            <p className="m-0">Loading the demo…</p>
+          </div>
         }
       >
         <FlyBrain />

@@ -244,16 +244,6 @@ export const education: EducationItem[] = [
 
 export const projects: Project[] = [
   {
-    id: 21,
-    title: 'Fly brain',
-    tech: 'TypeScript, WebGPU, React',
-    description:
-      'A browser simulation of a real FlyWire connectome cut. The same live demo scrolls on to Sat bench, which grades a satellite fault on how fast the correction comes and whether the trajectory stays in the corridor. Nothing is sent to a server.',
-    imageUrl: 'images/fly-brain.png',
-    demo: 'benches',
-    featured: true,
-  },
-  {
     id: 3,
     title: 'Legal Eagle Project',
     tech: 'Next.js, Prisma, AI SDK, NextAuth',
@@ -356,6 +346,15 @@ export const projects: Project[] = [
       'All 81 books of the Bible explained in plain words, with a chapter guide behind each. A to-scale strip of the whole library, search and read tracking are built in, and there is no build step.',
     imageUrl: 'images/bible-book-by-book.png',
     liveUrl: 'https://acolyer13.github.io/bible-book-by-book/',
+  },
+  {
+    id: 21,
+    title: 'Fly brain',
+    tech: 'TypeScript, WebGPU, React',
+    description:
+      'A browser simulation of a real FlyWire connectome cut. The same live demo scrolls on to Sat bench, which grades a satellite fault on how fast the correction comes and whether the trajectory stays in the corridor. Nothing is sent to a server.',
+    imageUrl: 'images/fly-brain.png',
+    demo: 'benches',
   },
   {
     id: 4,

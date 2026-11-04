@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { decodeCircuit, type FlyCircuit } from '../flybrain/circuit'
-import type { ToMain } from '../flybrain/protocol'
+import type { Backend, ToMain } from '../flybrain/protocol'
+import { renderBrain, type BrainView } from '../flybrain/render'
 import { withBase } from '../utils/baseUrl'
 import { primaryBtnClass, secondaryBtnClass } from '../utils/layoutClasses'
 import { Section } from './Section'
@@ -27,10 +28,30 @@ const CITATIONS = [
   },
 ] as const
 
-function engineLabel(backend: 'webgpu' | 'js' | null, dtMs: number): string {
-  if (backend === 'webgpu') return `WebGPU, ${dtMs} ms steps`
-  if (backend === 'js') return `JavaScript, ${dtMs} ms steps`
-  return 'Loading the connectome'
+function readView(canvas: HTMLCanvasElement, azimuth: number): BrainView | null {
+  const parent = canvas.parentElement
+  if (!parent) return null
+  const width = parent.clientWidth
+  const height = parent.clientHeight
+  if (width < 2 || height < 2) return null
+  const style = getComputedStyle(parent)
+  return {
+    azimuth,
+    width,
+    height,
+    dpr: Math.min(2, window.devicePixelRatio || 1),
+    ink: style.color,
+    rule: style.borderColor,
+  }
+}
+
+/** Drawing can move to the worker only where a canvas can be handed over. */
+function canOffscreen(): boolean {
+  return (
+    typeof OffscreenCanvas !== 'undefined' &&
+    typeof HTMLCanvasElement !== 'undefined' &&
+    'transferControlToOffscreen' in HTMLCanvasElement.prototype
+  )
 }
 
 export function FlyBrain() {
@@ -46,13 +67,16 @@ export function FlyBrain() {
   const [on, setOn] = useState<Record<string, boolean>>({})
   const [rates, setRates] = useState<number[]>([])
   const [azimuth, setAzimuth] = useState(0.4)
-  const [backend, setBackend] = useState<'webgpu' | 'js' | null>(null)
+  const [backend, setBackend] = useState<Backend | null>(null)
   const [dtMs, setDtMs] = useState(0)
   const [error, setError] = useState<string | null>(null)
+  const [loadId, setLoadId] = useState(0)
   const [live, setLive] = useState('No stimulus. The readout is quiet.')
   const [visible, setVisible] = useState(false)
   const unlistenRef = useRef<(() => void) | null>(null)
   const readyRef = useRef(false)
+  /** True once the canvas belongs to the worker; the main thread must not touch it. */
+  const offscreenRef = useRef(false)
   const onRef = useRef(on)
   const ratesRef = useRef(rates)
   const visibleRef = useRef(visible)
@@ -69,53 +93,43 @@ export function FlyBrain() {
 
   const draw = useCallback(() => {
     const canvas = canvasRef.current
+    if (!canvas) return
+    if (offscreenRef.current) {
+      const view = readView(canvas, azimuthRef.current)
+      if (view) workerRef.current?.postMessage({ type: 'view', view })
+      return
+    }
     const data = circuitRef.current
-    if (!canvas || !data) return
-    const parent = canvas.parentElement
-    if (!parent) return
-    const width = parent.clientWidth
-    const height = parent.clientHeight
-    if (width < 2 || height < 2) return
-    const dpr = Math.min(2, window.devicePixelRatio || 1)
-    const pxW = Math.round(width * dpr)
-    const pxH = Math.round(height * dpr)
+    const view = readView(canvas, azimuthRef.current)
+    if (!data || !view) return
+    const pxW = Math.round(view.width * view.dpr)
+    const pxH = Math.round(view.height * view.dpr)
     if (canvas.width !== pxW || canvas.height !== pxH) {
       canvas.width = pxW
       canvas.height = pxH
     }
     const ctx = canvas.getContext('2d')
     if (!ctx) return
-    const style = getComputedStyle(parent)
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
-    ctx.clearRect(0, 0, width, height)
-    const activity = activityRef.current
-    const az = azimuthRef.current
-    const cos = Math.cos(az)
-    const sin = Math.sin(az)
-    const pad = 16
-    const ink = style.color
-    const rule = style.borderColor
-    for (let i = 0; i < data.n; i++) {
-      const x = data.pos[i * 3]
-      const y = data.pos[i * 3 + 1]
-      const z = data.pos[i * 3 + 2]
-      const xr = x * cos + z * sin
-      const zr = -x * sin + z * cos
-      const px = pad + ((xr + 1) / 2) * (width - pad * 2)
-      const py = pad + ((1 - y) / 2) * (height - pad * 2)
-      const level = activity ? activity[i] / 255 : 0
-      const size = (level < 0.04 ? 1.25 : 1.25 + level * 4.5) * (1 + zr * 0.12)
-      ctx.globalAlpha = level < 0.04 ? 0.45 : 0.35 + level * 0.65
-      ctx.fillStyle = level < 0.04 ? rule : ink
-      ctx.fillRect(px - size / 2, py - size / 2, size, size)
-    }
-    ctx.globalAlpha = 1
+    renderBrain(ctx, data.pos, activityRef.current, view)
   }, [])
 
   useEffect(() => {
     azimuthRef.current = azimuth
     draw()
-  }, [azimuth, draw, rates, circuit])
+  }, [azimuth, draw, circuit])
+
+  useEffect(() => {
+    // Offscreen frames are drawn by the worker as they arrive.
+    if (!offscreenRef.current) draw()
+  }, [rates, draw])
+
+  useEffect(() => {
+    const node = boxRef.current
+    if (!node || typeof ResizeObserver === 'undefined') return
+    const observer = new ResizeObserver(() => draw())
+    observer.observe(node)
+    return () => observer.disconnect()
+  }, [draw])
 
   useEffect(() => {
     const node = boxRef.current
@@ -149,6 +163,20 @@ export function FlyBrain() {
     }
   }, [])
 
+  const retryLoad = () => {
+    unlistenRef.current?.()
+    unlistenRef.current = null
+    workerRef.current?.terminate()
+    workerRef.current = null
+    readyRef.current = false
+    offscreenRef.current = false
+    circuitRef.current = null
+    setCircuit(null)
+    setBackend(null)
+    setError(null)
+    setLoadId((n) => n + 1)
+  }
+
   useEffect(() => {
     if (!visible || workerRef.current || typeof Worker === 'undefined') return
     const worker = new Worker(new URL('../flybrain/worker.ts', import.meta.url), {
@@ -175,7 +203,7 @@ export function FlyBrain() {
           running: visibleRef.current && document.visibilityState !== 'hidden',
         })
       } else if (msg.type === 'frame') {
-        activityRef.current = msg.activity
+        if (msg.activity) activityRef.current = msg.activity
         const data = circuitRef.current
         if (!data || msg.simMs <= 0) return
         const sec = msg.simMs / 1000
@@ -207,8 +235,23 @@ export function FlyBrain() {
         emaRef.current = decoded.readouts.map(() => 0)
         setCircuit(decoded)
         setRates(emaRef.current)
+        const canvas = canvasRef.current
+        if (canvas && canOffscreen()) {
+          // Irreversible per element; retryLoad remounts the canvas via its key.
+          const offscreen = canvas.transferControlToOffscreen()
+          const pos = decoded.pos.slice()
+          offscreenRef.current = true
+          worker.postMessage({ type: 'canvas', canvas: offscreen, pos }, [offscreen, pos.buffer])
+          draw()
+        }
         worker.postMessage(
-          { type: 'init', csr: decoded.csr, post: decoded.post, w: decoded.w },
+          {
+            type: 'init',
+            csr: decoded.csr,
+            post: decoded.post,
+            w: decoded.w,
+            wasmUrl: new URL(withBase('lif.wasm'), window.location.href).href,
+          },
           [decoded.csr.buffer, decoded.post.buffer, decoded.w.buffer],
         )
       })
@@ -225,7 +268,7 @@ export function FlyBrain() {
     }
     document.addEventListener('visibilitychange', onVis)
     unlistenRef.current = () => document.removeEventListener('visibilitychange', onVis)
-  }, [visible])
+  }, [visible, loadId, draw])
 
   useEffect(() => {
     const worker = workerRef.current
@@ -270,21 +313,21 @@ export function FlyBrain() {
 
   return (
     <Section id="fly-brain" title="Fly brain" variant="brain">
-      <p className="m-0 max-w-[46rem] text-pretty text-body leading-snug text-text-default">
+      <p className="m-0 text-pretty text-body">
         This is the public FlyWire connectome, not a metaphor. These 1,846 neurons are a cut of
         the female adult brain reconstruction (v783), placed at the positions measured in that
         volume. The synapses are the ones electron microscopy counted. Loom, sugar, and odor
         drive the real sensory cell types named on the buttons. Spikes follow the leaky
         integrate-and-fire model from Shiu et al. (2024): rest at -52 mV, threshold -45 mV, and
         0.275 mV per synapse, with the sign taken from the predicted transmitter. The step runs
-        in this browser, on WebGPU when it is available and in JavaScript otherwise. Nothing is
+        in this browser, on WebGPU when it is available, then WebAssembly, and in JavaScript otherwise. Nothing is
         sent to a server. The readout is
         the firing of named descending neurons in this wiring, plus MN9, the motor neuron that
         extends the proboscis. Cells outside the cut are missing, so this is not the whole
         139,255-neuron brain.
       </p>
 
-      <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1.5fr)_minmax(16rem,22rem)] lg:gap-10">
+      <div className="mt-(--space-6) grid grid-cols-1 gap-(--space-6) lg:grid-cols-[minmax(0,1.5fr)_minmax(16rem,22rem)] lg:gap-(--space-12)">
         <div>
           <div role="group" aria-label="Sensory input" className="flex flex-wrap gap-2">
             {(circuit?.stimuli ?? STUB_STIMULI).map((stim) => {
@@ -326,17 +369,17 @@ export function FlyBrain() {
               Reset
             </button>
           </div>
-          <p className="m-0 mt-3 text-fluid-1 leading-snug text-text-muted">
+          <p className="m-0 mt-(--space-3) text-fluid-1">
             {activeDetails.length
               ? `Driving ${activeDetails.join('; ')}.`
               : 'Nothing is on. The model has no spontaneous firing, which is the baseline in Shiu et al.'}
           </p>
           <div
             ref={boxRef}
-            className="relative mt-4 h-72 border border-border-default text-text-default lg:h-[26rem]"
-            style={{ borderColor: 'var(--color-border-default)', color: 'var(--color-text-default)' }}
+            className="plot-stage mt-(--space-4) h-72 lg:h-[26rem]"
           >
             <canvas
+              key={loadId}
               ref={canvasRef}
               className="block h-full w-full touch-pan-y"
               aria-hidden="true"
@@ -355,14 +398,29 @@ export function FlyBrain() {
               }}
             />
             {!circuit && (
-              <p className="pointer-events-none absolute inset-0 m-0 flex items-center px-4 text-fluid-1 text-text-muted">
-                {error ??
-                  (typeof Worker === 'undefined'
-                    ? 'This browser cannot run the simulation.'
-                    : visible
-                      ? 'Loading the connectome…'
-                      : 'The simulation loads when this section reaches the screen.')}
-              </p>
+              <div className="absolute inset-0 flex items-center p-(--space-4)">
+                {error || typeof Worker === 'undefined' ? (
+                  <div className="state-error" role="alert">
+                    <p className="m-0">
+                      {error ?? 'This browser cannot run the simulation.'}
+                    </p>
+                    {typeof Worker !== 'undefined' ? (
+                      <button type="button" className="btn" onClick={retryLoad}>
+                        Try again
+                      </button>
+                    ) : null}
+                  </div>
+                ) : (
+                  <div className="state-loading" role="status">
+                    {visible ? <div className="skeleton skeleton-copy" /> : null}
+                    <p className="m-0">
+                      {visible
+                        ? 'Loading the connectome…'
+                        : 'The simulation loads when this section reaches the screen.'}
+                    </p>
+                  </div>
+                )}
+              </div>
             )}
           </div>
           <p className="m-0 mt-2 text-fluid-1 text-text-muted">
@@ -373,40 +431,54 @@ export function FlyBrain() {
         </div>
 
         <div>
-          <h3 className="m-0 text-fluid-3 font-bold text-text-default">Readout</h3>
-          <p className="m-0 mt-2 text-fluid-1 leading-snug text-text-muted">
+          <h3 className="m-0">Readout</h3>
+          <p className="m-0 mt-(--space-2) text-fluid-1">
             Descending neurons, and the proboscis motor neuron. Hertz, smoothed over the last
             fraction of a second.
           </p>
-          <ul className="m-0 mt-4 list-none p-0">
+          <ul className="m-0 mt-(--space-4) flex list-none flex-col gap-(--space-4) p-0">
             {(circuit?.readouts ?? STUB_READOUTS).map((row, index) => {
               const hz = rates[index] ?? 0
               const width = Math.min(100, (hz / 120) * 100)
               return (
-                <li key={row.id} className="border-b border-border-default py-3">
-                  <div className="flex items-baseline justify-between gap-3">
+                <li key={row.id}>
+                  <div className="flex items-baseline justify-between gap-(--space-3)">
                     <span className="text-body text-text-default">
                       {row.label}
-                      <span className="ms-2 text-fluid-1 text-text-muted">{row.detail}</span>
+                      <span className="ms-(--space-2) text-fluid-1 text-text-muted">{row.detail}</span>
                     </span>
-                    <span className="shrink-0 tabular-nums text-body text-text-default">
+                    <span className="metric shrink-0 text-body text-text-default">
                       {circuit ? Math.round(hz) : '–'} Hz
                     </span>
                   </div>
-                  <div className="mt-2 h-1.5 bg-surface-100" aria-hidden="true">
-                    <div className="h-full bg-text-default" style={{ width: `${width}%` }} />
+                  <div className="meter mt-(--space-2)" aria-hidden="true">
+                    <span style={{ width: `${width}%` }} />
                   </div>
                 </li>
               )
             })}
           </ul>
-          <p className="m-0 mt-4 text-fluid-1 text-text-muted" role="status">
-            {error ??
-              (typeof Worker === 'undefined'
-                ? 'This browser cannot run the simulation.'
+          <p
+            className={`status-live m-0 mt-(--space-4) text-fluid-1 ${
+              error || typeof Worker === 'undefined'
+                ? 'status-live--bad'
                 : backend
-                  ? engineLabel(backend, dtMs)
-                  : 'Waiting to start')}
+                  ? 'status-live--ok'
+                  : 'status-live--wait'
+            }`}
+            role="status"
+          >
+            {error ??
+              (typeof Worker === 'undefined' ? (
+                'This browser cannot run the simulation.'
+              ) : backend ? (
+                <>
+                  {BACKEND_LABEL[backend]},{' '}
+                  <span className="metric">{dtMs} ms</span> steps
+                </>
+              ) : (
+                'Waiting to start'
+              ))}
           </p>
         </div>
       </div>
@@ -415,7 +487,7 @@ export function FlyBrain() {
         {live}
       </p>
 
-      <p className="m-0 mt-6 max-w-[46rem] text-fluid-1 leading-snug text-text-muted">
+      <p className="m-0 mt-(--space-6) text-fluid-1">
         The cut keeps those sensory types, the descending neurons DNa01, DNa02, DNa03, DNb05,
         DNa11, DNp01, MDN, DNp09, DNg13 and DNp03, MN9 (CB0701), and every neuron on a path of
         at least 40 synapses between them. Wiring and cell types:{' '}
@@ -445,6 +517,12 @@ export function FlyBrain() {
       </p>
     </Section>
   )
+}
+
+const BACKEND_LABEL: Record<Backend, string> = {
+  webgpu: 'WebGPU',
+  wasm: 'WebAssembly',
+  js: 'JavaScript',
 }
 
 const STUB_STIMULI = [

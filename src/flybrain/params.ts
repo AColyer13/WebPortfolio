@@ -14,6 +14,8 @@ export const INPUT_W_MV = 68.75
 
 /** WebGPU integrates at the 0.1 ms step used with this parameter set. */
 export const GPU_DT_MS = 0.1
+/** WebAssembly is fast enough for a finer step than JavaScript, still coarser than WebGPU. */
+export const WASM_DT_MS = 0.25
 /** JavaScript uses a coarser step so a phone can keep up. */
 export const JS_DT_MS = 1
 /** Visual fade of a spike on the plot. Not part of the neuron model. */

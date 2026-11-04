@@ -15,7 +15,7 @@ describe('Projects', () => {
     // card titles and avoid duplicate matches.
     const cardTitles = screen.getAllByRole('heading', { level: 3 })
     const titles = cardTitles.map((h) => h.textContent ?? '')
-    expect(titles).toContain('Fly brain')
+    expect(titles).not.toContain('Fly brain')
     expect(titles).toContain('Legal Eagle Project')
     expect(titles).toContain('MissionCtrl')
     expect(titles).toContain('Pure Strike Golf')
@@ -35,20 +35,23 @@ describe('Projects', () => {
       .getAllByRole('heading', { level: 3 })
       .map((h) => h.textContent ?? '')
     expect(cardTitlesAfter).toContain('Dream Vacation App')
+    const bible = cardTitlesAfter.indexOf('Bible Book by Book')
+    expect(cardTitlesAfter[bible + 1]).toBe('Fly brain')
   })
 
   it('resolves image src for public assets', () => {
     const { container } = render(<Projects />)
     const imgs = container.querySelectorAll('img')
     expect(imgs.length).toBe(featuredProjects.length)
-    expect(imgs[0].getAttribute('src')).toContain('images/fly-brain')
+    expect(imgs[0].getAttribute('src')).toContain('images/legaleagleproject')
   })
 
   it('loads the first row of thumbnails eagerly and lazy-loads the rest', () => {
     const { container } = render(<Projects />)
     const imgs = container.querySelectorAll<HTMLImageElement>('img')
-    expect([...imgs].slice(0, 3).every((img) => img.getAttribute('loading') === 'eager')).toBe(true)
-    expect(imgs[3]?.getAttribute('loading')).toBe('lazy')
+    for (const img of imgs) {
+      expect(img.getAttribute('loading')).toBe('eager')
+    }
     expect(imgs[0].getAttribute('fetchpriority')).toBe('high')
 
     fireEvent.click(screen.getByRole('button', { name: /View all projects/i }))
@@ -59,6 +62,7 @@ describe('Projects', () => {
 
   it('opens the fly brain and sat bench demos in a scrollable popup', async () => {
     render(<Projects />)
+    fireEvent.click(screen.getByRole('button', { name: /View all projects/i }))
     fireEvent.click(screen.getByRole('button', { name: 'Live demo' }))
     const dialog = await screen.findByRole('dialog', { name: 'Live demo' })
     expect(dialog).toHaveClass('demo-dialog')

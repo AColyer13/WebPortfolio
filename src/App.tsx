@@ -5,24 +5,30 @@ import { Footer } from './components/Footer'
 import { Navbar } from './components/Navbar'
 import { Skills } from './components/Skills'
 import { useSectionNavigation } from './hooks/useSectionNavigation'
-import { sectionBlockClass } from './utils/layoutClasses'
+import { containerClass, sectionBlockClass, sectionContainerClass } from './utils/layoutClasses'
+import { loadContact, loadProjects } from './utils/prefetch'
 
-const Projects = lazy(() =>
-  import('./components/Projects').then((m) => ({ default: m.Projects })),
-)
-const Contact = lazy(() =>
-  import('./components/Contact').then((m) => ({ default: m.Contact })),
-)
+const Projects = lazy(() => loadProjects().then((m) => ({ default: m.Projects })))
+const Contact = lazy(() => loadContact().then((m) => ({ default: m.Contact })))
 
 /** Preserves section anchors for nav/scroll-spy while async chunks load. */
 function SectionPlaceholder({ id }: { id: string }) {
   return (
     <section
       id={id}
-      className={`${sectionBlockClass} min-h-[30rem]`}
+      className={`${sectionBlockClass} state-loading`}
       aria-busy="true"
       aria-label="Loading section"
-    />
+    >
+      <div className={`${containerClass} ${sectionContainerClass}`}>
+        <div className="skeleton skeleton-title" />
+        <div className="skeleton skeleton-copy" />
+        <div className="skeleton skeleton-copy" />
+        <p className="sr-only" role="status">
+          Loading
+        </p>
+      </div>
+    </section>
   )
 }
 
