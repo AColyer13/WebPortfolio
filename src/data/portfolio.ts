@@ -261,6 +261,7 @@ export const projects: Project[] = [
       'A small encyclopedia of 3,500+ entries in ten books, written in plain words with a Heads up box wherever the famous story is better than the evidence. A static site with search, a timeline and cross-links, and no build step or dependencies.',
     imageUrl: 'images/colyer-encyclopedia.png',
     liveUrl: 'https://acolyer13.github.io/colyer-encyclopedia/',
+    featured: true,
   },
   {
     id: 2,
@@ -270,6 +271,7 @@ export const projects: Project[] = [
       'Shop management system for an auto repair shop: service records, parts inventory, and scheduling. Firestore role rules keep customers and staff out of each other\'s records while admins see everything.',
     imageUrl: 'images/mechanicapiicon-new.png',
     liveUrl: 'https://valleyforgeautomotive.org',
+    featured: true,
   },
   {
     id: 8,
@@ -298,7 +300,6 @@ export const projects: Project[] = [
     imageUrl: 'images/legaleagleproject-new.png',
     liveUrl: 'https://legaleagleproject-mu.vercel.app',
     demoNote: 'Free sign-up required',
-    featured: true,
   },
   {
     id: 15,
@@ -318,7 +319,6 @@ export const projects: Project[] = [
     imageUrl: 'images/pure-strike-golf.png',
     liveUrl: 'https://acolyer13.github.io/pure-strike-golf/',
     githubUrl: 'https://github.com/AColyer13/pure-strike-golf',
-    featured: true,
   },
   {
     id: 12,
