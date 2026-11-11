@@ -1,6 +1,6 @@
 import { beforeEach, describe, it, expect } from 'vitest'
 import { fireEvent, render, screen, within } from '@testing-library/react'
-import { featuredProjects } from '../data/portfolio'
+import { featuredProjects, projects } from '../data/portfolio'
 import { Projects } from './Projects'
 
 beforeEach(() => {
@@ -16,9 +16,9 @@ describe('Projects', () => {
     const cardTitles = screen.getAllByRole('heading', { level: 3 })
     const titles = cardTitles.map((h) => h.textContent ?? '')
     expect(titles).not.toContain('Fly brain')
-    expect(titles).toContain('Legal Eagle Project')
+    expect(titles).toContain('Colyer Encyclopedia')
     expect(titles).toContain('MissionCtrl')
-    expect(titles).toContain('Pure Strike Golf')
+    expect(titles).toContain('Valley Forge Automotive')
   })
 
   it('hides non-featured projects until expanded', () => {
@@ -76,18 +76,20 @@ describe('Projects', () => {
 
   it('warns that the Legal Eagle demo needs a sign-up', () => {
     render(<Projects />)
+    fireEvent.click(screen.getByRole('button', { name: /View all projects/i }))
     expect(screen.getByText(/free sign-up required/i)).toBeInTheDocument()
   })
 
   it('shows a source link only for projects with a public repo', () => {
     render(<Projects />)
     expect(screen.getAllByRole('link', { name: /Live demo/i }).length).toBe(3)
+    expect(screen.queryAllByRole('link', { name: /source on GitHub/i })).toHaveLength(0)
+
+    fireEvent.click(screen.getByRole('button', { name: /View all projects/i }))
     const sources = screen.getAllByRole('link', { name: /source on GitHub/i })
-    expect(sources).toHaveLength(1)
-    expect(sources[0]).toHaveAttribute(
-      'href',
-      'https://github.com/AColyer13/pure-strike-golf',
-    )
+    const hrefs = sources.map((link) => link.getAttribute('href'))
+    expect(hrefs).toContain('https://github.com/AColyer13/pure-strike-golf')
+    expect(hrefs).toHaveLength(projects.filter((p) => p.githubUrl).length)
   })
 
   it('links expanded live demos to verified URLs', () => {
