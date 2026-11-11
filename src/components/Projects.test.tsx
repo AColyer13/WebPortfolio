@@ -27,14 +27,14 @@ describe('Projects', () => {
     const cardTitlesBefore = screen
       .getAllByRole('heading', { level: 3 })
       .map((h) => h.textContent ?? '')
-    expect(cardTitlesBefore).not.toContain('Dream Vacation App')
+    expect(cardTitlesBefore).not.toContain('The Office')
 
     fireEvent.click(screen.getByRole('button', { name: /View all projects/i }))
 
     const cardTitlesAfter = screen
       .getAllByRole('heading', { level: 3 })
       .map((h) => h.textContent ?? '')
-    expect(cardTitlesAfter).toContain('Dream Vacation App')
+    expect(cardTitlesAfter).toContain('The Office')
     const bible = cardTitlesAfter.indexOf('Bible Book by Book')
     expect(cardTitlesAfter[bible + 1]).toBe('Fly brain')
   })
@@ -43,7 +43,7 @@ describe('Projects', () => {
     const { container } = render(<Projects />)
     const imgs = container.querySelectorAll('img')
     expect(imgs.length).toBe(featuredProjects.length)
-    expect(imgs[0].getAttribute('src')).toContain('images/legaleagleproject')
+    expect(imgs[0].getAttribute('src')).toContain('images/missionctrl')
   })
 
   it('loads the first row of thumbnails eagerly and lazy-loads the rest', () => {
