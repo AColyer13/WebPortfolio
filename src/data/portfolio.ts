@@ -244,17 +244,6 @@ export const education: EducationItem[] = [
 
 export const projects: Project[] = [
   {
-    id: 3,
-    title: 'Legal Eagle Project',
-    tech: 'Next.js, Prisma, AI SDK, NextAuth',
-    description:
-      'Practice tools for estate attorneys: client files, filing deadlines, and a per-case change log. The built-in assistant answers only from app data, after names and other sensitive details are stripped.',
-    imageUrl: 'images/legaleagleproject-new.png',
-    liveUrl: 'https://legaleagleproject-mu.vercel.app',
-    demoNote: 'Free sign-up required',
-    featured: true,
-  },
-  {
     id: 1,
     title: 'MissionCtrl',
     tech: 'React, Firebase, Firestore, Gemini AI',
@@ -265,15 +254,13 @@ export const projects: Project[] = [
     featured: true,
   },
   {
-    id: 13,
-    title: 'Pure Strike Golf',
-    tech: 'Three.js, JavaScript, PWA',
+    id: 14,
+    title: 'Colyer Encyclopedia',
+    tech: 'HTML, CSS, Vanilla JS',
     description:
-      'Browser golf with real ball-flight physics, four tribute courses and a daily challenge. After every shot the game explains why the ball did what it did, with strokes-gained stats to match.',
-    imageUrl: 'images/pure-strike-golf.png',
-    liveUrl: 'https://acolyer13.github.io/pure-strike-golf/',
-    githubUrl: 'https://github.com/AColyer13/pure-strike-golf',
-    featured: true,
+      'A small encyclopedia of 3,500+ entries in ten books, written in plain words with a Heads up box wherever the famous story is better than the evidence. A static site with search, a timeline and cross-links, and no build step or dependencies.',
+    imageUrl: 'images/colyer-encyclopedia.png',
+    liveUrl: 'https://acolyer13.github.io/colyer-encyclopedia/',
   },
   {
     id: 2,
@@ -294,13 +281,24 @@ export const projects: Project[] = [
     liveUrl: 'https://acolyer13.github.io/Stardust/',
   },
   {
-    id: 14,
-    title: 'Colyer Encyclopedia',
-    tech: 'HTML, CSS, Vanilla JS',
+    id: 4,
+    title: 'Writing Consultant',
+    tech: 'Python, Flask',
     description:
-      'A small encyclopedia of 3,500+ entries in ten books, written in plain words with a Heads up box wherever the famous story is better than the evidence. A static site with search, a timeline and cross-links, and no build step or dependencies.',
-    imageUrl: 'images/colyer-encyclopedia.png',
-    liveUrl: 'https://acolyer13.github.io/colyer-encyclopedia/',
+      'AI writing assistant where one model drafts, a second critiques, and the first rewrites. Runs as a local Flask app, or as a browser-only build where your API key never leaves the page.',
+    imageUrl: 'images/writing-consultant.png',
+    liveUrl: 'https://acolyer13.github.io/writing_consultant/',
+  },
+  {
+    id: 3,
+    title: 'Legal Eagle Project',
+    tech: 'Next.js, Prisma, AI SDK, NextAuth',
+    description:
+      'Practice tools for estate attorneys: client files, filing deadlines, and a per-case change log. The built-in assistant answers only from app data, after names and other sensitive details are stripped.',
+    imageUrl: 'images/legaleagleproject-new.png',
+    liveUrl: 'https://legaleagleproject-mu.vercel.app',
+    demoNote: 'Free sign-up required',
+    featured: true,
   },
   {
     id: 15,
@@ -312,22 +310,59 @@ export const projects: Project[] = [
     liveUrl: 'https://acolyer13.github.io/c8-arcade-racer/',
   },
   {
-    id: 17,
-    title: 'Sports Research',
-    tech: 'Python, React, GitHub Actions',
+    id: 13,
+    title: 'Pure Strike Golf',
+    tech: 'Three.js, JavaScript, PWA',
     description:
-      'Paper-trading research desk for six US sports. Every candidate strategy runs in a shadow ledger, and one earns a stake only after 100 verified closes beat the closing line. Backtests nominate but never grant, and nothing places a real wager.',
-    imageUrl: 'images/sports-research.png',
-    liveUrl: 'https://acolyer13.github.io/sports-research/',
+      'Browser golf with real ball-flight physics, four tribute courses and a daily challenge. After every shot the game explains why the ball did what it did, with strokes-gained stats to match.',
+    imageUrl: 'images/pure-strike-golf.png',
+    liveUrl: 'https://acolyer13.github.io/pure-strike-golf/',
+    githubUrl: 'https://github.com/AColyer13/pure-strike-golf',
+    featured: true,
   },
   {
-    id: 18,
-    title: 'Hardened Trading Agent',
-    tech: 'Python, MCP, Render, GitHub Actions',
+    id: 12,
+    title: 'Minnesota Snowmobile',
+    tech: 'Three.js, WebGL, JavaScript',
     description:
-      'Trading agent built in strict phases: a tested risk engine first, then walk-forward backtests and an eight-week paper test. Live orders come last, and each one waits for human review.',
-    imageUrl: 'images/hardened-trading-agent.png',
-    liveUrl: 'https://acolyer13.github.io/hardened-trading-agent/docs/',
+      'SSX-style 3D snowmobile racer on Minnesota trails like Spirit Mountain and Lake Bemidji. Race five rivals, chain tricks off big kickers to fill your boost, and find the shortcuts.',
+    imageUrl: 'images/minnesota-snowmobile-new.png',
+    liveUrl: 'https://acolyer13.github.io/minnesota-snowmobile/',
+  },
+  {
+    id: 7,
+    title: 'Swimming Website',
+    tech: 'HTML, CSS, JS, PWA',
+    description:
+      'Swim lesson guide that teaches one skill at a time: water safety, body position, kick, arms, timing, then breath, before moving on to the four competitive strokes.',
+    imageUrl: 'images/Swimmingsiteicon-new.png',
+    liveUrl: 'https://acolyer13.github.io/Swim-Teaching-Website/',
+  },
+  {
+    id: 5,
+    title: 'Event Center Website',
+    tech: 'HTML, CSS, JS, PWA',
+    description:
+      'Website for an Edina event venue covering tournaments, live music, and private bookings. Five static pages with no build step and no runtime dependencies, installable as a PWA.',
+    imageUrl: 'images/Eventcentericon-new.png',
+    liveUrl: 'https://acolyer13.github.io/Event-Center-Website-v2/',
+  },
+  {
+    id: 9,
+    title: 'The Office',
+    tech: 'Node.js, Express, Three.js',
+    description:
+      'Walk a 3D Dunder Mifflin Scranton in first person and chat with the characters. Each one is played by an AI model, local through Ollama or any OpenAI-compatible API, prompted to stay in character.',
+    imageUrl: 'images/the-office.png',
+  },
+  {
+    id: 10,
+    title: 'Immaculate Draft',
+    tech: 'HTML, CSS, JavaScript',
+    description:
+      'Baseball trivia game: draft a 10-man lineup from MLB and Negro Leagues history. Answer the trivia question to pick from Hall of Famers; miss it and you choose from non-HOF starters.',
+    imageUrl: 'images/immaculate-grid-copy-new.png',
+    liveUrl: 'https://acolyer13.github.io/Immaculate-Grid-Copy/',
   },
   {
     id: 19,
@@ -357,65 +392,47 @@ export const projects: Project[] = [
     demo: 'benches',
   },
   {
-    id: 4,
-    title: 'Writing Consultant',
-    tech: 'Python, Flask',
+    id: 22,
+    title: 'Everything AI',
+    tech: 'HTML, CSS, JavaScript, Python',
     description:
-      'AI writing assistant where one model drafts, a second critiques, and the first rewrites. Runs as a local Flask app, or as a browser-only build where your API key never leaves the page.',
-    imageUrl: 'images/writing-consultant.png',
-    liveUrl: 'https://acolyer13.github.io/writing_consultant/',
+      'Study guide to Python, data science, machine learning, deep learning and generative AI, built from the Microsoft AI Engineer program. Twenty pages with runnable code examples and a searchable glossary, generated by a small Python build script into plain static files.',
+    imageUrl: 'images/everything-ai.png',
+    liveUrl: 'https://acolyer13.github.io/everything-ai/',
+    githubUrl: 'https://github.com/AColyer13/everything-ai',
   },
   {
-    id: 12,
-    title: 'Minnesota Snowmobile',
-    tech: 'Three.js, WebGL, JavaScript',
+    id: 23,
+    title: 'Home Video',
+    tech: 'Python, FFmpeg, RIFE, HLS, Tailscale',
     description:
-      'SSX-style 3D snowmobile racer on Minnesota trails like Spirit Mountain and Lake Bemidji. Race five rivals, chain tricks off big kickers to fill your boost, and find the shortcuts.',
-    imageUrl: 'images/minnesota-snowmobile-new.png',
-    liveUrl: 'https://acolyer13.github.io/minnesota-snowmobile/',
+      'Self-hosted movie server that runs frame interpolation on your own GPU and streams the smoother video to phones and TVs over HLS, Chromecast or AirPlay. Accounts, invite links and Tailscale keep remote access private, with no public ports opened.',
+    imageUrl: 'images/home-video.png',
   },
   {
-    id: 10,
-    title: 'Immaculate Draft',
-    tech: 'HTML, CSS, JavaScript',
+    id: 24,
+    title: 'Looper',
+    tech: 'Python, Typer, Claude Code, Codex, Ollama',
     description:
-      'Baseball trivia game: draft a 10-man lineup from MLB and Negro Leagues history. Answer the trivia question to pick from Hall of Famers; miss it and you choose from non-HOF starters.',
-    imageUrl: 'images/immaculate-grid-copy-new.png',
-    liveUrl: 'https://acolyer13.github.io/Immaculate-Grid-Copy/',
+      'Agent loop engine: a router picks the right loop for a task, then runs its stages across a team of one to five agents. Members can be coding CLIs such as Claude Code and Codex, hosted APIs, or local models, and each loop adapts to the weakest tier on the team.',
+    imageUrl: 'images/looper.png',
   },
   {
-    id: 7,
-    title: 'Swimming Website',
-    tech: 'HTML, CSS, JS, PWA',
+    id: 25,
+    title: 'Savage Sales Agent',
+    tech: 'Python, Claude Code',
     description:
-      'Swim lesson guide that teaches one skill at a time: water safety, body position, kick, arms, timing, then breath, before moving on to the four competitive strokes.',
-    imageUrl: 'images/Swimmingsiteicon-new.png',
-    liveUrl: 'https://acolyer13.github.io/Swim-Teaching-Website/',
+      'Sales coach that runs inside Claude Code, with about twenty slash commands from cold scripts and call prep to deal inspection and business cases. It drafts only, never sends, and a practice mode with a fictional company lets you try everything first.',
+    imageUrl: 'images/savage-sales-agent.png',
+    githubUrl: 'https://github.com/AColyer13/savage-sales-agent',
   },
   {
-    id: 5,
-    title: 'Event Center Website',
-    tech: 'HTML, CSS, JS, PWA',
+    id: 26,
+    title: 'Closed Book',
+    tech: 'Python, OCR, openpyxl',
     description:
-      'Website for an Edina event venue covering tournaments, live music, and private bookings. Five static pages with no build step and no runtime dependencies, installable as a PWA.',
-    imageUrl: 'images/Eventcentericon-new.png',
-    liveUrl: 'https://acolyer13.github.io/Event-Center-Website-v2/',
-  },
-  {
-    id: 9,
-    title: 'The Office',
-    tech: 'Node.js, Express, Three.js',
-    description:
-      'Walk a 3D Dunder Mifflin Scranton in first person and chat with the characters. Each one is played by an AI model, local through Ollama or any OpenAI-compatible API, prompted to stay in character.',
-    imageUrl: 'images/the-office.png',
-  },
-  {
-    id: 6,
-    title: 'Dream Vacation App',
-    tech: 'React, Vite, Hono, LangGraph, Mapbox',
-    description:
-      'Location-aware AI travel agent. Detects where you are and suggests drivable getaways or fly-away trips, with checked drive times, weather forecasts, maps, and day-by-day itineraries.',
-    imageUrl: 'images/dream-vacation-app.png',
+      'Offline document intake for small tax-prep offices: drop in a client’s W-2s and 1099s and get a workbook plus a list of missing documents. Any non-local network connection is blocked at startup, and a hash-chained audit log records every step without storing field values.',
+    imageUrl: 'images/closedbook.png',
   },
 ]
 
