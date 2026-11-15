@@ -49,3 +49,6 @@ lighthouse-*.json
 
 # Browser accessibility reports
 a11y-results/
+
+# Generated dependency audit reports
+audit-results/

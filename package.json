@@ -8,12 +8,13 @@
     "build:images": "node scripts/generate-image-variants.mjs",
     "build:wasm": "asc assembly/lif.ts --outFile public/lif.wasm --optimize --runtime stub --noAssert --use abort=",
     "build": "npm run build:images && npm run build:wasm && tsc -b && vite build",
-    "check": "tsc -b && eslint . && vitest run",
+    "check": "tsc -b && eslint . && vitest run && node --test scripts/check-audit.node.mjs",
     "lint": "eslint .",
     "preview": "vite preview",
     "test": "vitest run",
     "test:watch": "vitest",
-    "test:a11y": "npm run build && node scripts/axe-preview.mjs"
+    "test:a11y": "npm run build && node scripts/axe-preview.mjs",
+    "audit:review": "node scripts/check-audit.mjs"
   },
   "dependencies": {
     "@emailjs/browser": "^5.0.3",

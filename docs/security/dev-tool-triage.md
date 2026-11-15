@@ -37,3 +37,18 @@ The installed typescript-estree 8.72.2 requires `minimatch ^10.2.2` and resolves
 - TypeScript, ESLint, all 97 unit tests, and production build passed after integration.
 
 Retain supported dependency ranges. Recheck upstream get-uri/axe/chromedriver and typescript-eslint releases for compatible patched ranges, then rerun full and production audits, checks, build, and accessibility tests. If zero tooling advisories is mandatory immediately, evaluate a supported runner/lint migration as separate work. Do not suppress these findings or describe a production-only audit as a clean full audit. Browser test results are tracked by the pull request checks, not established by this dependency review.
+
+## Maintenance recheck (2026-11-15)
+
+Rechecked npm stable metadata: axe CLI 4.14.0, get-uri 8.0.1 and
+TypeScript ESLint/typescript-estree 8.72.2 remain current. Their basic-ftp and
+minimatch ranges remain ^5.3.1 and ^10.2.2 respectively. Fresh full audit:
+13 entries (6 high, 7 moderate); production audit: zero. A new non-forcing
+dry run again proposed zero additions, changes or removals. No forced fixes
+or dependency range changes were made.
+
+`npm run audit:review` now enforces regressions against the reviewed baseline
+without trusting package counts alone. It compares package locations, advisory
+URLs and severity; npm's propagated dependency edges and suggested fixes may
+change independently and are not used as stable advisory identities. Both CI
+workflows retain the full fresh report as `dependency-audit`.

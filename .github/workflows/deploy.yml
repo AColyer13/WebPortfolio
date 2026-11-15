@@ -33,6 +33,20 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Audit production dependencies
+        run: npm audit --omit=dev --audit-level=high
+
+      - name: Review full dependency audit for regressions
+        run: npm run audit:review
+
+      - name: Upload dependency audit report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: dependency-audit
+          path: audit-results/
+          if-no-files-found: ignore
+
       - name: Check (TypeCheck, Lint, Test)
         run: npm run check
 
