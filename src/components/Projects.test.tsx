@@ -80,15 +80,25 @@ describe('Projects', () => {
     expect(screen.getByText(/free sign-up required/i)).toBeInTheDocument()
   })
 
+  it('sets clear expectations for featured demo access', () => {
+    render(<Projects />)
+    const mission = screen.getByRole('link', { name: 'MissionCtrl: Live demo (opens in a new tab)' })
+    expect(mission).toHaveAccessibleDescription('Globe: no account needed; WebGL required. Sign in for NOVA.')
+    const valley = screen.getByRole('link', { name: 'Valley Forge Automotive: Visit site (opens in a new tab)' })
+    expect(valley).toHaveTextContent('Visit site')
+    expect(valley).toHaveAccessibleDescription('Staff sign-in only; accounts are invite-only.')
+  })
+
   it('shows a source link only for projects with a public repo', () => {
     render(<Projects />)
-    expect(screen.getAllByRole('link', { name: /Live demo/i }).length).toBe(3)
+    expect(screen.getAllByRole('link', { name: /Live demo/i }).length).toBe(2)
     expect(screen.queryAllByRole('link', { name: /source on GitHub/i })).toHaveLength(0)
 
     fireEvent.click(screen.getByRole('button', { name: /View all projects/i }))
     const sources = screen.getAllByRole('link', { name: /source on GitHub/i })
     const hrefs = sources.map((link) => link.getAttribute('href'))
-    expect(hrefs).toContain('https://github.com/AColyer13/pure-strike-golf')
+    expect(hrefs).not.toContain('https://github.com/AColyer13/pure-strike-golf')
+    expect(screen.queryByRole('link', { name: 'Pure Strike Golf source on GitHub' })).not.toBeInTheDocument()
     expect(hrefs).toHaveLength(projects.filter((p) => p.githubUrl).length)
   })
 

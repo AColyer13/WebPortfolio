@@ -127,13 +127,15 @@ function ProjectCard({
               className="btn"
               target="_blank"
               rel="noopener noreferrer"
+              aria-label={`${project.title}: ${project.liveLabel ?? 'Live demo'} (opens in a new tab)`}
+              aria-describedby={project.demoNote ? `project-${project.id}-access` : undefined}
             >
               <Icon name="external-link-alt" className="text-fluid-1" aria-hidden />
-              Live demo
+              {project.liveLabel ?? 'Live demo'}
             </a>
           ) : null}
           {project.liveUrl && project.demoNote ? (
-            <span className="text-copyright text-text-subtle">{project.demoNote}</span>
+            <span id={`project-${project.id}-access`} className="text-copyright text-text-subtle">{project.demoNote}</span>
           ) : null}
           {!project.liveUrl && !project.githubUrl && !project.demo ? (
             <span className="hit-target text-copyright text-text-subtle">

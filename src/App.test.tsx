@@ -8,6 +8,7 @@ describe('App', () => {
     render(<App />)
     const skip = screen.getByRole('link', { name: /skip to main content/i })
     expect(skip).toHaveAttribute('href', '#main-content')
+    expect(screen.getByRole('main')).toHaveAttribute('tabindex', '-1')
   })
 
   it('renders sections in the required DOM order', async () => {

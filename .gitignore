@@ -46,3 +46,9 @@ lighthouse-*.json
 
 # Claude Code local config
 .claude/
+
+# Browser accessibility reports
+a11y-results/
+
+# Generated dependency audit reports
+audit-results/
