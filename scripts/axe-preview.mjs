@@ -175,7 +175,10 @@ try {
       assert.equal(await driver.executeScript('return document.activeElement.classList.contains("skip-link")'), true, 'Skip link must be first Tab stop')
       await tabTo('.skip-link')
       await press(Key.ENTER)
-      assert.equal(new URL(await driver.getCurrentUrl()).hash, '#main-content')
+      // Scroll-spy intentionally clears the top-of-page hash; verify actual focus.
+      await driver.wait(() => driver.executeScript("return document.activeElement.id === 'main-content'"), 5000)
+      await press(Key.TAB)
+      assert.ok(await driver.executeScript("return document.querySelector('main').contains(document.activeElement)"), 'Skip link must bypass navigation')
       if (width < 768) await mobileMenu(name)
       await projects(name)
     }

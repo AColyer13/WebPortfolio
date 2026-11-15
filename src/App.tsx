@@ -56,7 +56,7 @@ function App() {
         headerScrollHidden={headerScrollHidden}
         onMenuOpenChange={setMobileMenuOpen}
       />
-      <main id="main-content">
+      <main id="main-content" tabIndex={-1}>
         <About />
         <Suspense fallback={<SectionPlaceholder id="projects" />}>
           <Projects />
