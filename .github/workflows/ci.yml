@@ -55,6 +55,14 @@ jobs:
         run: |
           npx --yes browser-driver-manager@latest install chrome | tee /tmp/browser-install.log
           sed -n -E 's/^(CHROME_TEST_PATH|CHROMEDRIVER_TEST_PATH)="(.*)"$/\1=\2/p' /tmp/browser-install.log >> "$GITHUB_ENV"
+          # Use the runner's installed Chrome with its supported Linux sandbox.
+          # Downloaded Chrome-for-Testing cannot use Ubuntu's AppArmor profile.
+          chrome_path="$(command -v google-chrome)"
+          chrome_major="$("$chrome_path" --version | grep -oE '[0-9]+' | head -1)"
+          driver_path="$(sed -n -E 's/^CHROMEDRIVER_TEST_PATH="(.*)"$/\1/p' /tmp/browser-install.log)"
+          driver_major="$("$driver_path" --version | grep -oE '[0-9]+' | head -1)"
+          test "$chrome_major" = "$driver_major"
+          echo "CHROME_PATH=$chrome_path" >> "$GITHUB_ENV"
 
       - name: Accessibility (axe, keyboard, responsive themes)
         run: node scripts/axe-preview.mjs
