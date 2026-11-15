@@ -3,7 +3,7 @@ import assert from 'node:assert/strict'
 import { stripVTControlCharacters } from 'node:util'
 import { spawn } from 'node:child_process'
 import { createRequire } from 'node:module'
-import { mkdir, writeFile } from 'node:fs/promises'
+import { mkdir, readFile, writeFile } from 'node:fs/promises'
 import path from 'node:path'
 import process from 'node:process'
 import { fileURLToPath } from 'node:url'
@@ -155,6 +155,7 @@ try {
   if (chromePath) options.setChromeBinaryPath(chromePath)
   if (process.env.A11Y_NO_SANDBOX === '1') options.addArguments('--no-sandbox')
   const service = new chrome.ServiceBuilder(process.env.CHROMEDRIVER_PATH || process.env.CHROMEDRIVER_TEST_PATH || chromedriver.path).setHostname('127.0.0.1')
+    .enableVerboseLogging().loggingTo(path.join(reports, 'chromedriver.log'))
   driver = await new Builder().forBrowser('chrome').setChromeService(service).setChromeOptions(options).build()
   await driver.manage().setTimeouts({ script: 60000, pageLoad: 30000 })
   for (const width of [1280, 390, 320]) {
@@ -183,6 +184,7 @@ try {
   assert.equal(results.reduce((total, r) => total + r.violations, 0), 0, 'Accessibility violations found; inspect a11y-results/*.json')
 } catch (error) {
   console.error(error)
+  if (!driver) console.error(await readFile(path.join(reports, 'chromedriver.log'), 'utf8').catch(() => 'No ChromeDriver log available'))
   process.exitCode = 1
 } finally {
   await writeFile(path.join(reports, 'summary.json'), JSON.stringify(results, null, 2)).catch(console.error)
