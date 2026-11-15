@@ -4,6 +4,7 @@ import { Experiences } from './components/Experiences'
 import { Footer } from './components/Footer'
 import { Navbar } from './components/Navbar'
 import { Skills } from './components/Skills'
+import { SectionErrorBoundary } from './components/SectionErrorBoundary'
 import { useSectionNavigation } from './hooks/useSectionNavigation'
 import { containerClass, sectionBlockClass, sectionContainerClass } from './utils/layoutClasses'
 import { loadContact, loadProjects } from './utils/prefetch'
@@ -58,14 +59,18 @@ function App() {
       />
       <main id="main-content" tabIndex={-1}>
         <About />
-        <Suspense fallback={<SectionPlaceholder id="projects" />}>
-          <Projects />
-        </Suspense>
+        <SectionErrorBoundary id="projects" title="Projects">
+          <Suspense fallback={<SectionPlaceholder id="projects" />}>
+            <Projects />
+          </Suspense>
+        </SectionErrorBoundary>
         <Experiences />
         <Skills />
-        <Suspense fallback={<SectionPlaceholder id="contact" />}>
-          <Contact />
-        </Suspense>
+        <SectionErrorBoundary id="contact" title="Get in Touch">
+          <Suspense fallback={<SectionPlaceholder id="contact" />}>
+            <Contact />
+          </Suspense>
+        </SectionErrorBoundary>
       </main>
       <Footer />
     </div>
