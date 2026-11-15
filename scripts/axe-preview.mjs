@@ -1,5 +1,6 @@
 /** Production-browser accessibility regression suite. Run after npm run build. */
 import assert from 'node:assert/strict'
+import { stripVTControlCharacters } from 'node:util'
 import { spawn } from 'node:child_process'
 import { createRequire } from 'node:module'
 import { mkdir, writeFile } from 'node:fs/promises'
@@ -22,12 +23,14 @@ const results = []
 let driver
 let previewError
 let previewListening = false
+let previewOutput = ''
 const preview = spawn(process.execPath, [path.join(root, 'node_modules/vite/bin/vite.js'),
   'preview', '--port', String(port), '--strictPort', '--host', '127.0.0.1'],
 { cwd: root, stdio: ['ignore', 'pipe', 'inherit'] })
 preview.stdout.on('data', (chunk) => {
   process.stdout.write(chunk)
-  if (chunk.toString().includes(url)) previewListening = true
+  previewOutput += stripVTControlCharacters(chunk.toString())
+  if (previewOutput.includes(url)) previewListening = true
 })
 preview.on('error', (error) => { previewError = error })
 
@@ -148,9 +151,10 @@ try {
     try { return (await fetch(url)).ok } catch { return false }
   }, 'Preview did not become ready')
   const options = new chrome.Options().addArguments('--headless=new', '--disable-dev-shm-usage')
-  if (process.env.CHROME_PATH) options.setChromeBinaryPath(process.env.CHROME_PATH)
+  const chromePath = process.env.CHROME_PATH || process.env.CHROME_TEST_PATH
+  if (chromePath) options.setChromeBinaryPath(chromePath)
   if (process.env.A11Y_NO_SANDBOX === '1') options.addArguments('--no-sandbox')
-  const service = new chrome.ServiceBuilder(process.env.CHROMEDRIVER_PATH || chromedriver.path).setHostname('127.0.0.1')
+  const service = new chrome.ServiceBuilder(process.env.CHROMEDRIVER_PATH || process.env.CHROMEDRIVER_TEST_PATH || chromedriver.path).setHostname('127.0.0.1')
   driver = await new Builder().forBrowser('chrome').setChromeService(service).setChromeOptions(options).build()
   await driver.manage().setTimeouts({ script: 60000, pageLoad: 30000 })
   for (const width of [1280, 390, 320]) {

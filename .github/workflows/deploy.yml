@@ -51,7 +51,9 @@ jobs:
           fi
 
       - name: Install Chrome + ChromeDriver for axe
-        run: npx --yes browser-driver-manager@latest install chrome
+        run: |
+          npx --yes browser-driver-manager@latest install chrome | tee /tmp/browser-install.log
+          sed -n -E 's/^(CHROME_TEST_PATH|CHROMEDRIVER_TEST_PATH)="(.*)"$/\1=\2/p' /tmp/browser-install.log >> "$GITHUB_ENV"
 
       - name: Accessibility (axe — landmarks, forms, headings)
         run: node scripts/axe-preview.mjs
