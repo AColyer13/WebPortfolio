@@ -6,7 +6,7 @@ A single-page personal portfolio. See [SPEC.md](SPEC.md) for what the site does.
 
 | | |
 |---|---|
-| **Framework** | React 19 + TypeScript + Vite 7 |
+| **Framework** | React 19 + TypeScript + Vite 8 |
 | **Styling**   | Tailwind v4 (OKLCH design tokens in `src/index.css`) |
 | **Icons**     | `lucide-react` + custom SVG paths in `src/components/Icons.tsx` |
 | **Contact**   | EmailJS (lazy-loaded SDK, fetched on submit) |
@@ -16,8 +16,11 @@ A single-page personal portfolio. See [SPEC.md](SPEC.md) for what the site does.
 Last 2 versions of Chrome, Firefox, Safari (16+), and Edge. Details: [docs/COMPAT.md](docs/COMPAT.md).
 ## Quick start
 
+Use Node.js 24.15+ (Node 24 is pinned in `.nvmrc`) and npm 10+. CI uses the same Node major.
+
 ```bash
-npm install
+nvm use
+npm ci
 npm run dev          # http://localhost:5173
 ```
 

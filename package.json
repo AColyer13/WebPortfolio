@@ -16,13 +16,13 @@
     "test:a11y": "npm run build && node scripts/axe-preview.mjs"
   },
   "dependencies": {
-    "@emailjs/browser": "^4.4.1",
+    "@emailjs/browser": "^5.0.3",
     "@fontsource-variable/newsreader": "^5.3.0",
-    "@fontsource-variable/source-sans-3": "^5.3.0",
-    "@fontsource/jetbrains-mono": "^5.2.8",
-    "lucide-react": "^1.23.0",
-    "react": "19.2.4",
-    "react-dom": "19.2.4",
+    "@fontsource-variable/source-sans-3": "^5.3.1",
+    "@fontsource/jetbrains-mono": "^5.3.0",
+    "lucide-react": "^1.73.0",
+    "react": "19.3.1",
+    "react-dom": "19.3.1",
     "web-vitals": "^6.2.3"
   },
   "browserslist": [
@@ -36,25 +36,29 @@
   "devDependencies": {
     "@axe-core/cli": "^4.14.0",
     "@eslint/js": "^10.0.1",
-    "@tailwindcss/vite": "^4.3.0",
-    "@testing-library/jest-dom": "^6.9.1",
-    "@testing-library/react": "^16.3.0",
-    "@types/node": "^24.10.1",
-    "@types/react": "^19.2.14",
-    "@types/react-dom": "^19.2.3",
-    "@vitejs/plugin-react": "^5.1.1",
+    "@tailwindcss/vite": "^4.3.5",
+    "@testing-library/jest-dom": "^7.0.1",
+    "@testing-library/react": "^16.3.3",
+    "@types/node": "^24.19.2",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^6.3.0",
     "@webgpu/types": "^0.1.74",
     "assemblyscript": "^0.28.20",
-    "eslint": "^10.0.0",
+    "eslint": "^10.15.0",
     "eslint-plugin-react-hooks": "^7.1.1",
     "eslint-plugin-react-refresh": "^0.5.7",
-    "globals": "^16.5.0",
-    "jsdom": "^29.1.1",
-    "sharp": "^0.35.3",
-    "tailwindcss": "^4.3.0",
-    "typescript": "~5.9.3",
+    "globals": "^17.14.0",
+    "jsdom": "^31.0.1",
+    "sharp": "^0.35.5",
+    "tailwindcss": "^4.3.5",
+    "typescript": "~6.0.3",
     "typescript-eslint": "^8.72.2",
-    "vite": "^7.2.4",
-    "vitest": "^4.1.12"
+    "vite": "^8.3.8",
+    "vitest": "^5.1.0"
+  },
+  "engines": {
+    "node": "^24.15.0 || >=26.0.0",
+    "npm": ">=10"
   }
 }

@@ -1,0 +1,59 @@
+# Validate pull requests, including drafts, without publishing or deploying.
+name: Pull request checks
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pr-checks-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Setup Node
+        uses: actions/setup-node@v7.1.0
+        with:
+          node-version-file: '.nvmrc'
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Audit production dependencies
+        run: npm audit --omit=dev --audit-level=high
+
+      - name: Check (TypeCheck, Lint, Test)
+        run: npm run check
+
+      - name: Build
+        run: npm run build
+
+      - name: Verify production bundle
+        run: |
+          if grep -qF 'main.tsx' dist/index.html; then
+            echo "dist/index.html still references main.tsx."
+            exit 1
+          fi
+          if grep -qE 'assets/(index\.css|index\.js)"' dist/index.html; then
+            echo "dist/index.html must use content-hashed asset URLs, not index.css/index.js."
+            exit 1
+          fi
+
+      - name: Install Chrome + ChromeDriver for axe
+        run: npx --yes browser-driver-manager@latest install chrome
+
+      - name: Accessibility (axe — landmarks, forms, headings)
+        run: node scripts/axe-preview.mjs
+
