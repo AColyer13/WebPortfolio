@@ -1,6 +1,6 @@
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
-import type { OutputBundle } from 'rollup'
+import type { Rolldown } from 'vite'
 
 import tailwindcss from '@tailwindcss/vite'
 import { defineConfig } from 'vitest/config'
@@ -9,7 +9,7 @@ import react from '@vitejs/plugin-react'
 const projectRoot = path.dirname(fileURLToPath(import.meta.url))
 
 /** Primary latin variable-font subsets only — latin-ext loads on demand via unicode-range. */
-function fontPreloadTags(bundle: OutputBundle): string {
+function fontPreloadTags(bundle: Rolldown.OutputBundle): string {
   const tags: string[] = []
   for (const chunk of Object.values(bundle)) {
     if (chunk.type !== 'asset') continue
@@ -81,20 +81,20 @@ export default defineConfig(({ mode }) => {
       outDir: path.join(projectRoot, 'dist'),
       emptyOutDir: true,
       cssCodeSplit: false,
+      // Preserve the existing Safari 16 browser support after Vite 8's target change.
+      target: ['chrome107', 'edge107', 'firefox104', 'safari16'],
       modulePreload: { polyfill: false },
-      rollupOptions: {
+      rolldownOptions: {
         // Split React runtime into a long-lived vendor chunk so it stays cached
         // across deploys (only the app chunk changes when components move).
         output: {
-          manualChunks(id) {
-            if (
-              id.includes('node_modules/react/') ||
-              id.includes('node_modules/react-dom/') ||
-              id.includes('node_modules/scheduler/')
-            ) {
-              return 'react-vendor'
-            }
-            return undefined
+          codeSplitting: {
+            groups: [
+              {
+                name: 'react-vendor',
+                test: /[\\/]node_modules[\\/](react|react-dom|scheduler)[\\/]/,
+              },
+            ],
           },
         },
       },
