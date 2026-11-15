@@ -75,11 +75,11 @@ async function layout(name) {
 async function tabTo(selector, max = 150) {
   for (let i = 0; i < max; i++) {
     if (await driver.executeScript('return document.activeElement.matches(arguments[0])', selector)) {
-      const visible = await driver.executeScript(`
+      const visible = await driver.wait(() => driver.executeScript(`
         const e = document.activeElement, s = getComputedStyle(e), r = e.getBoundingClientRect();
         return e.matches(':focus-visible') && r.width > 0 && r.height > 0 &&
           r.bottom > 0 && r.top < innerHeight && r.left >= -1 && r.right <= innerWidth + 1 &&
-          ((s.outlineStyle !== 'none' && parseFloat(s.outlineWidth) > 0) || s.boxShadow !== 'none');`)
+          ((s.outlineStyle !== 'none' && parseFloat(s.outlineWidth) > 0) || s.boxShadow !== 'none');`), 2000, `No visible keyboard focus indicator on ${selector}`)
       assert.ok(visible, `No visible keyboard focus indicator on ${selector}`)
       return await driver.switchTo().activeElement()
     }

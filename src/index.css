@@ -896,7 +896,7 @@
 }
 
 /* Keyboard focus must never remain in the offscreen auto-hidden toolbar. */
-.site-header.site-header--scroll-hidden:focus-within {
+.site-header:focus-within {
   transform: translateY(0);
   pointer-events: auto;
   transition: none;
