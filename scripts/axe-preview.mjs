@@ -187,6 +187,7 @@ try {
   assert.equal(results.reduce((total, r) => total + r.violations, 0), 0, 'Accessibility violations found; inspect a11y-results/*.json')
 } catch (error) {
   console.error(error)
+  if (driver) await writeFile(path.join(reports, 'failure.png'), await driver.takeScreenshot(), 'base64').catch(console.error)
   if (!driver) console.error(await readFile(path.join(reports, 'chromedriver.log'), 'utf8').catch(() => 'No ChromeDriver log available'))
   process.exitCode = 1
 } finally {
