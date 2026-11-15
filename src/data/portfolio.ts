@@ -27,6 +27,8 @@ export interface Project {
   description: string
   imageUrl: string
   liveUrl?: string
+  /** Label authenticated production sites differently from public demos. */
+  liveLabel?: string
   /** Short heads-up shown beside the live link, e.g. when the demo needs an account. */
   demoNote?: string
   /** Only set for public repos; omit it to hide the Source link. */
@@ -251,6 +253,7 @@ export const projects: Project[] = [
       'Satellite mission simulator that plots positions and orbital paths on a 3D globe from TLE data, with a Gemini flight assistant for the current orbit and upcoming burns.',
     imageUrl: 'images/missionctrl-tr41-groundctrl-new.png',
     liveUrl: 'https://missionctrl.org',
+    demoNote: 'Globe: no account needed; WebGL required. Sign in for NOVA.',
     featured: true,
   },
   {
@@ -271,6 +274,8 @@ export const projects: Project[] = [
       'Shop management system for an auto repair shop: service records, parts inventory, and scheduling. Firestore role rules keep customers and staff out of each other\'s records while admins see everything.',
     imageUrl: 'images/mechanicapiicon-new.png',
     liveUrl: 'https://valleyforgeautomotive.org',
+    liveLabel: 'Visit site',
+    demoNote: 'Staff sign-in only; accounts are invite-only.',
     featured: true,
   },
   {
@@ -318,7 +323,6 @@ export const projects: Project[] = [
       'Browser golf with real ball-flight physics, four tribute courses and a daily challenge. After every shot the game explains why the ball did what it did, with strokes-gained stats to match.',
     imageUrl: 'images/pure-strike-golf.png',
     liveUrl: 'https://acolyer13.github.io/pure-strike-golf/',
-    githubUrl: 'https://github.com/AColyer13/pure-strike-golf',
   },
   {
     id: 12,
